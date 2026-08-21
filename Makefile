@@ -1,0 +1,36 @@
+.PHONY: help sync lint fmt typecheck unit integration e2e check clean sweep
+
+help:
+	@grep -E '^[a-z-]+:.*?##' $(MAKEFILE_LIST) | sed 's/:.*##/\t/'
+
+sync: ## install dependencies from the lockfile
+	uv sync
+
+lint: ## ruff lint + format check
+	uv run ruff check src tests
+	uv run ruff format --check src tests
+
+fmt: ## apply ruff formatting and autofixes
+	uv run ruff check --fix src tests
+	uv run ruff format src tests
+
+typecheck: ## mypy --strict over src/meridian
+	uv run mypy
+
+unit: ## fast pure-logic tests
+	uv run pytest -m unit
+
+integration: ## Docker-backed tests
+	uv run pytest -m integration
+
+e2e: ## full run/replay/gate tests
+	uv run pytest -m e2e
+
+check: lint typecheck unit ## the gate every commit must pass
+
+sweep: ## remove leaked trial containers
+	uv run meridian sweep
+
+clean:
+	rm -rf .pytest_cache .mypy_cache .ruff_cache
+	find . -name __pycache__ -type d -prune -exec rm -rf {} +
