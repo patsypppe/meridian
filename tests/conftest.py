@@ -8,6 +8,7 @@ machine is slow.
 
 from __future__ import annotations
 
+import contextlib
 from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
@@ -49,15 +50,17 @@ def repo_root() -> Path:
     return REPO_ROOT
 
 
-def _labelled_containers() -> list[Any]:
+def _labelled_resources() -> tuple[list[Any], list[Any]]:
+    """Every container and volume carrying a Meridian run label."""
     try:
         from meridian.docker_client import get_client
 
         client = get_client()
     except Exception:
-        return []
+        return [], []
     containers: list[Any] = client.containers.list(all=True, filters={"label": RUN_LABEL})
-    return containers
+    volumes: list[Any] = client.volumes.list(filters={"label": RUN_LABEL})
+    return containers, volumes
 
 
 @pytest.fixture(autouse=True)
@@ -73,11 +76,24 @@ def no_leaked_trial_containers(request: pytest.FixtureRequest) -> Iterator[None]
         yield
         return
 
-    before = {c.id for c in _labelled_containers()}
+    before_containers, before_volumes = _labelled_resources()
+    seen_containers = {c.id for c in before_containers}
+    seen_volumes = {v.name for v in before_volumes}
+
     yield
-    leaked = [c for c in _labelled_containers() if c.id not in before]
-    if leaked:
-        names = ", ".join(f"{c.name}({c.status})" for c in leaked)
-        for container in leaked:
-            container.remove(force=True)
-        pytest.fail(f"{len(leaked)} trial container(s) leaked: {names}")
+
+    after_containers, after_volumes = _labelled_resources()
+    leaked_containers = [c for c in after_containers if c.id not in seen_containers]
+    leaked_volumes = [v for v in after_volumes if v.name not in seen_volumes]
+    if not leaked_containers and not leaked_volumes:
+        return
+
+    described = [f"container {c.name}({c.status})" for c in leaked_containers]
+    described += [f"volume {v.name}" for v in leaked_volumes]
+    for container in leaked_containers:
+        with contextlib.suppress(Exception):
+            container.remove(force=True, v=True)
+    for volume in leaked_volumes:
+        with contextlib.suppress(Exception):
+            volume.remove(force=True)
+    pytest.fail(f"{len(described)} resource(s) leaked: {', '.join(described)}")

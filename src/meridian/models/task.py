@@ -254,6 +254,24 @@ class TaskDefinition(BaseModel):
     def counts_toward_suite_score(self) -> bool:
         return self.state == "active" and self.role == "eval"
 
+    @model_validator(mode="after")
+    def _inputs_land_inside_the_workdir(self) -> TaskDefinition:
+        """Seed files must land under the workdir.
+
+        The rootfs is read-only and the workdir is the only writable mount, so a
+        `dest` outside it fails at container start with a permission error that
+        looks like an agent problem. Catching it at load time turns a confusing
+        runtime failure into an obvious authoring mistake.
+        """
+        workdir = self.environment.workdir.rstrip("/")
+        for seed in self.input.files:
+            if not (seed.dest == workdir or seed.dest.startswith(f"{workdir}/")):
+                raise ValueError(
+                    f"input_outside_workdir: {seed.dest!r} is not under the workdir "
+                    f"{workdir!r}; the rest of the filesystem is read-only"
+                )
+        return self
+
     def referenced_files(self) -> tuple[str, ...]:
         """Every suite-relative path this task depends on, for existence checks."""
         return (self.input.prompt_file, *(f.src for f in self.input.files))

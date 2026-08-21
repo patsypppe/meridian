@@ -146,5 +146,32 @@ def snapshot_show(
     out(digest)
 
 
+@app.command()
+def sweep(
+    run_id: str | None = typer.Option(None, "--run-id", help="Limit the sweep to one run."),
+) -> None:
+    """Remove containers and volumes a previous run left behind.
+
+    An interrupted harness leaves containers holding CPU and memory and volumes
+    holding disk, and neither announces itself. Run this after a crash, and it
+    runs automatically before each new run.
+    """
+    from meridian.runtime.trial_runner import sweep_orphans
+
+    try:
+        client = get_client()
+    except DockerUnavailableError as exc:
+        err(f"sweep failed: {exc}")
+        raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
+
+    removed = sweep_orphans(client, run_id=run_id)
+    if not removed:
+        err("nothing to sweep")
+        return
+    for name in removed:
+        out(name)
+    err(f"removed {len(removed)} orphaned resource(s)")
+
+
 if __name__ == "__main__":  # pragma: no cover
     app()

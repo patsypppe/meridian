@@ -1,32 +1,32 @@
 #!/bin/sh
 # Trial bootstrap. Runs as PID 1 inside the trial container.
 #
-# The workdir is a tmpfs, which means anything written into it before the
-# container starts is masked by the mount. The runner therefore cannot stage
-# inputs at create time; it starts the container, copies the payload in, and
-# drops a ready marker. This script seeds the workdir from the image's read-only
-# copy, waits for that marker, and then hands control to the entrypoint.
+# Two constraints shape this script:
+#
+# 1. The rootfs is read-only, so the Docker archive API refuses to copy anything
+#    in — "container rootfs is marked read-only" — even into a writable tmpfs.
+# 2. The workdir is a tmpfs, so anything staged before the container starts is
+#    masked when the mount appears.
+#
+# So the payload arrives on **stdin** as a tar stream, which is a pipe and cares
+# about neither. EOF is the signal that the payload is complete: no marker file,
+# no polling, no race. No host directory is mounted, so there is no channel
+# through which one trial could reach another.
 set -eu
 
 WORKDIR="${MERIDIAN_WORKDIR:-/work}"
-PAYLOAD="$WORKDIR/.meridian"
-READY="$PAYLOAD/ready"
-DEADLINE_TICKS="${MERIDIAN_PAYLOAD_TICKS:-600}"   # ticks of 0.1s
 
 mkdir -p "$WORKDIR/out" "$WORKDIR/orders"
-cp -a /opt/checkout/seed/. "$WORKDIR/"
+# `cp -R`, not `cp -a`: the workdir tmpfs is root-owned and the trial user
+# cannot set times on it, which makes -a fail under `set -e`.
+cp -R /opt/checkout/seed/. "$WORKDIR/"
 
-i=0
-while [ "$i" -lt "$DEADLINE_TICKS" ]; do
-    if [ -f "$READY" ]; then
-        break
-    fi
-    i=$((i + 1))
-    sleep 0.1
-done
+# Blocks until the harness finishes sending and closes its end.
+tar -xf - -C "$WORKDIR"
 
-if [ ! -f "$READY" ]; then
-    echo "meridian: trial payload never arrived at $PAYLOAD" >&2
+PAYLOAD="$WORKDIR/.meridian"
+if [ ! -f "$PAYLOAD/entrypoint.py" ]; then
+    echo "meridian: payload did not contain an entrypoint" >&2
     exit 70
 fi
 

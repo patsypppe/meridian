@@ -9,7 +9,7 @@ provenance:
   failure_code: "invoiced-empty-order"
 
 environment:
-  snapshot: "sha256:20703188e3f14f269dcaf1af7f50162ffe1bcb8dbcf1af6429f9dd3336c1a80f"
+  snapshot: "sha256:95c82c57ccc64cc3421159be5864d6c7e90007b6d07aa55accd5f624a4552323"
   workdir: /work
   network: proxy-only
   resources:
