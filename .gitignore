@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+
+# Tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.tsbuildinfo
+
+# Secrets — never commit
+.env
+.env.local
+*.pem
+*.key
+
+# Meridian runtime artifacts
+.meridian/
+runs/
+gate-comment.md
+snapshot-ref.json
+
+# OS
+.DS_Store
