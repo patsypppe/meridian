@@ -12,6 +12,14 @@ from pathlib import Path
 import typer
 
 from meridian import exit_codes
+from meridian.docker_client import DockerUnavailableError, get_client
+from meridian.snapshots.build import (
+    SnapshotBuildError,
+    build_snapshot,
+    current_platform,
+    rewrite_suite_snapshots,
+)
+from meridian.snapshots.registry import read_snapshot_ref
 from meridian.suites.loader import load_suite
 from meridian.suites.validate import SuiteValidationError
 from meridian.version import __version__
@@ -25,6 +33,11 @@ app = typer.Typer(
 
 suite_app = typer.Typer(help="Author, validate, and publish task suites.", no_args_is_help=True)
 app.add_typer(suite_app, name="suite")
+
+snapshot_app = typer.Typer(
+    help="Build environment snapshots and pin them by digest.", no_args_is_help=True
+)
+app.add_typer(snapshot_app, name="snapshot")
 
 
 def err(message: str) -> None:
@@ -86,6 +99,51 @@ def suite_publish(
     if excluded:
         names = ", ".join(t.slug for t in excluded)
         out(f"excluded:       {len(excluded)} ({names})")
+
+
+@snapshot_app.command("build")
+def snapshot_build(
+    path: Path = typer.Argument(..., help="Path to the environment directory."),
+    tag: str = typer.Option(..., "--tag", help="Human-readable tag for the built image."),
+    write_ref: bool = typer.Option(
+        False, "--write-ref", help="Record the digest in <env>/snapshot-ref.json."
+    ),
+    update_suite: Path | None = typer.Option(
+        None,
+        "--update-suite",
+        help="Rewrite every task in this suite to pin the digest just built.",
+    ),
+) -> None:
+    """Build an environment image and print its digest.
+
+    An image ID is architecture-specific, so the digest committed from a laptop
+    will not exist on an amd64 runner. `--update-suite` is how CI closes that
+    gap: rebuild, then repin, then run.
+    """
+    try:
+        client = get_client()
+        digest = build_snapshot(client, path, tag=tag, write_ref=write_ref)
+    except (DockerUnavailableError, SnapshotBuildError) as exc:
+        err(f"snapshot build failed: {exc}")
+        raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
+
+    err(f"built {tag} for {current_platform()}")
+    if update_suite is not None:
+        changed = rewrite_suite_snapshots(update_suite, digest)
+        err(f"repinned {len(changed)} task file(s) in {update_suite}")
+    out(digest)
+
+
+@snapshot_app.command("show")
+def snapshot_show(
+    path: Path = typer.Argument(..., help="Path to the environment directory."),
+) -> None:
+    """Print the digest most recently built for this environment."""
+    digest = read_snapshot_ref(path)
+    if digest is None:
+        err(f"no snapshot-ref.json in {path}; run `meridian snapshot build --write-ref` first")
+        raise typer.Exit(exit_codes.HARNESS_ERROR)
+    out(digest)
 
 
 if __name__ == "__main__":  # pragma: no cover
