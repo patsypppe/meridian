@@ -10,18 +10,26 @@ from __future__ import annotations
 
 import time
 import uuid
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from meridian.config import MeridianConfig, ProxyMode, RunMode
 from meridian.grading.pipeline import grade_task
-from meridian.models.run import RunResult, RunStatus, TaskResult, TrialResult, TrialSpec
+from meridian.models.run import (
+    AssertionResult,
+    RunResult,
+    RunStatus,
+    TaskResult,
+    TrialResult,
+    TrialSpec,
+)
 from meridian.models.suite import Suite
 from meridian.models.task import TaskDefinition
 from meridian.runtime.isolation import IsolationPolicy
 from meridian.runtime.proxy.session import ProxyHandle, start_proxy, stop_proxy
+from meridian.runtime.pytest_runner import ContainerPytestRunner
 from meridian.runtime.scheduler import run_tasks
 from meridian.runtime.trial_runner import TrialRunner, sweep_orphans
 
@@ -87,11 +95,26 @@ async def execute(client: DockerClient, request: RunRequest) -> RunResult:
         )
         progress(f"proxy up in {config.execution.proxy_mode} mode on {handle.network_name}")
 
+        # Assertions that run agent-authored tests get their own throwaway
+        # container, per task, so grading never executes that code on the host.
+        def grader(task: TaskDefinition, state_dir: Path, result: Any) -> Sequence[AssertionResult]:
+            return grade_task(
+                task,
+                state_dir,
+                result,
+                pytest_runner=ContainerPytestRunner(
+                    client,
+                    image=task.environment.snapshot,
+                    run_id=request.run_id,
+                    workdir=task.environment.workdir,
+                ),
+            )
+
         runner = TrialRunner(
             client,
             suite_root=request.suite.root,
             sut_root=request.sut_root,
-            grader=grade_task,
+            grader=grader,
             policy=policy,
             network_name=handle.network_name,
         )
