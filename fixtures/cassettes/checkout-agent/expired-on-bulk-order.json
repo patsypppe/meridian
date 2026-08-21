@@ -1,0 +1,783 @@
+{
+  "task": "expired-on-bulk-order",
+  "trials": {
+    "0": [
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:4f6f8cf1398733df9d64c7a986f5ad87cd9316c3355576b6cdb7637201ff9e0f",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1045
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:7e86a33aa61967a099dbec3aad1ec4cde183a98844e68a4f947d56c1d1b9f417",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:71267d6ae5df46368f3b71161a2dcf9b1d5c140bb75c5cd35c39d091047e782c",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "SUMMER20"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:a83425a055403b7b71e8b390f154a73e6352abe09957bde35d71fdfffab8b70f",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "SUMMER20",
+                  "decline_reason": "coupon SUMMER20 expired on 2026-08-13, before the order date 2026-08-14"
+                },
+                "order_id": 1045,
+                "subtotal_cents": 30000,
+                "total_cents": 30000
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:cfee9a590ba0d54729741f3b21248e32064012a9b53765fd1b5a40f4bcbcd2b9",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1045,
+                "status": "invoiced",
+                "total_cents": 30000
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:eca71ac99c9992605797c46d92527396c5819b5a4202ed095d6c68ba0fcc1aab",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1045 invoiced at 30000 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      }
+    ],
+    "1": [
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:4f6f8cf1398733df9d64c7a986f5ad87cd9316c3355576b6cdb7637201ff9e0f",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1045
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:7e86a33aa61967a099dbec3aad1ec4cde183a98844e68a4f947d56c1d1b9f417",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:71267d6ae5df46368f3b71161a2dcf9b1d5c140bb75c5cd35c39d091047e782c",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "SUMMER20"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:a83425a055403b7b71e8b390f154a73e6352abe09957bde35d71fdfffab8b70f",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "SUMMER20",
+                  "decline_reason": "coupon SUMMER20 expired on 2026-08-13, before the order date 2026-08-14"
+                },
+                "order_id": 1045,
+                "subtotal_cents": 30000,
+                "total_cents": 30000
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:cfee9a590ba0d54729741f3b21248e32064012a9b53765fd1b5a40f4bcbcd2b9",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1045,
+                "status": "invoiced",
+                "total_cents": 30000
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:eca71ac99c9992605797c46d92527396c5819b5a4202ed095d6c68ba0fcc1aab",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1045 invoiced at 30000 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      }
+    ],
+    "2": [
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:4f6f8cf1398733df9d64c7a986f5ad87cd9316c3355576b6cdb7637201ff9e0f",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1045
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:7e86a33aa61967a099dbec3aad1ec4cde183a98844e68a4f947d56c1d1b9f417",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:71267d6ae5df46368f3b71161a2dcf9b1d5c140bb75c5cd35c39d091047e782c",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "SUMMER20"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:a83425a055403b7b71e8b390f154a73e6352abe09957bde35d71fdfffab8b70f",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "SUMMER20",
+                  "decline_reason": "coupon SUMMER20 expired on 2026-08-13, before the order date 2026-08-14"
+                },
+                "order_id": 1045,
+                "subtotal_cents": 30000,
+                "total_cents": 30000
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:cfee9a590ba0d54729741f3b21248e32064012a9b53765fd1b5a40f4bcbcd2b9",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1045,
+                "status": "invoiced",
+                "total_cents": 30000
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:eca71ac99c9992605797c46d92527396c5819b5a4202ed095d6c68ba0fcc1aab",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1045 invoiced at 30000 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      }
+    ],
+    "3": [
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:4f6f8cf1398733df9d64c7a986f5ad87cd9316c3355576b6cdb7637201ff9e0f",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1045
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:7e86a33aa61967a099dbec3aad1ec4cde183a98844e68a4f947d56c1d1b9f417",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:71267d6ae5df46368f3b71161a2dcf9b1d5c140bb75c5cd35c39d091047e782c",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "SUMMER20"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:a83425a055403b7b71e8b390f154a73e6352abe09957bde35d71fdfffab8b70f",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "SUMMER20",
+                  "decline_reason": "coupon SUMMER20 expired on 2026-08-13, before the order date 2026-08-14"
+                },
+                "order_id": 1045,
+                "subtotal_cents": 30000,
+                "total_cents": 30000
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:cfee9a590ba0d54729741f3b21248e32064012a9b53765fd1b5a40f4bcbcd2b9",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1045,
+                "status": "invoiced",
+                "total_cents": 30000
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:eca71ac99c9992605797c46d92527396c5819b5a4202ed095d6c68ba0fcc1aab",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1045 invoiced at 30000 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      }
+    ],
+    "4": [
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:4f6f8cf1398733df9d64c7a986f5ad87cd9316c3355576b6cdb7637201ff9e0f",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1045
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:7e86a33aa61967a099dbec3aad1ec4cde183a98844e68a4f947d56c1d1b9f417",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:71267d6ae5df46368f3b71161a2dcf9b1d5c140bb75c5cd35c39d091047e782c",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "SUMMER20"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:a83425a055403b7b71e8b390f154a73e6352abe09957bde35d71fdfffab8b70f",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "SUMMER20",
+                  "decline_reason": "coupon SUMMER20 expired on 2026-08-13, before the order date 2026-08-14"
+                },
+                "order_id": 1045,
+                "subtotal_cents": 30000,
+                "total_cents": 30000
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:cfee9a590ba0d54729741f3b21248e32064012a9b53765fd1b5a40f4bcbcd2b9",
+        "response": {
+          "content": [
+            {
+              "text": "Invoice for order 1045 written.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      }
+    ]
+  },
+  "version": 1
+}

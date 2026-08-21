@@ -65,7 +65,7 @@ def test_suite_repinning_is_a_line_rewrite(docker_client: object, tmp_path: Path
     fake = "sha256:" + "ab" * 32
     changed = rewrite_suite_snapshots(suite_copy, fake)
 
-    assert len(changed) == 5
+    assert len(changed) == len(list((suite_copy / "tasks").glob("*.yaml")))
     rewritten = (suite_copy / "tasks" / "expired-coupon.yaml").read_text()
     assert fake in rewritten
     assert rewritten.splitlines()[0] == original.splitlines()[0]

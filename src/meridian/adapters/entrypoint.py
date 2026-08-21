@@ -17,11 +17,16 @@ import traceback
 from pathlib import Path
 from typing import Any
 
-from meridian.adapters.base import AdapterSpec
+from meridian.adapters.base import AdapterSpec, AdapterSpecError
 from meridian.models.adapter import AdapterResult, TrialContext
 
 EXIT_OK = 0
 EXIT_ENTRYPOINT_FAILED = 70
+
+# Written when the entrypoint itself could not run. The harness reads it so the
+# trial's detail says *what* was misconfigured rather than only that something
+# was.
+HARNESS_ERROR_FILE = "harness_error.txt"
 
 
 def build_adapter(spec: AdapterSpec) -> Any:
@@ -34,20 +39,39 @@ def build_adapter(spec: AdapterSpec) -> Any:
         from meridian.adapters.subprocess_adapter import SubprocessAdapter
 
         return SubprocessAdapter(spec)
-    # The LangGraph branch lands with WP-5. Until then a langgraph spec parses
-    # cleanly and fails loudly here rather than half-working.
+    if spec.kind == "langgraph":
+        from meridian.adapters.langgraph_adapter import LangGraphAdapter
+
+        return LangGraphAdapter(spec)
     raise ValueError(f"no adapter implementation for kind {spec.kind!r}")
+
+
+def record_harness_error(payload_dir: Path, message: str) -> int:
+    """Report a Meridian misconfiguration, not an agent failure."""
+    (payload_dir / HARNESS_ERROR_FILE).write_text(message, encoding="utf-8")
+    (payload_dir / "traceback.txt").write_text(traceback.format_exc(), encoding="utf-8")
+    return EXIT_ENTRYPOINT_FAILED
 
 
 async def run(context_path: Path) -> int:
     payload_dir = context_path.parent
     raw = json.loads(context_path.read_text(encoding="utf-8"))
-    adapter_spec = AdapterSpec.parse(raw.pop("adapter_spec"))
-    ctx = TrialContext.model_validate(raw)
 
-    adapter = build_adapter(adapter_spec)
+    # Everything up to and including resolving the adapter is configuration. A
+    # failure here says the harness was set up wrong, and calling it an agent
+    # failure would put a configuration mistake into the score.
+    try:
+        adapter_spec = AdapterSpec.parse(raw.pop("adapter_spec"))
+        ctx = TrialContext.model_validate(raw)
+        adapter = build_adapter(adapter_spec)
+        adapter_spec.resolve_target()
+    except (AdapterSpecError, ValueError) as exc:
+        return record_harness_error(payload_dir, f"{type(exc).__name__}: {exc}")
+
     try:
         result = await adapter.invoke(ctx)
+    except AdapterSpecError as exc:
+        return record_harness_error(payload_dir, f"{type(exc).__name__}: {exc}")
     except Exception as exc:  # the agent blew up: an agent failure, not a harness one
         result = AdapterResult(
             completed=False,

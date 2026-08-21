@@ -95,6 +95,10 @@ def test_reference_suite_loads_and_separates_probes() -> None:
     assert {t.slug for t in suite.scored_tasks} == {
         "happy-path",
         "expired-coupon",
+        "stale-coupon",
+        "expired-on-bulk-order",
+        "expiry-boundary",
+        "unknown-coupon",
         "missing-field",
     }
     # The contamination pair measures Meridian, not the agent, and must never

@@ -1,0 +1,7 @@
+Invoice order 1044.
+
+The order file is at /work/orders/order-1044.json. The coupon policy is at
+/work/policy.md. The store database is at /work/store.db.
+
+Produce /work/out/invoice-1044.json and update the order row to reflect what you
+did.

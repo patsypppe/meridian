@@ -328,7 +328,9 @@ async def test_budget_exhaustion_returns_a_structured_429(tmp_path: Path) -> Non
 async def test_recording_writes_a_cassette(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     from meridian.runtime.proxy import server as server_module
 
-    async def fake_upstream(state: object, body: dict[str, object]) -> dict[str, object]:
+    async def fake_upstream(
+        state: object, body: dict[str, object], **_: object
+    ) -> dict[str, object]:
         return response_body("live", in_tokens=4, out_tokens=6)
 
     monkeypatch.setattr(server_module, "_call_upstream", fake_upstream)

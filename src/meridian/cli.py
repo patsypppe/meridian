@@ -152,6 +152,107 @@ def snapshot_show(
 
 
 @app.command()
+def run(
+    suite: Path = typer.Option(..., "--suite", help="Path to the suite directory."),
+    n: int | None = typer.Option(None, "--n", help="Trials per task."),
+    k: int | None = typer.Option(None, "--k", help="The k in pass^k."),
+    proxy_mode: str | None = typer.Option(
+        None, "--proxy-mode", help="record | replay | passthrough."
+    ),
+    sut: Path = typer.Option(Path("fixtures"), "--sut", help="System under test root."),
+    cassettes: Path | None = typer.Option(None, "--cassettes", help="Cassette directory."),
+    budget: int | None = typer.Option(None, "--budget", help="Run cost cap, in cents."),
+    concurrency: int | None = typer.Option(None, "--concurrency", help="Concurrent trials."),
+    include_probes: bool = typer.Option(
+        False, "--include-probes", help="Also run the harness's own contamination probes."
+    ),
+    unsafe_shared_env: bool = typer.Option(
+        False,
+        "--unsafe-shared-env",
+        help="Share one workdir across every trial. Breaks Rule 1 on purpose, so the "
+        "contamination probe has a failing direction. Rejected in gate mode.",
+    ),
+    gate_mode: bool = typer.Option(
+        False, "--gate-mode", help="Apply gate-mode configuration rules."
+    ),
+    out: Path | None = typer.Option(None, "--out", help="Write the run result as JSON."),
+    live_provider: bool = typer.Option(
+        False,
+        "--live-provider",
+        help="Record against the real provider instead of the deterministic stub.",
+    ),
+) -> None:
+    """Run a suite and print per-task pass@k and pass^k.
+
+    Exits non-zero only if the harness itself failed. An agent that performed
+    badly is a result, not an error — see the exit-code contract in HANDOFF §8.4.
+    """
+    import asyncio
+
+    from meridian.config import RunMode, load_config
+    from meridian.report import table
+    from meridian.runtime.orchestrator import RunRequest, default_cassette_dir, execute
+
+    try:
+        loaded = load_suite(suite)
+    except SuiteValidationError as exc:
+        _report_validation_failure(exc)
+        raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
+
+    config = load_config(
+        "meridian.yaml",
+        overrides={
+            "execution": {
+                "n_trials": n,
+                "k": k,
+                "proxy_mode": proxy_mode,
+                "budget_cents": budget,
+                "max_concurrent_trials": concurrency,
+                "unsafe_shared_env": unsafe_shared_env or None,
+            }
+        },
+    )
+    mode = RunMode.GATE if gate_mode else RunMode.EXPLORATORY
+
+    try:
+        config.validate_for(mode)
+        client = get_client()
+    except (ValueError, DockerUnavailableError) as exc:
+        err(str(exc))
+        raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
+
+    request = RunRequest(
+        suite=loaded,
+        config=config,
+        cassette_dir=cassettes or default_cassette_dir(loaded),
+        sut_root=sut.resolve() if sut else None,
+        mode=mode,
+        include_probes=include_probes,
+        use_stub_provider=not live_provider,
+        progress=err,
+    )
+
+    try:
+        result = asyncio.run(execute(client, request))
+    except Exception as exc:
+        err(f"run failed: {type(exc).__name__}: {exc}")
+        raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
+
+    out_text = table.render(result)
+    print(out_text)
+    detail = table.failures(result)
+    if detail:
+        print("")
+        print("failing trials:")
+        print(detail)
+
+    if out is not None:
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(result.model_dump_json(indent=2), encoding="utf-8")
+        err(f"wrote {out}")
+
+
+@app.command()
 def sweep(
     run_id: str | None = typer.Option(None, "--run-id", help="Limit the sweep to one run."),
 ) -> None:

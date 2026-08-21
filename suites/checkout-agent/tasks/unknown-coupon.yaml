@@ -1,12 +1,12 @@
-slug: expired-coupon
+slug: unknown-coupon
 description: >
-  An order arrives with a coupon that expired yesterday. The agent must decline
-  the coupon, charge full price, and record the reason on the invoice.
+  A coupon code that is not in the database at all. Declining it is the same
+  outcome as an expired coupon, for an entirely different reason.
 
 provenance:
-  trace_id: "0af7651916cd43dd8448eb211c80319c"
-  session_id: "sess_2026-08-14T09:22Z"
-  failure_code: "coupon-expiry-ignored"
+  trace_id: "a1b2c3d4e5f60718293a4b5c6d7e8f90"
+  session_id: "sess_2026-08-09T14:20Z"
+  failure_code: "phantom-coupon-honoured"
 
 environment:
   snapshot: "sha256:1259042900c0cb1bf623c36f5e995ab873b2b2e3fdc2844c9dd7415831880d0c"
@@ -18,10 +18,10 @@ environment:
     pids: 256
 
 input:
-  prompt_file: prompts/expired-coupon.txt
+  prompt_file: prompts/order-1047.txt
   files:
-    - src: seed/order-1042.json
-      dest: /work/orders/order-1042.json
+    - src: seed/order-1047.json
+      dest: /work/orders/order-1047.json
 
 limits:
   timeout_seconds: 300
@@ -30,24 +30,24 @@ limits:
 
 outcome_assertions:
   - kind: json_path_equals
-    path: /work/out/invoice-1042.json
+    path: /work/out/invoice-1047.json
     json_path: "$.total_cents"
-    expected: 4999
+    expected: 2500
   - kind: json_path_equals
-    path: /work/out/invoice-1042.json
+    path: /work/out/invoice-1047.json
     json_path: "$.coupon.applied"
     expected: false
   - kind: json_path_matches
-    path: /work/out/invoice-1042.json
+    path: /work/out/invoice-1047.json
     json_path: "$.coupon.decline_reason"
-    pattern: "(?i)expired"
+    pattern: "(?i)(exist|unknown|not found)"
   - kind: sqlite_query_equals
     database: /work/store.db
-    query: "SELECT status FROM orders WHERE id = 1042"
+    query: "SELECT status FROM orders WHERE id = 1047"
     expected: [["invoiced"]]
 
 efficiency_expectations:
   max_tool_calls: 12
   max_turns: 8
 
-tags: [pricing, coupons, boundary]
+tags: [pricing, coupons, validation]

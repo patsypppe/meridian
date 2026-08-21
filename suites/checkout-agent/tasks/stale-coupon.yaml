@@ -1,11 +1,12 @@
-slug: expired-coupon
+slug: stale-coupon
 description: >
-  An order arrives with a coupon that expired yesterday. The agent must decline
-  the coupon, charge full price, and record the reason on the invoice.
+  A coupon that expired months ago, not merely yesterday. Same rule, a
+  different distance from the boundary — a fix that only handles off-by-one
+  cases should still fail here.
 
 provenance:
-  trace_id: "0af7651916cd43dd8448eb211c80319c"
-  session_id: "sess_2026-08-14T09:22Z"
+  trace_id: "8fc1a2b3c4d5e6f708192a3b4c5d6e7f"
+  session_id: "sess_2026-08-12T11:05Z"
   failure_code: "coupon-expiry-ignored"
 
 environment:
@@ -18,10 +19,10 @@ environment:
     pids: 256
 
 input:
-  prompt_file: prompts/expired-coupon.txt
+  prompt_file: prompts/order-1044.txt
   files:
-    - src: seed/order-1042.json
-      dest: /work/orders/order-1042.json
+    - src: seed/order-1044.json
+      dest: /work/orders/order-1044.json
 
 limits:
   timeout_seconds: 300
@@ -30,20 +31,20 @@ limits:
 
 outcome_assertions:
   - kind: json_path_equals
-    path: /work/out/invoice-1042.json
+    path: /work/out/invoice-1044.json
     json_path: "$.total_cents"
-    expected: 4999
+    expected: 12000
   - kind: json_path_equals
-    path: /work/out/invoice-1042.json
+    path: /work/out/invoice-1044.json
     json_path: "$.coupon.applied"
     expected: false
   - kind: json_path_matches
-    path: /work/out/invoice-1042.json
+    path: /work/out/invoice-1044.json
     json_path: "$.coupon.decline_reason"
     pattern: "(?i)expired"
   - kind: sqlite_query_equals
     database: /work/store.db
-    query: "SELECT status FROM orders WHERE id = 1042"
+    query: "SELECT status FROM orders WHERE id = 1044"
     expected: [["invoiced"]]
 
 efficiency_expectations:

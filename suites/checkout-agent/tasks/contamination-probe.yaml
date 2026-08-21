@@ -10,7 +10,7 @@ provenance:
     the isolation claim falsifiable.
 
 environment:
-  snapshot: "sha256:95c82c57ccc64cc3421159be5864d6c7e90007b6d07aa55accd5f624a4552323"
+  snapshot: "sha256:1259042900c0cb1bf623c36f5e995ab873b2b2e3fdc2844c9dd7415831880d0c"
   workdir: /work
   network: none
   resources:
