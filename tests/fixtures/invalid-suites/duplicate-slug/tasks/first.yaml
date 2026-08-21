@@ -1,0 +1,22 @@
+slug: same-slug
+description: fixture task
+provenance:
+  synthetic_reason: fixture
+environment:
+  snapshot: sha256:0000000000000000000000000000000000000000000000000000000000000000
+  workdir: /work
+  network: none
+  resources:
+    cpus: 1.0
+    memory_mb: 512
+    pids: 64
+input:
+  prompt_file: prompts/task.txt
+limits:
+  timeout_seconds: 60
+  max_tokens: 1000
+  budget_cents: 1
+outcome_assertions:
+- kind: file_exists
+  path: /work/out.txt
+  should_exist: true

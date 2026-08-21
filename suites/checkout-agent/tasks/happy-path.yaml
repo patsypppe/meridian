@@ -1,0 +1,50 @@
+slug: happy-path
+description: >
+  A valid, unexpired coupon on a well-formed order. Baseline competence: the
+  discount is applied, the invoice reflects it, and the order is marked invoiced.
+
+provenance:
+  synthetic_reason: >
+    baseline task authored with the suite; no real failure motivated it, and a
+    suite with only boundary cases cannot tell a regression from a task that was
+    always hard.
+
+environment:
+  snapshot: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+  workdir: /work
+  network: proxy-only
+  resources:
+    cpus: 2.0
+    memory_mb: 2048
+    pids: 256
+
+input:
+  prompt_file: prompts/happy-path.txt
+  files:
+    - src: seed/order-1041.json
+      dest: /work/orders/order-1041.json
+
+limits:
+  timeout_seconds: 300
+  max_tokens: 60000
+  budget_cents: 25
+
+outcome_assertions:
+  - kind: json_path_equals
+    path: /work/out/invoice-1041.json
+    json_path: "$.total_cents"
+    expected: 4500
+  - kind: json_path_equals
+    path: /work/out/invoice-1041.json
+    json_path: "$.coupon.applied"
+    expected: true
+  - kind: sqlite_query_equals
+    database: /work/store.db
+    query: "SELECT status FROM orders WHERE id = 1041"
+    expected: [["invoiced"]]
+
+efficiency_expectations:
+  max_tool_calls: 12
+  max_turns: 8
+
+tags: [pricing, coupons, baseline]

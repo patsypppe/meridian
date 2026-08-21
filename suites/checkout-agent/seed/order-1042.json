@@ -1,0 +1,9 @@
+{
+  "order_id": 1042,
+  "as_of": "2026-08-14",
+  "customer": "Grace Hopper",
+  "items": [
+    { "sku": "MRD-002", "qty": 1, "unit_cents": 4999 }
+  ],
+  "coupon_code": "SUMMER20"
+}

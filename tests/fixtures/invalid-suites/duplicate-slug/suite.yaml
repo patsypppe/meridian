@@ -1,0 +1,4 @@
+slug: fixture-suite
+version: 1
+description: fixture
+adapter: subprocess:probes:noop
