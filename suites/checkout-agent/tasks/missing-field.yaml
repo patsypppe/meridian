@@ -1,0 +1,48 @@
+slug: missing-field
+description: >
+  The order has no line items. The correct behaviour is to refuse: write no
+  invoice, leave the order pending, and record why.
+
+provenance:
+  trace_id: "4bf92f3577b34da6a3ce929d0e0e4736"
+  session_id: "sess_2026-08-11T16:40Z"
+  failure_code: "invoiced-empty-order"
+
+environment:
+  snapshot: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+  workdir: /work
+  network: proxy-only
+  resources:
+    cpus: 2.0
+    memory_mb: 2048
+    pids: 256
+
+input:
+  prompt_file: prompts/missing-field.txt
+  files:
+    - src: seed/order-1043.json
+      dest: /work/orders/order-1043.json
+
+limits:
+  timeout_seconds: 300
+  max_tokens: 60000
+  budget_cents: 25
+
+outcome_assertions:
+  - kind: file_exists
+    path: /work/out/invoice-1043.json
+    should_exist: false
+  - kind: json_path_matches
+    path: /work/out/refusal-1043.json
+    json_path: "$.reason"
+    pattern: "(?i)(missing|no line items|empty)"
+  - kind: sqlite_query_equals
+    database: /work/store.db
+    query: "SELECT status FROM orders WHERE id = 1043"
+    expected: [["pending"]]
+
+efficiency_expectations:
+  max_tool_calls: 10
+  max_turns: 6
+
+tags: [validation, refusal, graceful-failure]

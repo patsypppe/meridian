@@ -1,0 +1,36 @@
+slug: contamination-writer
+description: >
+  Writes a marker into the workdir. Half of the isolation probe: on its own it
+  proves nothing, and it is only meaningful paired with contamination-probe.
+
+provenance:
+  synthetic_reason: >
+    harness self-test for Rule 1. Isolation that is asserted rather than tested
+    is isolation nobody has verified.
+
+environment:
+  snapshot: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+  workdir: /work
+  network: none
+  resources:
+    cpus: 1.0
+    memory_mb: 512
+    pids: 64
+
+input:
+  prompt_file: prompts/contamination-writer.txt
+
+limits:
+  timeout_seconds: 60
+  max_tokens: 1000
+  budget_cents: 1
+
+adapter: "subprocess:probes:write_marker"
+role: harness_probe
+
+outcome_assertions:
+  - kind: file_exists
+    path: /work/marker.txt
+    should_exist: true
+
+tags: [harness, isolation]

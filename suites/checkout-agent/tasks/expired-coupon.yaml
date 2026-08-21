@@ -1,0 +1,53 @@
+slug: expired-coupon
+description: >
+  An order arrives with a coupon that expired yesterday. The agent must decline
+  the coupon, charge full price, and record the reason on the invoice.
+
+provenance:
+  trace_id: "0af7651916cd43dd8448eb211c80319c"
+  session_id: "sess_2026-08-14T09:22Z"
+  failure_code: "coupon-expiry-ignored"
+
+environment:
+  snapshot: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+  workdir: /work
+  network: proxy-only
+  resources:
+    cpus: 2.0
+    memory_mb: 2048
+    pids: 256
+
+input:
+  prompt_file: prompts/expired-coupon.txt
+  files:
+    - src: seed/order-1042.json
+      dest: /work/orders/order-1042.json
+
+limits:
+  timeout_seconds: 300
+  max_tokens: 60000
+  budget_cents: 25
+
+outcome_assertions:
+  - kind: json_path_equals
+    path: /work/out/invoice-1042.json
+    json_path: "$.total_cents"
+    expected: 4999
+  - kind: json_path_equals
+    path: /work/out/invoice-1042.json
+    json_path: "$.coupon.applied"
+    expected: false
+  - kind: json_path_matches
+    path: /work/out/invoice-1042.json
+    json_path: "$.coupon.decline_reason"
+    pattern: "(?i)expired"
+  - kind: sqlite_query_equals
+    database: /work/store.db
+    query: "SELECT status FROM orders WHERE id = 1042"
+    expected: [["invoiced"]]
+
+efficiency_expectations:
+  max_tool_calls: 12
+  max_turns: 8
+
+tags: [pricing, coupons, boundary]

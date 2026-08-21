@@ -1,0 +1,37 @@
+slug: contamination-probe
+description: >
+  Asserts the marker written by contamination-writer is NOT visible. Passes with
+  isolation on and FAILS with --unsafe-shared-env. Both directions are asserted;
+  a test that cannot fail proves nothing.
+
+provenance:
+  synthetic_reason: >
+    harness self-test for Rule 1, the failing half. This is the task that makes
+    the isolation claim falsifiable.
+
+environment:
+  snapshot: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+  workdir: /work
+  network: none
+  resources:
+    cpus: 1.0
+    memory_mb: 512
+    pids: 64
+
+input:
+  prompt_file: prompts/contamination-probe.txt
+
+limits:
+  timeout_seconds: 60
+  max_tokens: 1000
+  budget_cents: 1
+
+adapter: "subprocess:probes:noop"
+role: harness_probe
+
+outcome_assertions:
+  - kind: file_exists
+    path: /work/marker.txt
+    should_exist: false
+
+tags: [harness, isolation]

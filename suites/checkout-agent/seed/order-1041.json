@@ -1,0 +1,9 @@
+{
+  "order_id": 1041,
+  "as_of": "2026-08-14",
+  "customer": "Ada Lovelace",
+  "items": [
+    { "sku": "MRD-001", "qty": 1, "unit_cents": 5000 }
+  ],
+  "coupon_code": "SPRING10"
+}

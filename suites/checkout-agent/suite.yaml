@@ -1,0 +1,8 @@
+slug: checkout-agent
+version: 1
+description: >
+  A checkout and invoicing agent: read an order, apply the coupon policy, write
+  an invoice, update the order row. Three eval tasks plus the contamination pair
+  that tests Meridian rather than the agent.
+adapter: "langgraph:checkout_agent.agent:graph"
+tags: [reference, checkout]
