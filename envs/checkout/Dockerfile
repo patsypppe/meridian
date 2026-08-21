@@ -33,7 +33,13 @@ RUN chmod 0555 /opt/meridian/bootstrap.sh
 # Never root. The runner also drops all capabilities and sets no-new-privileges;
 # this is defence in depth, not the only line of defence.
 RUN groupadd --gid 10001 trial && useradd --uid 10001 --gid 10001 --no-create-home trial
-USER 10001:10001
 
+# The workdir is backed by a per-trial volume, and Docker seeds a fresh volume
+# from this path in the image — including its ownership. Without this the volume
+# arrives root-owned and the unprivileged trial user cannot write to its own
+# working directory.
+RUN mkdir -p /work && chown 10001:10001 /work && chmod 0775 /work
+
+USER 10001:10001
 WORKDIR /work
 ENTRYPOINT ["/opt/meridian/bootstrap.sh"]
