@@ -160,9 +160,2871 @@
             "output_tokens": 95
           }
         }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:85c23fdc269e1d9b17efb9c3c25e41432551a1e4517ce0b22a3bb0ded80bf95a",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:81b317483e3dbf17304ab7762b6492ff491fd0faa71a5da8434691b921b8d02e",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:26e63b59189a21b532ff6b1526520af06f9d735e281c12ea1dfad8084309f8f1",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b7156a98e21308a54a408a1f3e6671f79ab8f2d5a6870e1f0ca938f15f8481db",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ed210bad96c1e70a9b59e7987755b2071dfe1e9fb4a0c979674011d6288be817",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:31ca2cb5b08930891278bfa73baf06ae47a4a7fe5042d42dcf6f1cec1770e737",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:85c23fdc269e1d9b17efb9c3c25e41432551a1e4517ce0b22a3bb0ded80bf95a",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:81b317483e3dbf17304ab7762b6492ff491fd0faa71a5da8434691b921b8d02e",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:26e63b59189a21b532ff6b1526520af06f9d735e281c12ea1dfad8084309f8f1",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b7156a98e21308a54a408a1f3e6671f79ab8f2d5a6870e1f0ca938f15f8481db",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ed210bad96c1e70a9b59e7987755b2071dfe1e9fb4a0c979674011d6288be817",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:31ca2cb5b08930891278bfa73baf06ae47a4a7fe5042d42dcf6f1cec1770e737",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:42a6e6d49a1959eb2427eabdbeda0518024b866767a2b94a237ceacda2fbc04d",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:2c05977b8365be0a19d9bb1b0b3bcb7cad8880434e3bc18ce58cd22567aff99c",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:d92deeadc76e8648959b6e2eea756e6d9f660285c27a72c481b5884b36603e17",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:f183a91a38f91d7ae6e43a83b8c099d47aa0bc5c336c875225f342c6c4d47261",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ee23dbb7c3f8336b1d811958f60572de5a188cd47598d69b5d60b8a508dd6cd2",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:be08eb4d0c807e373419512b1c3944a26ad87cd9b052000759f7d08704a9e200",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:85c23fdc269e1d9b17efb9c3c25e41432551a1e4517ce0b22a3bb0ded80bf95a",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:81b317483e3dbf17304ab7762b6492ff491fd0faa71a5da8434691b921b8d02e",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:26e63b59189a21b532ff6b1526520af06f9d735e281c12ea1dfad8084309f8f1",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b7156a98e21308a54a408a1f3e6671f79ab8f2d5a6870e1f0ca938f15f8481db",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ed210bad96c1e70a9b59e7987755b2071dfe1e9fb4a0c979674011d6288be817",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:31ca2cb5b08930891278bfa73baf06ae47a4a7fe5042d42dcf6f1cec1770e737",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:42a6e6d49a1959eb2427eabdbeda0518024b866767a2b94a237ceacda2fbc04d",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:2c05977b8365be0a19d9bb1b0b3bcb7cad8880434e3bc18ce58cd22567aff99c",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:d92deeadc76e8648959b6e2eea756e6d9f660285c27a72c481b5884b36603e17",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:f183a91a38f91d7ae6e43a83b8c099d47aa0bc5c336c875225f342c6c4d47261",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ee23dbb7c3f8336b1d811958f60572de5a188cd47598d69b5d60b8a508dd6cd2",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:be08eb4d0c807e373419512b1c3944a26ad87cd9b052000759f7d08704a9e200",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:85c23fdc269e1d9b17efb9c3c25e41432551a1e4517ce0b22a3bb0ded80bf95a",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:81b317483e3dbf17304ab7762b6492ff491fd0faa71a5da8434691b921b8d02e",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:26e63b59189a21b532ff6b1526520af06f9d735e281c12ea1dfad8084309f8f1",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b7156a98e21308a54a408a1f3e6671f79ab8f2d5a6870e1f0ca938f15f8481db",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ed210bad96c1e70a9b59e7987755b2071dfe1e9fb4a0c979674011d6288be817",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:31ca2cb5b08930891278bfa73baf06ae47a4a7fe5042d42dcf6f1cec1770e737",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:42a6e6d49a1959eb2427eabdbeda0518024b866767a2b94a237ceacda2fbc04d",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:2c05977b8365be0a19d9bb1b0b3bcb7cad8880434e3bc18ce58cd22567aff99c",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:d92deeadc76e8648959b6e2eea756e6d9f660285c27a72c481b5884b36603e17",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:f183a91a38f91d7ae6e43a83b8c099d47aa0bc5c336c875225f342c6c4d47261",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ee23dbb7c3f8336b1d811958f60572de5a188cd47598d69b5d60b8a508dd6cd2",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:be08eb4d0c807e373419512b1c3944a26ad87cd9b052000759f7d08704a9e200",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:85c23fdc269e1d9b17efb9c3c25e41432551a1e4517ce0b22a3bb0ded80bf95a",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:81b317483e3dbf17304ab7762b6492ff491fd0faa71a5da8434691b921b8d02e",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:26e63b59189a21b532ff6b1526520af06f9d735e281c12ea1dfad8084309f8f1",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b7156a98e21308a54a408a1f3e6671f79ab8f2d5a6870e1f0ca938f15f8481db",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ed210bad96c1e70a9b59e7987755b2071dfe1e9fb4a0c979674011d6288be817",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:31ca2cb5b08930891278bfa73baf06ae47a4a7fe5042d42dcf6f1cec1770e737",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:85c23fdc269e1d9b17efb9c3c25e41432551a1e4517ce0b22a3bb0ded80bf95a",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:81b317483e3dbf17304ab7762b6492ff491fd0faa71a5da8434691b921b8d02e",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:26e63b59189a21b532ff6b1526520af06f9d735e281c12ea1dfad8084309f8f1",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b7156a98e21308a54a408a1f3e6671f79ab8f2d5a6870e1f0ca938f15f8481db",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ed210bad96c1e70a9b59e7987755b2071dfe1e9fb4a0c979674011d6288be817",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:31ca2cb5b08930891278bfa73baf06ae47a4a7fe5042d42dcf6f1cec1770e737",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
       }
     ],
     "1": [
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:85c23fdc269e1d9b17efb9c3c25e41432551a1e4517ce0b22a3bb0ded80bf95a",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:81b317483e3dbf17304ab7762b6492ff491fd0faa71a5da8434691b921b8d02e",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:26e63b59189a21b532ff6b1526520af06f9d735e281c12ea1dfad8084309f8f1",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b7156a98e21308a54a408a1f3e6671f79ab8f2d5a6870e1f0ca938f15f8481db",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ed210bad96c1e70a9b59e7987755b2071dfe1e9fb4a0c979674011d6288be817",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:31ca2cb5b08930891278bfa73baf06ae47a4a7fe5042d42dcf6f1cec1770e737",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:85c23fdc269e1d9b17efb9c3c25e41432551a1e4517ce0b22a3bb0ded80bf95a",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:81b317483e3dbf17304ab7762b6492ff491fd0faa71a5da8434691b921b8d02e",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:26e63b59189a21b532ff6b1526520af06f9d735e281c12ea1dfad8084309f8f1",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b7156a98e21308a54a408a1f3e6671f79ab8f2d5a6870e1f0ca938f15f8481db",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ed210bad96c1e70a9b59e7987755b2071dfe1e9fb4a0c979674011d6288be817",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:31ca2cb5b08930891278bfa73baf06ae47a4a7fe5042d42dcf6f1cec1770e737",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:85c23fdc269e1d9b17efb9c3c25e41432551a1e4517ce0b22a3bb0ded80bf95a",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:81b317483e3dbf17304ab7762b6492ff491fd0faa71a5da8434691b921b8d02e",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:26e63b59189a21b532ff6b1526520af06f9d735e281c12ea1dfad8084309f8f1",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b7156a98e21308a54a408a1f3e6671f79ab8f2d5a6870e1f0ca938f15f8481db",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ed210bad96c1e70a9b59e7987755b2071dfe1e9fb4a0c979674011d6288be817",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:31ca2cb5b08930891278bfa73baf06ae47a4a7fe5042d42dcf6f1cec1770e737",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:42a6e6d49a1959eb2427eabdbeda0518024b866767a2b94a237ceacda2fbc04d",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:2c05977b8365be0a19d9bb1b0b3bcb7cad8880434e3bc18ce58cd22567aff99c",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:d92deeadc76e8648959b6e2eea756e6d9f660285c27a72c481b5884b36603e17",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:f183a91a38f91d7ae6e43a83b8c099d47aa0bc5c336c875225f342c6c4d47261",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ee23dbb7c3f8336b1d811958f60572de5a188cd47598d69b5d60b8a508dd6cd2",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:be08eb4d0c807e373419512b1c3944a26ad87cd9b052000759f7d08704a9e200",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:85c23fdc269e1d9b17efb9c3c25e41432551a1e4517ce0b22a3bb0ded80bf95a",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:81b317483e3dbf17304ab7762b6492ff491fd0faa71a5da8434691b921b8d02e",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:26e63b59189a21b532ff6b1526520af06f9d735e281c12ea1dfad8084309f8f1",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b7156a98e21308a54a408a1f3e6671f79ab8f2d5a6870e1f0ca938f15f8481db",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ed210bad96c1e70a9b59e7987755b2071dfe1e9fb4a0c979674011d6288be817",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:31ca2cb5b08930891278bfa73baf06ae47a4a7fe5042d42dcf6f1cec1770e737",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:42a6e6d49a1959eb2427eabdbeda0518024b866767a2b94a237ceacda2fbc04d",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:2c05977b8365be0a19d9bb1b0b3bcb7cad8880434e3bc18ce58cd22567aff99c",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:d92deeadc76e8648959b6e2eea756e6d9f660285c27a72c481b5884b36603e17",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:f183a91a38f91d7ae6e43a83b8c099d47aa0bc5c336c875225f342c6c4d47261",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ee23dbb7c3f8336b1d811958f60572de5a188cd47598d69b5d60b8a508dd6cd2",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:be08eb4d0c807e373419512b1c3944a26ad87cd9b052000759f7d08704a9e200",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:85c23fdc269e1d9b17efb9c3c25e41432551a1e4517ce0b22a3bb0ded80bf95a",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:81b317483e3dbf17304ab7762b6492ff491fd0faa71a5da8434691b921b8d02e",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:26e63b59189a21b532ff6b1526520af06f9d735e281c12ea1dfad8084309f8f1",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b7156a98e21308a54a408a1f3e6671f79ab8f2d5a6870e1f0ca938f15f8481db",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ed210bad96c1e70a9b59e7987755b2071dfe1e9fb4a0c979674011d6288be817",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:31ca2cb5b08930891278bfa73baf06ae47a4a7fe5042d42dcf6f1cec1770e737",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:42a6e6d49a1959eb2427eabdbeda0518024b866767a2b94a237ceacda2fbc04d",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:2c05977b8365be0a19d9bb1b0b3bcb7cad8880434e3bc18ce58cd22567aff99c",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:d92deeadc76e8648959b6e2eea756e6d9f660285c27a72c481b5884b36603e17",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:f183a91a38f91d7ae6e43a83b8c099d47aa0bc5c336c875225f342c6c4d47261",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ee23dbb7c3f8336b1d811958f60572de5a188cd47598d69b5d60b8a508dd6cd2",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:be08eb4d0c807e373419512b1c3944a26ad87cd9b052000759f7d08704a9e200",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:85c23fdc269e1d9b17efb9c3c25e41432551a1e4517ce0b22a3bb0ded80bf95a",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:81b317483e3dbf17304ab7762b6492ff491fd0faa71a5da8434691b921b8d02e",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:26e63b59189a21b532ff6b1526520af06f9d735e281c12ea1dfad8084309f8f1",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b7156a98e21308a54a408a1f3e6671f79ab8f2d5a6870e1f0ca938f15f8481db",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ed210bad96c1e70a9b59e7987755b2071dfe1e9fb4a0c979674011d6288be817",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:31ca2cb5b08930891278bfa73baf06ae47a4a7fe5042d42dcf6f1cec1770e737",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
       {
         "input_tokens": 420,
         "output_tokens": 95,
@@ -482,6 +3344,1437 @@
             "output_tokens": 95
           }
         }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:85c23fdc269e1d9b17efb9c3c25e41432551a1e4517ce0b22a3bb0ded80bf95a",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:81b317483e3dbf17304ab7762b6492ff491fd0faa71a5da8434691b921b8d02e",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:26e63b59189a21b532ff6b1526520af06f9d735e281c12ea1dfad8084309f8f1",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b7156a98e21308a54a408a1f3e6671f79ab8f2d5a6870e1f0ca938f15f8481db",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ed210bad96c1e70a9b59e7987755b2071dfe1e9fb4a0c979674011d6288be817",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:31ca2cb5b08930891278bfa73baf06ae47a4a7fe5042d42dcf6f1cec1770e737",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:85c23fdc269e1d9b17efb9c3c25e41432551a1e4517ce0b22a3bb0ded80bf95a",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:81b317483e3dbf17304ab7762b6492ff491fd0faa71a5da8434691b921b8d02e",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:26e63b59189a21b532ff6b1526520af06f9d735e281c12ea1dfad8084309f8f1",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b7156a98e21308a54a408a1f3e6671f79ab8f2d5a6870e1f0ca938f15f8481db",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ed210bad96c1e70a9b59e7987755b2071dfe1e9fb4a0c979674011d6288be817",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:31ca2cb5b08930891278bfa73baf06ae47a4a7fe5042d42dcf6f1cec1770e737",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:42a6e6d49a1959eb2427eabdbeda0518024b866767a2b94a237ceacda2fbc04d",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:2c05977b8365be0a19d9bb1b0b3bcb7cad8880434e3bc18ce58cd22567aff99c",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:d92deeadc76e8648959b6e2eea756e6d9f660285c27a72c481b5884b36603e17",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:f183a91a38f91d7ae6e43a83b8c099d47aa0bc5c336c875225f342c6c4d47261",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ee23dbb7c3f8336b1d811958f60572de5a188cd47598d69b5d60b8a508dd6cd2",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:be08eb4d0c807e373419512b1c3944a26ad87cd9b052000759f7d08704a9e200",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:85c23fdc269e1d9b17efb9c3c25e41432551a1e4517ce0b22a3bb0ded80bf95a",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:81b317483e3dbf17304ab7762b6492ff491fd0faa71a5da8434691b921b8d02e",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:26e63b59189a21b532ff6b1526520af06f9d735e281c12ea1dfad8084309f8f1",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b7156a98e21308a54a408a1f3e6671f79ab8f2d5a6870e1f0ca938f15f8481db",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ed210bad96c1e70a9b59e7987755b2071dfe1e9fb4a0c979674011d6288be817",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:31ca2cb5b08930891278bfa73baf06ae47a4a7fe5042d42dcf6f1cec1770e737",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:42a6e6d49a1959eb2427eabdbeda0518024b866767a2b94a237ceacda2fbc04d",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:2c05977b8365be0a19d9bb1b0b3bcb7cad8880434e3bc18ce58cd22567aff99c",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:d92deeadc76e8648959b6e2eea756e6d9f660285c27a72c481b5884b36603e17",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:f183a91a38f91d7ae6e43a83b8c099d47aa0bc5c336c875225f342c6c4d47261",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ee23dbb7c3f8336b1d811958f60572de5a188cd47598d69b5d60b8a508dd6cd2",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:be08eb4d0c807e373419512b1c3944a26ad87cd9b052000759f7d08704a9e200",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:85c23fdc269e1d9b17efb9c3c25e41432551a1e4517ce0b22a3bb0ded80bf95a",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:81b317483e3dbf17304ab7762b6492ff491fd0faa71a5da8434691b921b8d02e",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:26e63b59189a21b532ff6b1526520af06f9d735e281c12ea1dfad8084309f8f1",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b7156a98e21308a54a408a1f3e6671f79ab8f2d5a6870e1f0ca938f15f8481db",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ed210bad96c1e70a9b59e7987755b2071dfe1e9fb4a0c979674011d6288be817",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:31ca2cb5b08930891278bfa73baf06ae47a4a7fe5042d42dcf6f1cec1770e737",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:42a6e6d49a1959eb2427eabdbeda0518024b866767a2b94a237ceacda2fbc04d",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:2c05977b8365be0a19d9bb1b0b3bcb7cad8880434e3bc18ce58cd22567aff99c",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:d92deeadc76e8648959b6e2eea756e6d9f660285c27a72c481b5884b36603e17",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:f183a91a38f91d7ae6e43a83b8c099d47aa0bc5c336c875225f342c6c4d47261",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ee23dbb7c3f8336b1d811958f60572de5a188cd47598d69b5d60b8a508dd6cd2",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:be08eb4d0c807e373419512b1c3944a26ad87cd9b052000759f7d08704a9e200",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:85c23fdc269e1d9b17efb9c3c25e41432551a1e4517ce0b22a3bb0ded80bf95a",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:81b317483e3dbf17304ab7762b6492ff491fd0faa71a5da8434691b921b8d02e",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:26e63b59189a21b532ff6b1526520af06f9d735e281c12ea1dfad8084309f8f1",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b7156a98e21308a54a408a1f3e6671f79ab8f2d5a6870e1f0ca938f15f8481db",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ed210bad96c1e70a9b59e7987755b2071dfe1e9fb4a0c979674011d6288be817",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:31ca2cb5b08930891278bfa73baf06ae47a4a7fe5042d42dcf6f1cec1770e737",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:85c23fdc269e1d9b17efb9c3c25e41432551a1e4517ce0b22a3bb0ded80bf95a",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:81b317483e3dbf17304ab7762b6492ff491fd0faa71a5da8434691b921b8d02e",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:26e63b59189a21b532ff6b1526520af06f9d735e281c12ea1dfad8084309f8f1",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b7156a98e21308a54a408a1f3e6671f79ab8f2d5a6870e1f0ca938f15f8481db",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ed210bad96c1e70a9b59e7987755b2071dfe1e9fb4a0c979674011d6288be817",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:31ca2cb5b08930891278bfa73baf06ae47a4a7fe5042d42dcf6f1cec1770e737",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
       }
     ],
     "3": [
@@ -643,9 +4936,2039 @@
             "output_tokens": 95
           }
         }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:42a6e6d49a1959eb2427eabdbeda0518024b866767a2b94a237ceacda2fbc04d",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:2c05977b8365be0a19d9bb1b0b3bcb7cad8880434e3bc18ce58cd22567aff99c",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:d92deeadc76e8648959b6e2eea756e6d9f660285c27a72c481b5884b36603e17",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:f183a91a38f91d7ae6e43a83b8c099d47aa0bc5c336c875225f342c6c4d47261",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ee23dbb7c3f8336b1d811958f60572de5a188cd47598d69b5d60b8a508dd6cd2",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:be08eb4d0c807e373419512b1c3944a26ad87cd9b052000759f7d08704a9e200",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:85c23fdc269e1d9b17efb9c3c25e41432551a1e4517ce0b22a3bb0ded80bf95a",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:81b317483e3dbf17304ab7762b6492ff491fd0faa71a5da8434691b921b8d02e",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:26e63b59189a21b532ff6b1526520af06f9d735e281c12ea1dfad8084309f8f1",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b7156a98e21308a54a408a1f3e6671f79ab8f2d5a6870e1f0ca938f15f8481db",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ed210bad96c1e70a9b59e7987755b2071dfe1e9fb4a0c979674011d6288be817",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:31ca2cb5b08930891278bfa73baf06ae47a4a7fe5042d42dcf6f1cec1770e737",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:42a6e6d49a1959eb2427eabdbeda0518024b866767a2b94a237ceacda2fbc04d",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:2c05977b8365be0a19d9bb1b0b3bcb7cad8880434e3bc18ce58cd22567aff99c",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:d92deeadc76e8648959b6e2eea756e6d9f660285c27a72c481b5884b36603e17",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:f183a91a38f91d7ae6e43a83b8c099d47aa0bc5c336c875225f342c6c4d47261",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ee23dbb7c3f8336b1d811958f60572de5a188cd47598d69b5d60b8a508dd6cd2",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:be08eb4d0c807e373419512b1c3944a26ad87cd9b052000759f7d08704a9e200",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:85c23fdc269e1d9b17efb9c3c25e41432551a1e4517ce0b22a3bb0ded80bf95a",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:81b317483e3dbf17304ab7762b6492ff491fd0faa71a5da8434691b921b8d02e",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:26e63b59189a21b532ff6b1526520af06f9d735e281c12ea1dfad8084309f8f1",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b7156a98e21308a54a408a1f3e6671f79ab8f2d5a6870e1f0ca938f15f8481db",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ed210bad96c1e70a9b59e7987755b2071dfe1e9fb4a0c979674011d6288be817",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:31ca2cb5b08930891278bfa73baf06ae47a4a7fe5042d42dcf6f1cec1770e737",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:42a6e6d49a1959eb2427eabdbeda0518024b866767a2b94a237ceacda2fbc04d",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:2c05977b8365be0a19d9bb1b0b3bcb7cad8880434e3bc18ce58cd22567aff99c",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:d92deeadc76e8648959b6e2eea756e6d9f660285c27a72c481b5884b36603e17",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:f183a91a38f91d7ae6e43a83b8c099d47aa0bc5c336c875225f342c6c4d47261",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ee23dbb7c3f8336b1d811958f60572de5a188cd47598d69b5d60b8a508dd6cd2",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:be08eb4d0c807e373419512b1c3944a26ad87cd9b052000759f7d08704a9e200",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:85c23fdc269e1d9b17efb9c3c25e41432551a1e4517ce0b22a3bb0ded80bf95a",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:81b317483e3dbf17304ab7762b6492ff491fd0faa71a5da8434691b921b8d02e",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:26e63b59189a21b532ff6b1526520af06f9d735e281c12ea1dfad8084309f8f1",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b7156a98e21308a54a408a1f3e6671f79ab8f2d5a6870e1f0ca938f15f8481db",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ed210bad96c1e70a9b59e7987755b2071dfe1e9fb4a0c979674011d6288be817",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:31ca2cb5b08930891278bfa73baf06ae47a4a7fe5042d42dcf6f1cec1770e737",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:85c23fdc269e1d9b17efb9c3c25e41432551a1e4517ce0b22a3bb0ded80bf95a",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:81b317483e3dbf17304ab7762b6492ff491fd0faa71a5da8434691b921b8d02e",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:26e63b59189a21b532ff6b1526520af06f9d735e281c12ea1dfad8084309f8f1",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b7156a98e21308a54a408a1f3e6671f79ab8f2d5a6870e1f0ca938f15f8481db",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ed210bad96c1e70a9b59e7987755b2071dfe1e9fb4a0c979674011d6288be817",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1046,
+                "status": "invoiced",
+                "total_cents": 7440
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:31ca2cb5b08930891278bfa73baf06ae47a4a7fe5042d42dcf6f1cec1770e737",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1046 invoiced at 7440 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
       }
     ],
     "4": [
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:85c23fdc269e1d9b17efb9c3c25e41432551a1e4517ce0b22a3bb0ded80bf95a",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:81b317483e3dbf17304ab7762b6492ff491fd0faa71a5da8434691b921b8d02e",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:26e63b59189a21b532ff6b1526520af06f9d735e281c12ea1dfad8084309f8f1",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b7156a98e21308a54a408a1f3e6671f79ab8f2d5a6870e1f0ca938f15f8481db",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ed210bad96c1e70a9b59e7987755b2071dfe1e9fb4a0c979674011d6288be817",
+        "response": {
+          "content": [
+            {
+              "text": "Invoice for order 1046 written.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:42a6e6d49a1959eb2427eabdbeda0518024b866767a2b94a237ceacda2fbc04d",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:2c05977b8365be0a19d9bb1b0b3bcb7cad8880434e3bc18ce58cd22567aff99c",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:d92deeadc76e8648959b6e2eea756e6d9f660285c27a72c481b5884b36603e17",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:f183a91a38f91d7ae6e43a83b8c099d47aa0bc5c336c875225f342c6c4d47261",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ee23dbb7c3f8336b1d811958f60572de5a188cd47598d69b5d60b8a508dd6cd2",
+        "response": {
+          "content": [
+            {
+              "text": "Invoice for order 1046 written.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:85c23fdc269e1d9b17efb9c3c25e41432551a1e4517ce0b22a3bb0ded80bf95a",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:81b317483e3dbf17304ab7762b6492ff491fd0faa71a5da8434691b921b8d02e",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:26e63b59189a21b532ff6b1526520af06f9d735e281c12ea1dfad8084309f8f1",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b7156a98e21308a54a408a1f3e6671f79ab8f2d5a6870e1f0ca938f15f8481db",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ed210bad96c1e70a9b59e7987755b2071dfe1e9fb4a0c979674011d6288be817",
+        "response": {
+          "content": [
+            {
+              "text": "Invoice for order 1046 written.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:42a6e6d49a1959eb2427eabdbeda0518024b866767a2b94a237ceacda2fbc04d",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:2c05977b8365be0a19d9bb1b0b3bcb7cad8880434e3bc18ce58cd22567aff99c",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:d92deeadc76e8648959b6e2eea756e6d9f660285c27a72c481b5884b36603e17",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:f183a91a38f91d7ae6e43a83b8c099d47aa0bc5c336c875225f342c6c4d47261",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ee23dbb7c3f8336b1d811958f60572de5a188cd47598d69b5d60b8a508dd6cd2",
+        "response": {
+          "content": [
+            {
+              "text": "Invoice for order 1046 written.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:85c23fdc269e1d9b17efb9c3c25e41432551a1e4517ce0b22a3bb0ded80bf95a",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:81b317483e3dbf17304ab7762b6492ff491fd0faa71a5da8434691b921b8d02e",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:26e63b59189a21b532ff6b1526520af06f9d735e281c12ea1dfad8084309f8f1",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b7156a98e21308a54a408a1f3e6671f79ab8f2d5a6870e1f0ca938f15f8481db",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ed210bad96c1e70a9b59e7987755b2071dfe1e9fb4a0c979674011d6288be817",
+        "response": {
+          "content": [
+            {
+              "text": "Invoice for order 1046 written.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:42a6e6d49a1959eb2427eabdbeda0518024b866767a2b94a237ceacda2fbc04d",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:2c05977b8365be0a19d9bb1b0b3bcb7cad8880434e3bc18ce58cd22567aff99c",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:d92deeadc76e8648959b6e2eea756e6d9f660285c27a72c481b5884b36603e17",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:f183a91a38f91d7ae6e43a83b8c099d47aa0bc5c336c875225f342c6c4d47261",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ee23dbb7c3f8336b1d811958f60572de5a188cd47598d69b5d60b8a508dd6cd2",
+        "response": {
+          "content": [
+            {
+              "text": "Invoice for order 1046 written.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:85c23fdc269e1d9b17efb9c3c25e41432551a1e4517ce0b22a3bb0ded80bf95a",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1046
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:81b317483e3dbf17304ab7762b6492ff491fd0faa71a5da8434691b921b8d02e",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:26e63b59189a21b532ff6b1526520af06f9d735e281c12ea1dfad8084309f8f1",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "BOUNDARY7"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b7156a98e21308a54a408a1f3e6671f79ab8f2d5a6870e1f0ca938f15f8481db",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": true,
+                  "code": "BOUNDARY7",
+                  "percent_off": 7
+                },
+                "order_id": 1046,
+                "subtotal_cents": 8000,
+                "total_cents": 7440
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:ed210bad96c1e70a9b59e7987755b2071dfe1e9fb4a0c979674011d6288be817",
+        "response": {
+          "content": [
+            {
+              "text": "Invoice for order 1046 written.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
       {
         "input_tokens": 420,
         "output_tokens": 95,

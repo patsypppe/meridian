@@ -1,0 +1,103 @@
+name: meridian gate
+
+# This workflow is the product demonstrating itself. It is the thing you
+# screenshot.
+on: pull_request
+
+permissions:
+  contents: read
+  pull-requests: write        # required for the comment
+
+concurrency:
+  group: gate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Not optional. Merge-base resolution silently returns nothing on a
+          # shallow clone, and the gate then quietly has no baseline forever.
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - run: uv sync --frozen
+
+      - name: Build images and repin the suite
+        # An image ID is architecture-specific: the digest committed from an
+        # arm64 laptop does not exist on this amd64 runner.
+        run: |
+          uv run meridian snapshot build ./envs/checkout --tag checkout:dev \
+            --write-ref --update-suite ./suites/checkout-agent
+          uv run meridian snapshot build ./envs/proxy --tag meridian-proxy:dev --context .
+
+      - name: Gate
+        id: gate
+        # No API key. The fixture agent talks to the proxy, and the proxy talks
+        # to the deterministic stand-in provider on a private network — so this
+        # job is offline, free, and cannot be flaky because a provider was slow.
+        #
+        # --proxy-mode record, not replay: a gate measures the agent *as it is
+        # now*, and cassettes recorded from the previous version would miss on
+        # every changed prompt. Replay is for reproducing a past run.
+        run: |
+          uv run meridian gate \
+            --suite ./suites/checkout-agent \
+            --baseline-ref "${{ github.event.pull_request.base.sha }}" \
+            --n 5 --k 3 \
+            --tolerance 0.03 \
+            --require-significance \
+            --proxy-mode record \
+            --comment-file gate-comment.md
+
+      - name: Comment
+        # `always()`: a failing gate must still explain itself, or the developer
+        # sees a red X with no reason and disables the check.
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const body = fs.existsSync('gate-comment.md')
+              ? fs.readFileSync('gate-comment.md', 'utf8')
+              : '## Meridian gate\n\n🟡 The gate did not produce a report. This is a harness failure, not a verdict about the agent — see the job log.';
+
+            const marker = '## Meridian gate';
+            const { data: comments } = await github.rest.issues.listComments({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+            // Update in place rather than appending a comment per push: a PR
+            // with fifteen gate comments is a PR where nobody reads the gate.
+            const existing = comments.find(
+              (c) => c.user.type === 'Bot' && c.body.startsWith(marker),
+            );
+            if (existing) {
+              await github.rest.issues.updateComment({
+                comment_id: existing.id,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body,
+              });
+            }
+
+      - name: Archive the run
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: meridian-runs
+          path: runs/
+          if-no-files-found: ignore

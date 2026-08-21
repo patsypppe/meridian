@@ -1,0 +1,15 @@
+The contamination probe, both directions.
+A probe that cannot fail proves nothing, so the failing direction is
+asserted in CI alongside the passing one.
+
+$ meridian run --suite checkout-agent --include-probes 
+  contamination-writer     pass
+  contamination-probe      pass
+
+$ meridian run --suite checkout-agent --include-probes --unsafe-shared-env
+  contamination-writer     pass
+  contamination-probe      fail  /work/marker.txt exists but should not — 18 bytes of state that should not be reachable
+
+With isolation, the probe passes: the marker written by the previous trial
+is not reachable. With --unsafe-shared-env the two trials share one
+workdir volume, the marker survives, and the probe fails.

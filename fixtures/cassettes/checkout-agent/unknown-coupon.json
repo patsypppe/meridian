@@ -160,9 +160,2871 @@
             "output_tokens": 95
           }
         }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b8cbb93091b4b969eedbd1447266140cdef8d2ca59b8fc872d710eeda0723621",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:6118632b4edfb098762d0e4ff1ec0e3358c3d02422146d4d42816ef7722ab065",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:87ca256e37955c2ad282074164f8f7e35b2b5eb01d2b884021d551a7f15611ab",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:39e714ba5acaaf0a6e31e4869b98157e485746749d8b45deb7803f6b52044c9e",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:5e51957d85c6c4c4cb62030a32b3b47a55c7b8ddac97b5e60034eae6450a07c8",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:09285269958f866e00d6d1c05b809f2f5ff7d4d95377f9139359132aeb50fe20",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b8cbb93091b4b969eedbd1447266140cdef8d2ca59b8fc872d710eeda0723621",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:6118632b4edfb098762d0e4ff1ec0e3358c3d02422146d4d42816ef7722ab065",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:87ca256e37955c2ad282074164f8f7e35b2b5eb01d2b884021d551a7f15611ab",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:39e714ba5acaaf0a6e31e4869b98157e485746749d8b45deb7803f6b52044c9e",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:5e51957d85c6c4c4cb62030a32b3b47a55c7b8ddac97b5e60034eae6450a07c8",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:09285269958f866e00d6d1c05b809f2f5ff7d4d95377f9139359132aeb50fe20",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:aeb8be1826472752bff6c558ceab8faea14891e607ed8d319a65842292e16abe",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:7e4e6090b1e0f318c8453e6d176a1c74beea88db5dae6b0df9ce2008be13f3fb",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:34c26ea4a79ea1631a49aa4dd777f2c327090ffbea2933c191e97b0cfe62780e",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:29875846c0e219ece2351b91e4a77b147dfd712333a1a729b696eae14730f7cc",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:9560c5807519357309a2ce02317b86c5662ef9c7006b79f64dd936077391eed5",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:672b746d87188466b321391aa350df1ed6095a2f0d69797cc5cee3daa24101be",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b8cbb93091b4b969eedbd1447266140cdef8d2ca59b8fc872d710eeda0723621",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:6118632b4edfb098762d0e4ff1ec0e3358c3d02422146d4d42816ef7722ab065",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:87ca256e37955c2ad282074164f8f7e35b2b5eb01d2b884021d551a7f15611ab",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:39e714ba5acaaf0a6e31e4869b98157e485746749d8b45deb7803f6b52044c9e",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:5e51957d85c6c4c4cb62030a32b3b47a55c7b8ddac97b5e60034eae6450a07c8",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:09285269958f866e00d6d1c05b809f2f5ff7d4d95377f9139359132aeb50fe20",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:aeb8be1826472752bff6c558ceab8faea14891e607ed8d319a65842292e16abe",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:7e4e6090b1e0f318c8453e6d176a1c74beea88db5dae6b0df9ce2008be13f3fb",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:34c26ea4a79ea1631a49aa4dd777f2c327090ffbea2933c191e97b0cfe62780e",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:29875846c0e219ece2351b91e4a77b147dfd712333a1a729b696eae14730f7cc",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:9560c5807519357309a2ce02317b86c5662ef9c7006b79f64dd936077391eed5",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:672b746d87188466b321391aa350df1ed6095a2f0d69797cc5cee3daa24101be",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b8cbb93091b4b969eedbd1447266140cdef8d2ca59b8fc872d710eeda0723621",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:6118632b4edfb098762d0e4ff1ec0e3358c3d02422146d4d42816ef7722ab065",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:87ca256e37955c2ad282074164f8f7e35b2b5eb01d2b884021d551a7f15611ab",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:39e714ba5acaaf0a6e31e4869b98157e485746749d8b45deb7803f6b52044c9e",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:5e51957d85c6c4c4cb62030a32b3b47a55c7b8ddac97b5e60034eae6450a07c8",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:09285269958f866e00d6d1c05b809f2f5ff7d4d95377f9139359132aeb50fe20",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:aeb8be1826472752bff6c558ceab8faea14891e607ed8d319a65842292e16abe",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:7e4e6090b1e0f318c8453e6d176a1c74beea88db5dae6b0df9ce2008be13f3fb",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:34c26ea4a79ea1631a49aa4dd777f2c327090ffbea2933c191e97b0cfe62780e",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:29875846c0e219ece2351b91e4a77b147dfd712333a1a729b696eae14730f7cc",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:9560c5807519357309a2ce02317b86c5662ef9c7006b79f64dd936077391eed5",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:672b746d87188466b321391aa350df1ed6095a2f0d69797cc5cee3daa24101be",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b8cbb93091b4b969eedbd1447266140cdef8d2ca59b8fc872d710eeda0723621",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:6118632b4edfb098762d0e4ff1ec0e3358c3d02422146d4d42816ef7722ab065",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:87ca256e37955c2ad282074164f8f7e35b2b5eb01d2b884021d551a7f15611ab",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:39e714ba5acaaf0a6e31e4869b98157e485746749d8b45deb7803f6b52044c9e",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:5e51957d85c6c4c4cb62030a32b3b47a55c7b8ddac97b5e60034eae6450a07c8",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:09285269958f866e00d6d1c05b809f2f5ff7d4d95377f9139359132aeb50fe20",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b8cbb93091b4b969eedbd1447266140cdef8d2ca59b8fc872d710eeda0723621",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:6118632b4edfb098762d0e4ff1ec0e3358c3d02422146d4d42816ef7722ab065",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:87ca256e37955c2ad282074164f8f7e35b2b5eb01d2b884021d551a7f15611ab",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:39e714ba5acaaf0a6e31e4869b98157e485746749d8b45deb7803f6b52044c9e",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:5e51957d85c6c4c4cb62030a32b3b47a55c7b8ddac97b5e60034eae6450a07c8",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:09285269958f866e00d6d1c05b809f2f5ff7d4d95377f9139359132aeb50fe20",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
       }
     ],
     "1": [
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b8cbb93091b4b969eedbd1447266140cdef8d2ca59b8fc872d710eeda0723621",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:6118632b4edfb098762d0e4ff1ec0e3358c3d02422146d4d42816ef7722ab065",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:87ca256e37955c2ad282074164f8f7e35b2b5eb01d2b884021d551a7f15611ab",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:39e714ba5acaaf0a6e31e4869b98157e485746749d8b45deb7803f6b52044c9e",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:5e51957d85c6c4c4cb62030a32b3b47a55c7b8ddac97b5e60034eae6450a07c8",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:09285269958f866e00d6d1c05b809f2f5ff7d4d95377f9139359132aeb50fe20",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b8cbb93091b4b969eedbd1447266140cdef8d2ca59b8fc872d710eeda0723621",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:6118632b4edfb098762d0e4ff1ec0e3358c3d02422146d4d42816ef7722ab065",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:87ca256e37955c2ad282074164f8f7e35b2b5eb01d2b884021d551a7f15611ab",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:39e714ba5acaaf0a6e31e4869b98157e485746749d8b45deb7803f6b52044c9e",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:5e51957d85c6c4c4cb62030a32b3b47a55c7b8ddac97b5e60034eae6450a07c8",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:09285269958f866e00d6d1c05b809f2f5ff7d4d95377f9139359132aeb50fe20",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b8cbb93091b4b969eedbd1447266140cdef8d2ca59b8fc872d710eeda0723621",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:6118632b4edfb098762d0e4ff1ec0e3358c3d02422146d4d42816ef7722ab065",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:87ca256e37955c2ad282074164f8f7e35b2b5eb01d2b884021d551a7f15611ab",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:39e714ba5acaaf0a6e31e4869b98157e485746749d8b45deb7803f6b52044c9e",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:5e51957d85c6c4c4cb62030a32b3b47a55c7b8ddac97b5e60034eae6450a07c8",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:09285269958f866e00d6d1c05b809f2f5ff7d4d95377f9139359132aeb50fe20",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:aeb8be1826472752bff6c558ceab8faea14891e607ed8d319a65842292e16abe",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:7e4e6090b1e0f318c8453e6d176a1c74beea88db5dae6b0df9ce2008be13f3fb",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:34c26ea4a79ea1631a49aa4dd777f2c327090ffbea2933c191e97b0cfe62780e",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:29875846c0e219ece2351b91e4a77b147dfd712333a1a729b696eae14730f7cc",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:9560c5807519357309a2ce02317b86c5662ef9c7006b79f64dd936077391eed5",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:672b746d87188466b321391aa350df1ed6095a2f0d69797cc5cee3daa24101be",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b8cbb93091b4b969eedbd1447266140cdef8d2ca59b8fc872d710eeda0723621",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:6118632b4edfb098762d0e4ff1ec0e3358c3d02422146d4d42816ef7722ab065",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:87ca256e37955c2ad282074164f8f7e35b2b5eb01d2b884021d551a7f15611ab",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:39e714ba5acaaf0a6e31e4869b98157e485746749d8b45deb7803f6b52044c9e",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:5e51957d85c6c4c4cb62030a32b3b47a55c7b8ddac97b5e60034eae6450a07c8",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:09285269958f866e00d6d1c05b809f2f5ff7d4d95377f9139359132aeb50fe20",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:aeb8be1826472752bff6c558ceab8faea14891e607ed8d319a65842292e16abe",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:7e4e6090b1e0f318c8453e6d176a1c74beea88db5dae6b0df9ce2008be13f3fb",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:34c26ea4a79ea1631a49aa4dd777f2c327090ffbea2933c191e97b0cfe62780e",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:29875846c0e219ece2351b91e4a77b147dfd712333a1a729b696eae14730f7cc",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:9560c5807519357309a2ce02317b86c5662ef9c7006b79f64dd936077391eed5",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:672b746d87188466b321391aa350df1ed6095a2f0d69797cc5cee3daa24101be",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b8cbb93091b4b969eedbd1447266140cdef8d2ca59b8fc872d710eeda0723621",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:6118632b4edfb098762d0e4ff1ec0e3358c3d02422146d4d42816ef7722ab065",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:87ca256e37955c2ad282074164f8f7e35b2b5eb01d2b884021d551a7f15611ab",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:39e714ba5acaaf0a6e31e4869b98157e485746749d8b45deb7803f6b52044c9e",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:5e51957d85c6c4c4cb62030a32b3b47a55c7b8ddac97b5e60034eae6450a07c8",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:09285269958f866e00d6d1c05b809f2f5ff7d4d95377f9139359132aeb50fe20",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:aeb8be1826472752bff6c558ceab8faea14891e607ed8d319a65842292e16abe",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:7e4e6090b1e0f318c8453e6d176a1c74beea88db5dae6b0df9ce2008be13f3fb",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:34c26ea4a79ea1631a49aa4dd777f2c327090ffbea2933c191e97b0cfe62780e",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:29875846c0e219ece2351b91e4a77b147dfd712333a1a729b696eae14730f7cc",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:9560c5807519357309a2ce02317b86c5662ef9c7006b79f64dd936077391eed5",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:672b746d87188466b321391aa350df1ed6095a2f0d69797cc5cee3daa24101be",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b8cbb93091b4b969eedbd1447266140cdef8d2ca59b8fc872d710eeda0723621",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:6118632b4edfb098762d0e4ff1ec0e3358c3d02422146d4d42816ef7722ab065",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:87ca256e37955c2ad282074164f8f7e35b2b5eb01d2b884021d551a7f15611ab",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:39e714ba5acaaf0a6e31e4869b98157e485746749d8b45deb7803f6b52044c9e",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:5e51957d85c6c4c4cb62030a32b3b47a55c7b8ddac97b5e60034eae6450a07c8",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:09285269958f866e00d6d1c05b809f2f5ff7d4d95377f9139359132aeb50fe20",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
       {
         "input_tokens": 420,
         "output_tokens": 95,
@@ -482,6 +3344,1437 @@
             "output_tokens": 95
           }
         }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b8cbb93091b4b969eedbd1447266140cdef8d2ca59b8fc872d710eeda0723621",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:6118632b4edfb098762d0e4ff1ec0e3358c3d02422146d4d42816ef7722ab065",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:87ca256e37955c2ad282074164f8f7e35b2b5eb01d2b884021d551a7f15611ab",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:39e714ba5acaaf0a6e31e4869b98157e485746749d8b45deb7803f6b52044c9e",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:5e51957d85c6c4c4cb62030a32b3b47a55c7b8ddac97b5e60034eae6450a07c8",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:09285269958f866e00d6d1c05b809f2f5ff7d4d95377f9139359132aeb50fe20",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b8cbb93091b4b969eedbd1447266140cdef8d2ca59b8fc872d710eeda0723621",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:6118632b4edfb098762d0e4ff1ec0e3358c3d02422146d4d42816ef7722ab065",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:87ca256e37955c2ad282074164f8f7e35b2b5eb01d2b884021d551a7f15611ab",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:39e714ba5acaaf0a6e31e4869b98157e485746749d8b45deb7803f6b52044c9e",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:5e51957d85c6c4c4cb62030a32b3b47a55c7b8ddac97b5e60034eae6450a07c8",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:09285269958f866e00d6d1c05b809f2f5ff7d4d95377f9139359132aeb50fe20",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:aeb8be1826472752bff6c558ceab8faea14891e607ed8d319a65842292e16abe",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:7e4e6090b1e0f318c8453e6d176a1c74beea88db5dae6b0df9ce2008be13f3fb",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:34c26ea4a79ea1631a49aa4dd777f2c327090ffbea2933c191e97b0cfe62780e",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:29875846c0e219ece2351b91e4a77b147dfd712333a1a729b696eae14730f7cc",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:9560c5807519357309a2ce02317b86c5662ef9c7006b79f64dd936077391eed5",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:672b746d87188466b321391aa350df1ed6095a2f0d69797cc5cee3daa24101be",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b8cbb93091b4b969eedbd1447266140cdef8d2ca59b8fc872d710eeda0723621",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:6118632b4edfb098762d0e4ff1ec0e3358c3d02422146d4d42816ef7722ab065",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:87ca256e37955c2ad282074164f8f7e35b2b5eb01d2b884021d551a7f15611ab",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:39e714ba5acaaf0a6e31e4869b98157e485746749d8b45deb7803f6b52044c9e",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:5e51957d85c6c4c4cb62030a32b3b47a55c7b8ddac97b5e60034eae6450a07c8",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:09285269958f866e00d6d1c05b809f2f5ff7d4d95377f9139359132aeb50fe20",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:aeb8be1826472752bff6c558ceab8faea14891e607ed8d319a65842292e16abe",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:7e4e6090b1e0f318c8453e6d176a1c74beea88db5dae6b0df9ce2008be13f3fb",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:34c26ea4a79ea1631a49aa4dd777f2c327090ffbea2933c191e97b0cfe62780e",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:29875846c0e219ece2351b91e4a77b147dfd712333a1a729b696eae14730f7cc",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:9560c5807519357309a2ce02317b86c5662ef9c7006b79f64dd936077391eed5",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:672b746d87188466b321391aa350df1ed6095a2f0d69797cc5cee3daa24101be",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b8cbb93091b4b969eedbd1447266140cdef8d2ca59b8fc872d710eeda0723621",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:6118632b4edfb098762d0e4ff1ec0e3358c3d02422146d4d42816ef7722ab065",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:87ca256e37955c2ad282074164f8f7e35b2b5eb01d2b884021d551a7f15611ab",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:39e714ba5acaaf0a6e31e4869b98157e485746749d8b45deb7803f6b52044c9e",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:5e51957d85c6c4c4cb62030a32b3b47a55c7b8ddac97b5e60034eae6450a07c8",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:09285269958f866e00d6d1c05b809f2f5ff7d4d95377f9139359132aeb50fe20",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:aeb8be1826472752bff6c558ceab8faea14891e607ed8d319a65842292e16abe",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:7e4e6090b1e0f318c8453e6d176a1c74beea88db5dae6b0df9ce2008be13f3fb",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:34c26ea4a79ea1631a49aa4dd777f2c327090ffbea2933c191e97b0cfe62780e",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:29875846c0e219ece2351b91e4a77b147dfd712333a1a729b696eae14730f7cc",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:9560c5807519357309a2ce02317b86c5662ef9c7006b79f64dd936077391eed5",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:672b746d87188466b321391aa350df1ed6095a2f0d69797cc5cee3daa24101be",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b8cbb93091b4b969eedbd1447266140cdef8d2ca59b8fc872d710eeda0723621",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:6118632b4edfb098762d0e4ff1ec0e3358c3d02422146d4d42816ef7722ab065",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:87ca256e37955c2ad282074164f8f7e35b2b5eb01d2b884021d551a7f15611ab",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:39e714ba5acaaf0a6e31e4869b98157e485746749d8b45deb7803f6b52044c9e",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:5e51957d85c6c4c4cb62030a32b3b47a55c7b8ddac97b5e60034eae6450a07c8",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:09285269958f866e00d6d1c05b809f2f5ff7d4d95377f9139359132aeb50fe20",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b8cbb93091b4b969eedbd1447266140cdef8d2ca59b8fc872d710eeda0723621",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:6118632b4edfb098762d0e4ff1ec0e3358c3d02422146d4d42816ef7722ab065",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:87ca256e37955c2ad282074164f8f7e35b2b5eb01d2b884021d551a7f15611ab",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:39e714ba5acaaf0a6e31e4869b98157e485746749d8b45deb7803f6b52044c9e",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:5e51957d85c6c4c4cb62030a32b3b47a55c7b8ddac97b5e60034eae6450a07c8",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:09285269958f866e00d6d1c05b809f2f5ff7d4d95377f9139359132aeb50fe20",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
       }
     ],
     "3": [
@@ -643,9 +4936,2039 @@
             "output_tokens": 95
           }
         }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:aeb8be1826472752bff6c558ceab8faea14891e607ed8d319a65842292e16abe",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:7e4e6090b1e0f318c8453e6d176a1c74beea88db5dae6b0df9ce2008be13f3fb",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:34c26ea4a79ea1631a49aa4dd777f2c327090ffbea2933c191e97b0cfe62780e",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:29875846c0e219ece2351b91e4a77b147dfd712333a1a729b696eae14730f7cc",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:9560c5807519357309a2ce02317b86c5662ef9c7006b79f64dd936077391eed5",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:672b746d87188466b321391aa350df1ed6095a2f0d69797cc5cee3daa24101be",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b8cbb93091b4b969eedbd1447266140cdef8d2ca59b8fc872d710eeda0723621",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:6118632b4edfb098762d0e4ff1ec0e3358c3d02422146d4d42816ef7722ab065",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:87ca256e37955c2ad282074164f8f7e35b2b5eb01d2b884021d551a7f15611ab",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:39e714ba5acaaf0a6e31e4869b98157e485746749d8b45deb7803f6b52044c9e",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:5e51957d85c6c4c4cb62030a32b3b47a55c7b8ddac97b5e60034eae6450a07c8",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:09285269958f866e00d6d1c05b809f2f5ff7d4d95377f9139359132aeb50fe20",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:aeb8be1826472752bff6c558ceab8faea14891e607ed8d319a65842292e16abe",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:7e4e6090b1e0f318c8453e6d176a1c74beea88db5dae6b0df9ce2008be13f3fb",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:34c26ea4a79ea1631a49aa4dd777f2c327090ffbea2933c191e97b0cfe62780e",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:29875846c0e219ece2351b91e4a77b147dfd712333a1a729b696eae14730f7cc",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:9560c5807519357309a2ce02317b86c5662ef9c7006b79f64dd936077391eed5",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:672b746d87188466b321391aa350df1ed6095a2f0d69797cc5cee3daa24101be",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b8cbb93091b4b969eedbd1447266140cdef8d2ca59b8fc872d710eeda0723621",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:6118632b4edfb098762d0e4ff1ec0e3358c3d02422146d4d42816ef7722ab065",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:87ca256e37955c2ad282074164f8f7e35b2b5eb01d2b884021d551a7f15611ab",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:39e714ba5acaaf0a6e31e4869b98157e485746749d8b45deb7803f6b52044c9e",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:5e51957d85c6c4c4cb62030a32b3b47a55c7b8ddac97b5e60034eae6450a07c8",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:09285269958f866e00d6d1c05b809f2f5ff7d4d95377f9139359132aeb50fe20",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:aeb8be1826472752bff6c558ceab8faea14891e607ed8d319a65842292e16abe",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:7e4e6090b1e0f318c8453e6d176a1c74beea88db5dae6b0df9ce2008be13f3fb",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:34c26ea4a79ea1631a49aa4dd777f2c327090ffbea2933c191e97b0cfe62780e",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:29875846c0e219ece2351b91e4a77b147dfd712333a1a729b696eae14730f7cc",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:9560c5807519357309a2ce02317b86c5662ef9c7006b79f64dd936077391eed5",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:672b746d87188466b321391aa350df1ed6095a2f0d69797cc5cee3daa24101be",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b8cbb93091b4b969eedbd1447266140cdef8d2ca59b8fc872d710eeda0723621",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:6118632b4edfb098762d0e4ff1ec0e3358c3d02422146d4d42816ef7722ab065",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:87ca256e37955c2ad282074164f8f7e35b2b5eb01d2b884021d551a7f15611ab",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:39e714ba5acaaf0a6e31e4869b98157e485746749d8b45deb7803f6b52044c9e",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:5e51957d85c6c4c4cb62030a32b3b47a55c7b8ddac97b5e60034eae6450a07c8",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:09285269958f866e00d6d1c05b809f2f5ff7d4d95377f9139359132aeb50fe20",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b8cbb93091b4b969eedbd1447266140cdef8d2ca59b8fc872d710eeda0723621",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:6118632b4edfb098762d0e4ff1ec0e3358c3d02422146d4d42816ef7722ab065",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:87ca256e37955c2ad282074164f8f7e35b2b5eb01d2b884021d551a7f15611ab",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:39e714ba5acaaf0a6e31e4869b98157e485746749d8b45deb7803f6b52044c9e",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:5e51957d85c6c4c4cb62030a32b3b47a55c7b8ddac97b5e60034eae6450a07c8",
+        "response": {
+          "content": [
+            {
+              "id": "t6",
+              "input": {
+                "order_id": 1047,
+                "status": "invoiced",
+                "total_cents": 2500
+              },
+              "name": "update_order_status",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:09285269958f866e00d6d1c05b809f2f5ff7d4d95377f9139359132aeb50fe20",
+        "response": {
+          "content": [
+            {
+              "text": "Order 1047 invoiced at 2500 cents.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
       }
     ],
     "4": [
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b8cbb93091b4b969eedbd1447266140cdef8d2ca59b8fc872d710eeda0723621",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:6118632b4edfb098762d0e4ff1ec0e3358c3d02422146d4d42816ef7722ab065",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:87ca256e37955c2ad282074164f8f7e35b2b5eb01d2b884021d551a7f15611ab",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:39e714ba5acaaf0a6e31e4869b98157e485746749d8b45deb7803f6b52044c9e",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:5e51957d85c6c4c4cb62030a32b3b47a55c7b8ddac97b5e60034eae6450a07c8",
+        "response": {
+          "content": [
+            {
+              "text": "Invoice for order 1047 written.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:aeb8be1826472752bff6c558ceab8faea14891e607ed8d319a65842292e16abe",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:7e4e6090b1e0f318c8453e6d176a1c74beea88db5dae6b0df9ce2008be13f3fb",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:34c26ea4a79ea1631a49aa4dd777f2c327090ffbea2933c191e97b0cfe62780e",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:29875846c0e219ece2351b91e4a77b147dfd712333a1a729b696eae14730f7cc",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:9560c5807519357309a2ce02317b86c5662ef9c7006b79f64dd936077391eed5",
+        "response": {
+          "content": [
+            {
+              "text": "Invoice for order 1047 written.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b8cbb93091b4b969eedbd1447266140cdef8d2ca59b8fc872d710eeda0723621",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:6118632b4edfb098762d0e4ff1ec0e3358c3d02422146d4d42816ef7722ab065",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:87ca256e37955c2ad282074164f8f7e35b2b5eb01d2b884021d551a7f15611ab",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:39e714ba5acaaf0a6e31e4869b98157e485746749d8b45deb7803f6b52044c9e",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:5e51957d85c6c4c4cb62030a32b3b47a55c7b8ddac97b5e60034eae6450a07c8",
+        "response": {
+          "content": [
+            {
+              "text": "Invoice for order 1047 written.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:aeb8be1826472752bff6c558ceab8faea14891e607ed8d319a65842292e16abe",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:7e4e6090b1e0f318c8453e6d176a1c74beea88db5dae6b0df9ce2008be13f3fb",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:34c26ea4a79ea1631a49aa4dd777f2c327090ffbea2933c191e97b0cfe62780e",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:29875846c0e219ece2351b91e4a77b147dfd712333a1a729b696eae14730f7cc",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:9560c5807519357309a2ce02317b86c5662ef9c7006b79f64dd936077391eed5",
+        "response": {
+          "content": [
+            {
+              "text": "Invoice for order 1047 written.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b8cbb93091b4b969eedbd1447266140cdef8d2ca59b8fc872d710eeda0723621",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:6118632b4edfb098762d0e4ff1ec0e3358c3d02422146d4d42816ef7722ab065",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:87ca256e37955c2ad282074164f8f7e35b2b5eb01d2b884021d551a7f15611ab",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:39e714ba5acaaf0a6e31e4869b98157e485746749d8b45deb7803f6b52044c9e",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:5e51957d85c6c4c4cb62030a32b3b47a55c7b8ddac97b5e60034eae6450a07c8",
+        "response": {
+          "content": [
+            {
+              "text": "Invoice for order 1047 written.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:aeb8be1826472752bff6c558ceab8faea14891e607ed8d319a65842292e16abe",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:7e4e6090b1e0f318c8453e6d176a1c74beea88db5dae6b0df9ce2008be13f3fb",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:34c26ea4a79ea1631a49aa4dd777f2c327090ffbea2933c191e97b0cfe62780e",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:29875846c0e219ece2351b91e4a77b147dfd712333a1a729b696eae14730f7cc",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:9560c5807519357309a2ce02317b86c5662ef9c7006b79f64dd936077391eed5",
+        "response": {
+          "content": [
+            {
+              "text": "Invoice for order 1047 written.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:b8cbb93091b4b969eedbd1447266140cdef8d2ca59b8fc872d710eeda0723621",
+        "response": {
+          "content": [
+            {
+              "id": "t1",
+              "input": {
+                "order_id": 1047
+              },
+              "name": "read_order",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:6118632b4edfb098762d0e4ff1ec0e3358c3d02422146d4d42816ef7722ab065",
+        "response": {
+          "content": [
+            {
+              "id": "t3",
+              "input": {},
+              "name": "read_policy",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:87ca256e37955c2ad282074164f8f7e35b2b5eb01d2b884021d551a7f15611ab",
+        "response": {
+          "content": [
+            {
+              "id": "t4",
+              "input": {
+                "code": "ZZZFAKE"
+              },
+              "name": "query_coupon",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:39e714ba5acaaf0a6e31e4869b98157e485746749d8b45deb7803f6b52044c9e",
+        "response": {
+          "content": [
+            {
+              "id": "t5",
+              "input": {
+                "coupon": {
+                  "applied": false,
+                  "code": "ZZZFAKE",
+                  "decline_reason": "coupon ZZZFAKE does not exist"
+                },
+                "order_id": 1047,
+                "subtotal_cents": 2500,
+                "total_cents": 2500
+              },
+              "name": "write_invoice",
+              "type": "tool_use"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "tool_use",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
+      {
+        "input_tokens": 420,
+        "output_tokens": 95,
+        "request_hash": "sha256:5e51957d85c6c4c4cb62030a32b3b47a55c7b8ddac97b5e60034eae6450a07c8",
+        "response": {
+          "content": [
+            {
+              "text": "Invoice for order 1047 written.",
+              "type": "text"
+            }
+          ],
+          "id": "msg_stub",
+          "model": "meridian-stub",
+          "role": "assistant",
+          "stop_reason": "end_turn",
+          "type": "message",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 95
+          }
+        }
+      },
       {
         "input_tokens": 420,
         "output_tokens": 95,

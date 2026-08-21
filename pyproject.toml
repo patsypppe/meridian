@@ -89,4 +89,5 @@ markers = [
     "unit: pure-logic tests, no Docker, no network (< 5s total)",
     "integration: requires the Docker daemon (< 3min)",
     "e2e: full run/replay/gate against the fixture agent (< 10min)",
+    "slow: end-to-end gate runs measured in minutes; excluded from -m e2e by default",
 ]
