@@ -89,6 +89,9 @@ class BudgetLedger:
     limits: dict[str, TrialLimits] = field(default_factory=dict)
     run_budget_cents: int | None = None
     usage: dict[str, TrialUsage] = field(default_factory=dict)
+    # Which models were actually called. Recorded because the manifest must pin
+    # the model, and the harness never chooses it -- the agent does.
+    models: set[str] = field(default_factory=set)
 
     def _key(self, task_slug: str, trial_index: int) -> str:
         return f"{task_slug}:{trial_index}"
@@ -139,6 +142,7 @@ class BudgetLedger:
         output_tokens: int,
     ) -> TrialUsage:
         usage = self.usage_for(task_slug, trial_index)
+        self.models.add(model)
         usage.input_tokens += input_tokens
         usage.output_tokens += output_tokens
         usage.microcents += cost_microcents(model, input_tokens, output_tokens)
@@ -146,6 +150,7 @@ class BudgetLedger:
 
     def snapshot(self) -> dict[str, object]:
         return {
+            "models": sorted(self.models),
             "run_cents": self.run_cents,
             "run_microcents": self.run_microcents,
             "run_budget_cents": self.run_budget_cents,

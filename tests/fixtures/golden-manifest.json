@@ -1,0 +1,70 @@
+{
+  "meridian_version": "0.1.0",
+  "created_unix_ms": 1756000000000,
+  "commit_sha": "0123456789abcdef0123456789abcdef01234567",
+  "suite_slug": "checkout-agent",
+  "suite_version": 1,
+  "suite_content_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+  "config_hash": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+  "adapter_spec": "langgraph:checkout_agent.agent:graph",
+  "sut_commit_sha": "fedcba9876543210fedcba9876543210fedcba98",
+  "sut_content_hash": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+  "n_trials": 5,
+  "k": 3,
+  "bootstrap_seed": 0,
+  "proxy_mode": "replay",
+  "tasks": [
+    {
+      "slug": "expired-coupon",
+      "definition_hash": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "snapshot_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+    },
+    {
+      "slug": "happy-path",
+      "definition_hash": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+      "snapshot_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+    }
+  ],
+  "trials": [
+    {
+      "task_slug": "expired-coupon",
+      "trial_index": 0,
+      "seed": 1000,
+      "cassette_hash": "sha256:7777777777777777777777777777777777777777777777777777777777777777"
+    },
+    {
+      "task_slug": "expired-coupon",
+      "trial_index": 1,
+      "seed": 1001,
+      "cassette_hash": "sha256:7777777777777777777777777777777777777777777777777777777777777777"
+    },
+    {
+      "task_slug": "happy-path",
+      "trial_index": 0,
+      "seed": 1000,
+      "cassette_hash": "sha256:7777777777777777777777777777777777777777777777777777777777777777"
+    },
+    {
+      "task_slug": "happy-path",
+      "trial_index": 1,
+      "seed": 1001,
+      "cassette_hash": "sha256:7777777777777777777777777777777777777777777777777777777777777777"
+    }
+  ],
+  "models": [
+    {
+      "model_id": "claude-sonnet-5",
+      "provider": "stub"
+    }
+  ],
+  "prompt_hashes": {
+    "checkout_agent/prompts/planner.md": "sha256:8888888888888888888888888888888888888888888888888888888888888888"
+  },
+  "env": {
+    "python": "3.13.7",
+    "platform": "darwin/arm64",
+    "implementation": "cpython",
+    "uv_lock": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+    "docker": "29.1.3"
+  }
+}

@@ -233,23 +233,136 @@ def run(
     )
 
     try:
-        result = asyncio.run(execute(client, request))
+        outcome = asyncio.run(execute(client, request))
     except Exception as exc:
         err(f"run failed: {type(exc).__name__}: {exc}")
         raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
 
-    out_text = table.render(result)
-    print(out_text)
-    detail = table.failures(result)
+    from meridian.manifest import store as run_store
+
+    archived = run_store.save(outcome.manifest, outcome.result)
+    err(f"archived {outcome.result.run_id} to {archived}")
+
+    print(table.render(outcome.result))
+    detail = table.failures(outcome.result)
     if detail:
         print("")
         print("failing trials:")
         print(detail)
+    print("")
+    print(f"manifest: {outcome.manifest.manifest_hash()}")
 
     if out is not None:
         out.parent.mkdir(parents=True, exist_ok=True)
-        out.write_text(result.model_dump_json(indent=2), encoding="utf-8")
+        out.write_text(outcome.result.model_dump_json(indent=2), encoding="utf-8")
         err(f"wrote {out}")
+
+
+@app.command()
+def replay(
+    run_id: str = typer.Argument(..., help="The archived run to re-materialize."),
+    cassettes: Path | None = typer.Option(None, "--cassettes", help="Cassette root."),
+    sut: Path = typer.Option(Path("fixtures"), "--sut", help="System under test root."),
+    suite: Path | None = typer.Option(
+        None, "--suite", help="Suite directory (defaults to ./suites/<slug>)."
+    ),
+) -> None:
+    """Re-run an archived run from its manifest and report replay fidelity.
+
+    Replay is a correctness check on the harness, not a convenience. Drift means
+    something outside the manifest is influencing results.
+    """
+    import asyncio
+
+    from meridian.config import load_config
+    from meridian.manifest import store as run_store
+    from meridian.manifest.replay import ReplayError, compare, verify_images_available
+    from meridian.runtime.orchestrator import RunRequest, default_cassette_dir, execute
+
+    try:
+        manifest = run_store.load_manifest(run_id)
+        recorded = run_store.load_result(run_id)
+    except run_store.RunNotFoundError as exc:
+        err(str(exc))
+        raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
+
+    recorded_hash = manifest.manifest_hash()
+    suite_path = suite or Path("suites") / manifest.suite_slug
+
+    try:
+        loaded = load_suite(suite_path)
+    except SuiteValidationError as exc:
+        _report_validation_failure(exc)
+        raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
+
+    if loaded.content_hash() != manifest.suite_content_hash:
+        err(
+            "the suite on disk does not match the one this run used; replaying it "
+            "would compare two different suites and call the difference drift"
+        )
+        raise typer.Exit(exit_codes.HARNESS_ERROR)
+
+    config = load_config(
+        "meridian.yaml",
+        overrides={
+            "execution": {
+                "n_trials": manifest.n_trials,
+                "k": manifest.k,
+                # Replay is the only honest mode here: recording again would
+                # measure the provider, not the harness.
+                "proxy_mode": "replay",
+            }
+        },
+    )
+
+    try:
+        client = get_client()
+        verify_images_available(client, manifest)
+    except (DockerUnavailableError, ReplayError) as exc:
+        err(str(exc))
+        raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
+
+    request = RunRequest(
+        suite=loaded,
+        config=config,
+        cassette_dir=(cassettes / manifest.suite_slug)
+        if cassettes
+        else default_cassette_dir(loaded),
+        sut_root=sut.resolve() if sut else None,
+        # The same run id reproduces the same derived seeds.
+        run_id=run_id,
+        progress=err,
+    )
+
+    try:
+        outcome = asyncio.run(execute(client, request))
+    except Exception as exc:
+        err(f"replay failed: {type(exc).__name__}: {exc}")
+        raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
+
+    report = compare(manifest, recorded, outcome.result, expected_hash=recorded_hash)
+    print(report.render())
+    if not report.exact:
+        err("replay did not reproduce exactly; something outside the manifest moved")
+
+
+@app.command("runs")
+def list_runs_command() -> None:
+    """List archived runs, oldest first."""
+    from meridian.manifest import store as run_store
+
+    ids = run_store.list_runs()
+    if not ids:
+        err("no archived runs")
+        return
+    out(f"{'run':<28} {'suite':<26} {'n':>3} {'k':>3}  commit")
+    for run_id in ids:
+        summary = run_store.summarize(run_id)
+        commit = str(summary["commit"] or "-")[:12]
+        out(
+            f"{run_id:<28} {summary['suite']!s:<26} "
+            f"{summary['n']!s:>3} {summary['k']!s:>3}  {commit}"
+        )
 
 
 @app.command()
