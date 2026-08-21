@@ -50,5 +50,36 @@ jobs:
         with:
           enable-cache: true
       - run: uv sync --frozen
+      # An image ID is architecture-specific: the digest committed from an arm64
+      # laptop does not exist on this amd64 runner. Rebuild and repin before
+      # anything tries to start a container.
+      - name: Build images and repin the suite
+        run: |
+          uv run meridian snapshot build ./envs/checkout --tag checkout:dev \
+            --write-ref --update-suite ./suites/checkout-agent
+          uv run meridian snapshot build ./envs/proxy --tag meridian-proxy:dev --context .
       - name: integration tests
         run: uv run pytest -m integration
+
+  e2e:
+    name: e2e (run, replay, gate)
+    runs-on: ubuntu-latest
+    needs: integration
+    if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - run: uv sync --frozen
+      - name: Build images and repin the suite
+        run: |
+          uv run meridian snapshot build ./envs/checkout --tag checkout:dev \
+            --write-ref --update-suite ./suites/checkout-agent
+          uv run meridian snapshot build ./envs/proxy --tag meridian-proxy:dev --context .
+      # No API key anywhere in this job. Replay runs from the committed
+      # cassettes, which is why CI works offline and cannot be flaky because a
+      # provider was slow.
+      - name: e2e tests
+        run: uv run pytest -m e2e

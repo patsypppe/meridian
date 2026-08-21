@@ -17,6 +17,8 @@ from typing import TYPE_CHECKING, Any
 
 from meridian.config import MeridianConfig, ProxyMode, RunMode
 from meridian.grading.pipeline import grade_task
+from meridian.manifest.build import build_manifest
+from meridian.models.manifest import Manifest, ManifestModel
 from meridian.models.run import (
     AssertionResult,
     RunResult,
@@ -28,6 +30,7 @@ from meridian.models.run import (
 from meridian.models.suite import Suite
 from meridian.models.task import TaskDefinition
 from meridian.runtime.isolation import IsolationPolicy
+from meridian.runtime.proxy.cassette import CassetteStore
 from meridian.runtime.proxy.session import ProxyHandle, start_proxy, stop_proxy
 from meridian.runtime.pytest_runner import ContainerPytestRunner
 from meridian.runtime.scheduler import run_tasks
@@ -37,6 +40,14 @@ if TYPE_CHECKING:  # pragma: no cover - typing only
     from docker import DockerClient
 
 Progress = Callable[[str], None]
+
+
+@dataclass(frozen=True)
+class RunOutcome:
+    """What a run produced: the numbers, and the pins that determine them."""
+
+    result: RunResult
+    manifest: Manifest
 
 
 def new_run_id() -> str:
@@ -55,6 +66,7 @@ class RunRequest:
     run_id: str = field(default_factory=new_run_id)
     use_stub_provider: bool = True
     stub_slip_every: int | None = None
+    repo_root: Path | None = None
     progress: Progress | None = None
 
     def tasks(self) -> list[TaskDefinition]:
@@ -63,7 +75,7 @@ class RunRequest:
         return list(self.suite.scored_tasks)
 
 
-async def execute(client: DockerClient, request: RunRequest) -> RunResult:
+async def execute(client: DockerClient, request: RunRequest) -> RunOutcome:
     """Run a suite and return its result. Never raises for an agent failure."""
     config = request.config
     config.validate_for(request.mode)
@@ -143,7 +155,9 @@ async def execute(client: DockerClient, request: RunRequest) -> RunResult:
             should_halt=budget_exhausted,
         )
 
-        cost_cents = handle.run_cents() if handle else 0
+        usage = handle.usage() if handle else {}
+        cost_cents = int(usage.get("run_cents", 0))
+        model_ids = [str(m) for m in usage.get("models", [])]
         if len(results) < len(tasks):
             status = RunStatus.HALTED_BUDGET
             ran = {result.task_slug for result in results}
@@ -156,7 +170,7 @@ async def execute(client: DockerClient, request: RunRequest) -> RunResult:
         stop_proxy(handle, client=client)
         sweep_orphans(client, run_id=request.run_id)
 
-    return RunResult(
+    result = RunResult(
         run_id=request.run_id,
         suite_slug=request.suite.slug,
         suite_version=request.suite.version,
@@ -172,6 +186,55 @@ async def execute(client: DockerClient, request: RunRequest) -> RunResult:
         duration_ms=int((time.time() - started) * 1000),
         cost_cents=cost_cents,
     )
+
+    manifest = build_manifest(
+        suite=request.suite,
+        config=config,
+        run_id=request.run_id,
+        created_unix_ms=int(started * 1000),
+        sut_root=request.sut_root,
+        repo_root=request.repo_root or Path.cwd(),
+        cassettes=CassetteStore(request.cassette_dir),
+        models=tuple(
+            ManifestModel(
+                model_id=model_id,
+                provider="stub" if request.use_stub_provider else "anthropic",
+            )
+            for model_id in model_ids
+        ),
+        prompt_hashes=prompt_hashes(request.sut_root),
+        docker_version=docker_version(client),
+    )
+    return RunOutcome(
+        result=result.model_copy(update={"manifest_hash": manifest.manifest_hash()}),
+        manifest=manifest,
+    )
+
+
+def prompt_hashes(sut_root: Path | None) -> dict[str, str]:
+    """Hash every prompt in the system under test.
+
+    Prompts are the most common thing a regression edits and the least likely to
+    show up in a diff someone reads, so they are pinned individually rather than
+    folded into the SUT's overall content hash.
+    """
+    from meridian.manifest.build import file_hash
+
+    if sut_root is None or not sut_root.is_dir():
+        return {}
+    return {
+        path.relative_to(sut_root).as_posix(): file_hash(path)
+        for path in sorted(sut_root.rglob("*.md"))
+        if path.is_file()
+    }
+
+
+def docker_version(client: DockerClient) -> str | None:
+    try:
+        version: str = client.version().get("Version", "")
+    except Exception:
+        return None
+    return version or None
 
 
 def default_cassette_dir(suite: Suite, root: Path | None = None) -> Path:
