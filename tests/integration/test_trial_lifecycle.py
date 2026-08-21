@@ -178,24 +178,25 @@ async def test_container_removed_on_grader_exception(docker_client: Any, suite: 
     assert len(docker_client.containers.list(all=True)) == before
 
 
-async def test_assertion_without_a_grader_is_a_harness_error(
+async def test_an_unevaluatable_assertion_is_a_harness_error(
     docker_client: Any, suite: Suite
 ) -> None:
-    """An assertion with no grader must fail loudly, not be silently skipped.
+    """An assertion that cannot be evaluated has not been satisfied.
 
-    A skipped assertion is a task that passes without being checked, which is
-    strictly worse than a task that errors.
+    A `pytest` assertion needs a sandboxed runner, because its test files come
+    from a directory the agent controlled. Where none is configured the grader
+    errors and the trial becomes a harness error — never a pass, and never a
+    failure blamed on the agent.
     """
-    from meridian.models.task import ExitCode
+    from meridian.models.task import PytestAssertion
 
     task = task_running(suite.task("contamination-probe"), "touch_output").model_copy(
-        # `exit_code` is in the schema; its grader lands with WP-6.
-        update={"outcome_assertions": (ExitCode(kind="exit_code", expected=0),)}
+        update={"outcome_assertions": (PytestAssertion(kind="pytest", path="/work/tests"),)}
     )
-    result = await run(make_runner(docker_client, suite), task, "life-nograder")
+    result = await run(make_runner(docker_client, suite), task, "life-unevaluatable")
 
     assert result.outcome is Outcome.HARNESS_ERROR
-    assert "no grader registered" in result.detail
+    assert "code execution" in result.detail
 
 
 async def test_final_state_is_extracted_before_removal(docker_client: Any, suite: Suite) -> None:
