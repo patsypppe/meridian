@@ -39,6 +39,7 @@ def build_snapshot(
     *,
     tag: str,
     write_ref: bool = False,
+    context: str | Path | None = None,
 ) -> str:
     """Build the image at `path` and return its digest.
 
@@ -52,9 +53,17 @@ def build_snapshot(
     if not dockerfile.is_file():
         raise SnapshotBuildError(f"no Dockerfile at {dockerfile}")
 
+    # The proxy image ships a slice of the harness, so its build context is the
+    # repository root rather than its own directory.
+    build_context = Path(context).resolve() if context is not None else env_path
+    dockerfile_arg = (
+        str(dockerfile.relative_to(build_context)) if context is not None else "Dockerfile"
+    )
+
     try:
         image, _logs = client.images.build(
-            path=str(env_path),
+            path=str(build_context),
+            dockerfile=dockerfile_arg,
             tag=tag,
             rm=True,
             forcerm=True,
