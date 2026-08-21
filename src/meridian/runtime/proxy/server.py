@@ -42,6 +42,11 @@ class ProxyConfig:
     run_budget_cents: int | None = None
     upstream_base_url: str = ANTHROPIC_BASE_URL
     credential: ProviderCredential | None = None
+    # Whether the upstream needs authenticating at all. A real provider does; the
+    # deterministic stand-in provider used to record cassettes offline does not,
+    # and demanding a credential it has no use for would make the zero-cost
+    # recording path impossible.
+    requires_credential: bool = True
 
 
 class ProxyState:
@@ -65,13 +70,25 @@ def _usage_from(response_body: dict[str, Any]) -> tuple[int, int]:
     return int(usage.get("input_tokens", 0)), int(usage.get("output_tokens", 0))
 
 
-async def _call_upstream(state: ProxyState, body: dict[str, Any]) -> dict[str, Any]:
-    credential = state.config.credential or load_credential()
+async def _call_upstream(
+    state: ProxyState,
+    body: dict[str, Any],
+    *,
+    task_slug: str = "",
+    trial_index: int = 0,
+) -> dict[str, Any]:
     headers = {
-        credential.header_name: credential.header_value,
         "anthropic-version": ANTHROPIC_VERSION,
         "content-type": "application/json",
+        # Forwarded so a stand-in provider can vary its behaviour per trial. A
+        # real provider ignores them; without them every trial of a task would
+        # record an identical tape and pass^k could only ever be 0 or 1.
+        TASK_HEADER: task_slug,
+        TRIAL_HEADER: str(trial_index),
     }
+    if state.config.requires_credential:
+        credential = state.config.credential or load_credential()
+        headers[credential.header_name] = credential.header_value
     async with httpx.AsyncClient(timeout=UPSTREAM_TIMEOUT_SECONDS) as client:
         response = await client.post(
             f"{state.config.upstream_base_url}/v1/messages", json=body, headers=headers
@@ -133,7 +150,9 @@ async def messages(request: Request) -> Response:
         return JSONResponse(entry["response"])
 
     try:
-        response_body = await _call_upstream(state, body)
+        response_body = await _call_upstream(
+            state, body, task_slug=task_slug, trial_index=trial_index
+        )
     except Exception as exc:
         return JSONResponse(
             {"type": "error", "error": {"type": "upstream_error", "message": str(exc)}},
@@ -200,12 +219,16 @@ def config_from_env(env: dict[str, str] | None = None) -> ProxyConfig:
         for slug, entry in raw_limits.items()
     }
     run_budget = environment.get("MERIDIAN_RUN_BUDGET_CENTS")
+    upstream = environment.get("MERIDIAN_UPSTREAM_BASE_URL", ANTHROPIC_BASE_URL)
     return ProxyConfig(
         mode=ProxyMode(environment.get("MERIDIAN_PROXY_MODE", "replay")),
         cassette_dir=Path(environment.get("MERIDIAN_CASSETTE_DIR", "/cassettes")),
         limits=limits,
         run_budget_cents=int(run_budget) if run_budget else None,
-        upstream_base_url=environment.get("MERIDIAN_UPSTREAM_BASE_URL", ANTHROPIC_BASE_URL),
+        upstream_base_url=upstream,
+        # Only the real provider is authenticated. Pointing upstream elsewhere is
+        # an explicit act, and it is how the offline recording path works.
+        requires_credential=upstream == ANTHROPIC_BASE_URL,
     )
 
 

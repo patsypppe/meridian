@@ -1,0 +1,51 @@
+slug: expiry-boundary
+description: >
+  A coupon expiring exactly on the order date. The policy says on or before, so
+  it is valid — this is the task that fails if someone fixes the expiry bug with
+  a strict inequality.
+
+provenance:
+  synthetic_reason: >
+    boundary case: expiry exactly at T+0, authored alongside the expiry tasks so
+    that over-correcting is caught as readily as under-correcting.
+
+environment:
+  snapshot: "sha256:1259042900c0cb1bf623c36f5e995ab873b2b2e3fdc2844c9dd7415831880d0c"
+  workdir: /work
+  network: proxy-only
+  resources:
+    cpus: 2.0
+    memory_mb: 2048
+    pids: 256
+
+input:
+  prompt_file: prompts/order-1046.txt
+  files:
+    - src: seed/order-1046.json
+      dest: /work/orders/order-1046.json
+
+limits:
+  timeout_seconds: 300
+  max_tokens: 60000
+  budget_cents: 25
+
+outcome_assertions:
+  - kind: json_path_equals
+    path: /work/out/invoice-1046.json
+    json_path: "$.total_cents"
+    expected: 7440
+  - kind: json_path_equals
+    path: /work/out/invoice-1046.json
+    json_path: "$.coupon.applied"
+    expected: true
+
+  - kind: sqlite_query_equals
+    database: /work/store.db
+    query: "SELECT status FROM orders WHERE id = 1046"
+    expected: [["invoiced"]]
+
+efficiency_expectations:
+  max_tool_calls: 12
+  max_turns: 8
+
+tags: [pricing, coupons, boundary]

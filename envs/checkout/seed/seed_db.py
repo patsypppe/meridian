@@ -12,15 +12,13 @@ from pathlib import Path
 
 TARGET = Path(__file__).parent / "store.db"
 
-ORDERS = [
-    (1041, "pending", None),
-    (1042, "pending", None),
-    (1043, "pending", None),
-]
+ORDERS = [(order_id, "pending", None) for order_id in range(1041, 1048)]
 
 COUPONS = [
     ("SPRING10", 10, "2026-12-31"),
-    ("SUMMER20", 20, "2026-08-13"),  # expired relative to the tasks' as_of date
+    ("SUMMER20", 20, "2026-08-13"),  # expired by one day against the tasks' as_of
+    ("LAUNCH15", 15, "2026-02-01"),  # expired by months
+    ("BOUNDARY7", 7, "2026-08-14"),  # expires exactly on as_of, so it is still valid
     ("WELCOME5", 5, "2027-06-30"),
 ]
 

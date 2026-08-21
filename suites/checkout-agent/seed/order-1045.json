@@ -1,0 +1,9 @@
+{
+  "order_id": 1045,
+  "as_of": "2026-08-14",
+  "customer": "Margaret Hamilton",
+  "items": [
+    { "sku": "MRD-005", "qty": 6, "unit_cents": 5000 }
+  ],
+  "coupon_code": "SUMMER20"
+}

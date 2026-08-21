@@ -13,6 +13,8 @@ from typing import Any
 
 from meridian.grading.graders.base import GraderError, errored
 from meridian.grading.graders.filesystem import grade_file_exists
+from meridian.grading.graders.json_state import grade_json_path_equals, grade_json_path_matches
+from meridian.grading.graders.sqlite import grade_sqlite_query_equals
 from meridian.models.adapter import AdapterResult
 from meridian.models.run import AssertionResult
 from meridian.models.task import TaskDefinition
@@ -23,6 +25,11 @@ from meridian.models.task import TaskDefinition
 # without being checked.
 GRADERS: dict[str, Callable[[Any, Path, str, AdapterResult], AssertionResult]] = {
     "file_exists": lambda a, state, workdir, _result: grade_file_exists(a, state, workdir),
+    "json_path_equals": lambda a, state, workdir, _r: grade_json_path_equals(a, state, workdir),
+    "json_path_matches": lambda a, state, workdir, _r: grade_json_path_matches(a, state, workdir),
+    "sqlite_query_equals": lambda a, state, workdir, _r: grade_sqlite_query_equals(
+        a, state, workdir
+    ),
 }
 
 

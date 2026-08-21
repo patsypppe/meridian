@@ -63,7 +63,7 @@ def test_dispatch_is_task_major() -> None:
         run_tasks(dispatch, suite, suite.scored_tasks, run_id="r", n=3, concurrency=2)
     )
 
-    assert len(results) == 3
+    assert len(results) == len(suite.scored_tasks)
     slugs_in_order = [entry.split(":")[0] for entry in order]
     # Each task's slug occupies one contiguous block.
     assert [s for i, s in enumerate(slugs_in_order) if i == 0 or s != slugs_in_order[i - 1]] == [

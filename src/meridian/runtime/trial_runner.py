@@ -237,7 +237,7 @@ class TrialRunner:
                 spec,
                 started,
                 attempt,
-                "the entrypoint could not run inside the container",
+                self._entrypoint_failure_detail(state_dir),
                 removed=phase.container_removed,
             )
 
@@ -418,6 +418,15 @@ class TrialRunner:
         if result.exit_code is None and exit_code is not None:
             result = result.model_copy(update={"exit_code": exit_code})
         return result
+
+    def _entrypoint_failure_detail(self, state_dir: Path) -> str:
+        """Say *what* was misconfigured, not merely that something was."""
+        from meridian.adapters.entrypoint import HARNESS_ERROR_FILE
+
+        recorded = state_dir / payload_module.PAYLOAD_DIR / HARNESS_ERROR_FILE
+        if recorded.is_file():
+            return f"the entrypoint could not run: {recorded.read_text(encoding='utf-8').strip()}"
+        return "the entrypoint could not run inside the container"
 
     def _classify(
         self, assertions: Sequence[AssertionResult], result: AdapterResult
