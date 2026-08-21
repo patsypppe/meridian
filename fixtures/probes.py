@@ -64,3 +64,33 @@ def probe_no_network(ctx: Any) -> list[str]:
         "python3 -c \"import socket; socket.gethostbyname('example.com')\" 2>/dev/null "
         f"|| touch {ctx.workdir}/out/no-network",
     ]
+
+
+def dump_env(ctx: Any) -> list[str]:
+    """Write the trial's whole environment out so a test can inspect it."""
+    return ["/bin/sh", "-c", f"env > {ctx.workdir}/out/env.txt"]
+
+
+def reach_proxy(ctx: Any) -> list[str]:
+    """Leave a marker only if the proxy is reachable by its network alias."""
+    return [
+        "/bin/sh",
+        "-c",
+        'python3 -c "import urllib.request as u; '
+        f"u.urlopen('{ctx.model_base_url}/healthz', timeout=5).read()\" "
+        f"&& touch {ctx.workdir}/out/proxy-reachable",
+    ]
+
+
+def reach_internet(ctx: Any) -> list[str]:
+    """Leave a marker only if a public address is NOT reachable.
+
+    Connects to an IP rather than a hostname so the test proves there is no
+    route, not merely that DNS is unhelpful.
+    """
+    return [
+        "/bin/sh",
+        "-c",
+        "python3 -c \"import socket; socket.create_connection(('1.1.1.1', 443), timeout=4)\" "
+        f"2>/dev/null || touch {ctx.workdir}/out/internet-unreachable",
+    ]

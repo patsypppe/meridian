@@ -108,6 +108,11 @@ def snapshot_build(
     write_ref: bool = typer.Option(
         False, "--write-ref", help="Record the digest in <env>/snapshot-ref.json."
     ),
+    context: Path | None = typer.Option(
+        None,
+        "--context",
+        help="Build context, when the image ships files from outside its own directory.",
+    ),
     update_suite: Path | None = typer.Option(
         None,
         "--update-suite",
@@ -122,7 +127,7 @@ def snapshot_build(
     """
     try:
         client = get_client()
-        digest = build_snapshot(client, path, tag=tag, write_ref=write_ref)
+        digest = build_snapshot(client, path, tag=tag, write_ref=write_ref, context=context)
     except (DockerUnavailableError, SnapshotBuildError) as exc:
         err(f"snapshot build failed: {exc}")
         raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
