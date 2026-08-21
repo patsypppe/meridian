@@ -8,6 +8,7 @@ is not good enough — and it is the line the demo is built around.
 from __future__ import annotations
 
 from meridian.models.run import RunResult, TaskResult
+from meridian.stats.bootstrap import bootstrap_ci
 from meridian.stats.passk import pass_at_k, pass_hat_k
 
 BAR = "─"
@@ -49,6 +50,11 @@ def render(run: RunResult) -> str:
     if scored:
         suite_hat = sum(pass_hat_k(t.n, t.c, min(run.k, t.n)) for t in scored) / len(scored)
         lines.append(f"{'suite pass^' + str(run.k):<24} {_fmt(suite_hat):>28}")
+        if len(scored) > 1:
+            # Resampled over tasks, not trials — trials within a task are
+            # correlated and a trial-level interval would be far too narrow.
+            lo, hi = bootstrap_ci([(t.n, t.c, run.k) for t in scored], pass_hat_k, iterations=4000)
+            lines.append(f"{'95% CI (over tasks)':<24} {f'[{_fmt(lo)}, {_fmt(hi)}]':>28}")
     if run.excluded_task_slugs:
         lines.append(f"excluded from the aggregate: {', '.join(run.excluded_task_slugs)}")
     lines.append(f"harness error rate: {run.harness_error_rate:.1%}")
