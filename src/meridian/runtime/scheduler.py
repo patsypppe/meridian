@@ -29,9 +29,15 @@ def derive_seed(run_id: str, task_slug: str, trial_index: int) -> int:
     Derived rather than random so that replaying a manifest reproduces the same
     seeds without having to store each one separately — and stored anyway,
     because a derivation that changes silently is worse than a stored value.
+
+    Bounded to 63 bits so it fits a signed 64-bit column.
     """
     digest = hashlib.sha256(f"{run_id}:{task_slug}:{trial_index}".encode()).digest()
-    return int.from_bytes(digest[:8], "big")
+    # 63 bits, not 64: a seed has to survive a round trip through a signed
+    # 64-bit column, and an unsigned 64-bit value does not. Discovered the way
+    # these things usually are — a run that computed fine and then would not
+    # persist.
+    return int.from_bytes(digest[:8], "big") >> 1
 
 
 def trial_specs(
