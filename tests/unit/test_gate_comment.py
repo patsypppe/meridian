@@ -203,3 +203,63 @@ def test_too_few_tasks_says_so_rather_than_quoting_a_number() -> None:
     note = "\n".join(sensitivity_note({"a": 1.0}, {"a": 0.5}, target=0.03))
     assert "Too few comparable tasks" in note
     assert "could reliably detect" not in note
+
+
+# -- k is not silently lowered -----------------------------------------------
+
+
+def _task_with(slug: str, *, passes: int, harness_errors: int) -> TaskResult:
+    trials = [
+        TrialResult(
+            run_id="r",
+            task_slug=slug,
+            trial_index=i,
+            seed=0,
+            outcome=Outcome.PASS if i < passes else Outcome.FAIL,
+        )
+        for i in range(passes)
+    ]
+    trials += [
+        TrialResult(
+            run_id="r",
+            task_slug=slug,
+            trial_index=100 + i,
+            seed=0,
+            outcome=Outcome.HARNESS_ERROR,
+        )
+        for i in range(harness_errors)
+    ]
+    return TaskResult(task_slug=slug, trials=tuple(trials))
+
+
+def _run_with(*tasks: TaskResult, k: int = 3) -> RunResult:
+    return RunResult(
+        run_id="r",
+        suite_slug="s",
+        suite_version=1,
+        status=RunStatus.COMPLETE,
+        k=k,
+        n_requested=5,
+        tasks=tasks,
+    )
+
+
+def test_a_task_with_fewer_than_k_trials_is_excluded_not_clamped() -> None:
+    """Clamping reported pass^2 as pass^3 = 1.000 and fed it to the aggregate."""
+    run = _run_with(_task_with("starved", passes=2, harness_errors=3), k=3)
+    assert per_task_scores(run) == {}
+
+
+def test_a_task_with_exactly_k_trials_is_scored() -> None:
+    run = _run_with(_task_with("thin", passes=3, harness_errors=2), k=3)
+    assert per_task_scores(run) == {"thin": pytest.approx(1.0)}
+
+
+def test_a_starved_task_does_not_reach_the_suite_aggregate() -> None:
+    """It would have entered as a perfect score and lifted the suite number."""
+    run = _run_with(
+        _task_with("healthy", passes=3, harness_errors=0),
+        _task_with("starved", passes=2, harness_errors=3),
+        k=3,
+    )
+    assert set(per_task_scores(run)) == {"healthy"}

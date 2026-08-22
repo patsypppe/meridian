@@ -201,11 +201,23 @@ def render(
 
 
 def per_task_scores(run: RunResult) -> dict[str, float]:
-    """Per-task pass^k, clamped to the trials that actually produced a verdict."""
+    """Per-task pass^k, over tasks that actually produced k trials to draw from.
+
+    A task with fewer than `k` scoreable trials is **excluded**, not clamped.
+    Clamping silently substitutes a different statistic under the same label:
+    a task that lost three of five trials to harness errors and passed the
+    remaining two was reported as `pass^3 = 1.000`, which is a `pass^2` wearing
+    the wrong name, and it lands in the suite aggregate as a perfect score.
+
+    Excluding is safe here because the gate already names every task present on
+    only one side — "Not run on head (excluded from the comparison)" — so a task
+    dropping out is visible rather than silent. A comparison that quietly changes
+    which statistic it is comparing is the worse failure.
+    """
     return {
-        task.task_slug: pass_hat_k(task.n, task.c, min(run.k, task.n))
+        task.task_slug: pass_hat_k(task.n, task.c, run.k)
         for task in run.tasks
-        if task.n > 0
+        if task.n >= run.k
     }
 
 
