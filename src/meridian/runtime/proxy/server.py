@@ -176,7 +176,23 @@ async def messages(request: Request) -> Response:
             input_tokens=input_tokens,
             output_tokens=output_tokens,
         )
-        state.cassettes.save(cassette)
+        try:
+            state.cassettes.save(cassette)
+        except OSError as exc:
+            # Recording that cannot be written is a harness failure, and it has
+            # to say so. Returning the model response anyway would produce a run
+            # that looks fine and cannot be replayed.
+            return JSONResponse(
+                {
+                    "type": "error",
+                    "error": {
+                        "type": "cassette_write_failed",
+                        "message": f"could not write the cassette for {task_slug}: {exc}. "
+                        f"The proxy needs write access to its cassette directory.",
+                    },
+                },
+                status_code=500,
+            )
 
     return JSONResponse(response_body)
 

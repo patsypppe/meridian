@@ -224,7 +224,7 @@ def run(
     request = RunRequest(
         suite=loaded,
         config=config,
-        cassette_dir=cassettes or default_cassette_dir(loaded),
+        cassette_dir=default_cassette_dir(loaded, cassettes),
         sut_root=sut.resolve() if sut else None,
         mode=mode,
         include_probes=include_probes,
@@ -334,7 +334,7 @@ def gate(
         return RunRequest(
             suite=loaded,
             config=config,
-            cassette_dir=(cassettes / loaded.slug) if cassettes else default_cassette_dir(loaded),
+            cassette_dir=default_cassette_dir(loaded, cassettes),
             sut_root=sut_root.resolve(),
             mode=RunMode.GATE,
             use_stub_provider=not live_provider,
@@ -522,9 +522,7 @@ def replay(
     request = RunRequest(
         suite=loaded,
         config=config,
-        cassette_dir=(cassettes / manifest.suite_slug)
-        if cassettes
-        else default_cassette_dir(loaded),
+        cassette_dir=default_cassette_dir(loaded, cassettes),
         sut_root=sut.resolve() if sut else None,
         # The same run id reproduces the same derived seeds.
         run_id=run_id,

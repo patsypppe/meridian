@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import contextlib
 import json
+import os
 import time
 from dataclasses import dataclass
 from pathlib import Path
@@ -56,6 +57,23 @@ def stub_upstream_url(run_id: str) -> str:
 
 HEALTH_TIMEOUT_SECONDS = 30.0
 HEALTH_POLL_SECONDS = 0.2
+
+
+def _writer_identity() -> str | None:
+    """Who the proxy should run as when it has to write cassettes to a host path.
+
+    Docker Desktop on macOS remaps ownership on bind mounts, so the image's own
+    user can write to a host directory. Linux does not, and the proxy's uid
+    cannot write a directory owned by the person who checked the repository out.
+    That difference is invisible until CI is the first Linux host to try it, and
+    then it shows up as every trial failing at once.
+
+    Running as the caller also means recorded cassettes land owned by whoever ran
+    the recording, which is what you want before committing them.
+    """
+    if not hasattr(os, "getuid"):  # pragma: no cover - Windows
+        return None
+    return f"{os.getuid()}:{os.getgid()}"
 
 
 class ProxyStartError(RuntimeError):
@@ -197,9 +215,11 @@ def start_proxy(
             internal=True,
             labels={RUN_LABEL: run_id},
         )
+        writes_cassettes = mode is not ProxyMode.REPLAY
         container = client.containers.create(
             image=image,
             name=f"meridian-proxy-{run_id}",
+            user=_writer_identity() if writes_cassettes else None,
             environment=environment,
             labels={RUN_LABEL: run_id, "meridian.role": "proxy"},
             volumes={
