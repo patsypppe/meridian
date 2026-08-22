@@ -66,6 +66,14 @@ A mean score reports 80% and reads like a B. `pass^3` reports 0.40 and reads lik
 what it is: an agent you cannot ship without a retry loop. Meridian leads with
 `pass^k` because "works if you retry it" is not a claim anybody can ship on.
 
+The metric is not Meridian's invention — it is τ-bench's
+([arXiv:2406.12045](https://arxiv.org/abs/2406.12045)). Implementing it exactly,
+as `C(c,k)/C(n,k)` rather than the `(c/n)^k` that shows up in a lot of code, is
+table stakes rather than a differentiator. Confidence intervals resample **tasks,
+not trials**, because trials within a task are correlated and a trial-level
+interval is far too narrow — see
+[arXiv:2411.00640](https://arxiv.org/abs/2411.00640).
+
 ---
 
 ## The gate
@@ -85,6 +93,44 @@ The gate declines to draw a conclusion when it should: too many harness errors,
 too many stale cassettes, or a drop that a paired significance test cannot
 distinguish from noise. And with no baseline it returns **PASS** — a gate that
 fails on day one gets disabled on day two.
+
+### It tells you when it could not have seen the regression
+
+Every verdict carries the thing that decides whether it means anything:
+
+> **Sensitivity.** This run could reliably detect a suite-level drop of **0.183**
+> or larger (80% power, one-sided alpha=0.05). A real regression smaller than that
+> would most likely have passed. Resolving the configured tolerance of 0.030 would
+> take about **262 comparable tasks**; this comparison has 7.
+
+A `PASS` from an underpowered suite is not evidence that nothing broke. It is the
+absence of evidence either way, and a gate that reports those identically teaches
+people to trust it exactly when it is least reliable.
+
+This is also the honest explanation of Meridian's own 4/5 above. The seeded
+rounding bug moved 2 of 7 tasks and dropped suite pass^3 by 0.114 — against a
+minimum detectable effect of 0.183. The gate did not miss it because its
+threshold was wrong. It missed it because seven tasks cannot resolve it, and no
+threshold can fix that. The note says so, and says how many tasks would.
+
+### The evaluator never trusts the container
+
+Assertions run on state **extracted** from the trial, on the host, after the
+container is gone. Nothing inside the sandbox decides whether the trial passed.
+
+This is not fastidiousness. In 2026 independent researchers broke several major
+agent benchmarks precisely here: agents on SWE-bench wrote a `conftest.py` that
+rewrote every test result to `passed`; agents on Terminal-Bench replaced
+`/usr/bin/curl` to emit fake test output; one FieldWorkArena validator scored a
+`"{}"` response 1.0 on all 890 tasks. Their first recommendation — *run evaluation
+outside the agent's container, and don't trust files, outputs, or state from
+inside the sandbox* — is this design.
+
+Meridian holds the same line against its **own** inputs. A task file is untrusted:
+in the case this product exists for, a pull request edits `suites/` and CI runs
+the gate on the result. Task paths are contained to the suite directory, grader
+paths to the extracted state, cassette names to the task schema's alphabet, and
+per-trial budgets to slugs the harness recognises.
 
 **[See it fail and pass on a real PR →](docs/demo/)**
 
@@ -111,6 +157,24 @@ uv run meridian run --suite ./suites/checkout-agent --n 5 --k 3 --proxy-mode rep
 No API key needed. Replay runs from cassettes committed to this repository, which
 is why CI works offline and cannot go red because a provider was slow. A key is
 needed only to *record* a new cassette.
+
+**What replay does and does not test.** Under replay the model's outputs are
+fixed, so a replayed run measures the *scaffold* — prompt assembly, tool routing,
+parsing, state mutation — and not the model. That is a real and useful thing to
+gate on, and it is most of what a pull request actually changes, but it is not a
+measurement of agent capability. Use the two modes for what each is:
+
+| | `--proxy-mode replay` | `--proxy-mode record` |
+|---|---|---|
+| Runs | every PR, offline, free | nightly, or on demand |
+| Catches | scaffold regressions | agent capability regressions |
+| Cannot catch | anything requiring the model to respond differently | — |
+
+`meridian gate` records by default for exactly this reason: a gate measures the
+agent as it is now, and cassettes from the previous version would miss on every
+changed prompt. The gate reports its stale-cassette rate and returns
+**INCONCLUSIVE** rather than FAIL when too many trials missed their recording —
+"re-record" and "your change broke something" look identical otherwise.
 
 ```bash
 # Would this change block the merge?
