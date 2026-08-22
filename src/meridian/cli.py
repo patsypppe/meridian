@@ -224,7 +224,7 @@ def run(
     request = RunRequest(
         suite=loaded,
         config=config,
-        cassette_dir=cassettes or default_cassette_dir(loaded),
+        cassette_dir=default_cassette_dir(loaded, cassettes),
         sut_root=sut.resolve() if sut else None,
         mode=mode,
         include_probes=include_probes,
@@ -256,6 +256,203 @@ def run(
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(outcome.result.model_dump_json(indent=2), encoding="utf-8")
         err(f"wrote {out}")
+
+
+@app.command()
+def gate(
+    suite: Path = typer.Option(..., "--suite", help="Path to the suite directory."),
+    baseline_ref: str | None = typer.Option(
+        None, "--baseline-ref", help="Commit or ref to compare against (usually the merge base)."
+    ),
+    baseline_run: str | None = typer.Option(
+        None, "--baseline-run", help="An archived run id to compare against instead."
+    ),
+    n: int | None = typer.Option(None, "--n", help="Trials per task."),
+    k: int | None = typer.Option(None, "--k", help="The k in pass^k."),
+    tolerance: float | None = typer.Option(None, "--tolerance", help="Allowed pass^k drop."),
+    require_significance: bool = typer.Option(
+        True, "--require-significance/--no-require-significance"
+    ),
+    fail_on_inconclusive: bool = typer.Option(False, "--fail-on-inconclusive"),
+    proxy_mode: str = typer.Option(
+        "record",
+        "--proxy-mode",
+        help="record (default) runs the agent for real; replay only works when the "
+        "agent has not changed since the cassettes were recorded.",
+    ),
+    sut: Path = typer.Option(Path("fixtures"), "--sut", help="System under test root."),
+    cassettes: Path | None = typer.Option(None, "--cassettes", help="Cassette root."),
+    comment_file: Path | None = typer.Option(
+        None, "--comment-file", help="Write the PR comment here."
+    ),
+    live_provider: bool = typer.Option(False, "--live-provider"),
+) -> None:
+    """Compare head against a baseline and decide whether to block the merge.
+
+    The only command that returns a non-zero exit code for a product verdict:
+    1 for FAIL, 0 for everything else. CI must never confuse "the agent got
+    worse" with "the tool crashed".
+    """
+    import asyncio
+
+    from meridian.config import RunMode, load_config
+    from meridian.gate import comment as comment_module
+    from meridian.gate.baseline import Baseline, BaselineError, merge_base, worktree_at
+    from meridian.gate.decide import GateInput, decide, flipped_tasks
+    from meridian.manifest import store as run_store
+    from meridian.runtime.orchestrator import RunRequest, default_cassette_dir, execute
+    from meridian.stats.significance import paired_regression_p_value
+
+    repo_root = Path.cwd()
+
+    try:
+        loaded = load_suite(suite)
+    except SuiteValidationError as exc:
+        _report_validation_failure(exc)
+        raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
+
+    config = load_config(
+        "meridian.yaml",
+        overrides={
+            "execution": {"n_trials": n, "k": k, "proxy_mode": proxy_mode},
+            "gate": {
+                "tolerance": str(tolerance) if tolerance is not None else None,
+                "require_significance": require_significance,
+                "fail_on_inconclusive": fail_on_inconclusive or None,
+            },
+        },
+    )
+
+    try:
+        config.validate_for(RunMode.GATE)
+        client = get_client()
+    except (ValueError, DockerUnavailableError) as exc:
+        err(str(exc))
+        raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
+
+    def request(sut_root: Path, run_id_suffix: str) -> RunRequest:
+        return RunRequest(
+            suite=loaded,
+            config=config,
+            cassette_dir=default_cassette_dir(loaded, cassettes),
+            sut_root=sut_root.resolve(),
+            mode=RunMode.GATE,
+            use_stub_provider=not live_provider,
+            repo_root=repo_root,
+            progress=err,
+        )
+
+    # --- baseline -------------------------------------------------------
+    baseline_scores: dict[str, float] = {}
+    baseline_suite: float | None = None
+    baseline_info = Baseline(run_id=None, source="none")
+
+    if baseline_run:
+        try:
+            recorded = run_store.load_result(baseline_run)
+        except run_store.RunNotFoundError as exc:
+            err(str(exc))
+            raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
+        baseline_scores = comment_module.per_task_scores(recorded)
+        baseline_suite = comment_module.suite_score(recorded)
+        baseline_info = Baseline(run_id=baseline_run, source="archive")
+    elif baseline_ref:
+        sha = merge_base(repo_root, baseline_ref)
+        if sha is None:
+            err(f"could not resolve {baseline_ref!r}; proceeding with no baseline")
+        else:
+            # Comparable, not merely same-commit: a baseline run at a different
+            # n, k, or suite version yields a difference that is an artefact of
+            # the configuration and looks exactly like a regression.
+            archived = run_store.find_by_commit(
+                sha,
+                n_trials=config.execution.n_trials,
+                k=config.execution.k,
+                suite_content_hash=loaded.content_hash(),
+            )
+            if archived is not None:
+                recorded = run_store.load_result(archived)
+                baseline_scores = comment_module.per_task_scores(recorded)
+                baseline_suite = comment_module.suite_score(recorded)
+                baseline_info = Baseline(run_id=archived, source="archive")
+                err(f"baseline from archived run {archived} at {sha[:12]}")
+            else:
+                err(f"no archived run at {sha[:12]}; running the baseline from a worktree")
+                try:
+                    with worktree_at(repo_root, sha) as checkout:
+                        base_sut = checkout / sut
+                        if not base_sut.is_dir():
+                            err(f"{sut} does not exist at {sha[:12]}; treating as no baseline")
+                        else:
+                            outcome = asyncio.run(execute(client, request(base_sut, "baseline")))
+                            run_store.save(outcome.manifest, outcome.result)
+                            baseline_scores = comment_module.per_task_scores(outcome.result)
+                            baseline_suite = comment_module.suite_score(outcome.result)
+                            baseline_info = Baseline(
+                                run_id=outcome.result.run_id, source="worktree"
+                            )
+                except BaselineError as exc:
+                    err(str(exc))
+                    raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
+                except Exception as exc:
+                    err(f"baseline run failed: {type(exc).__name__}: {exc}")
+                    raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
+
+    # --- head -----------------------------------------------------------
+    try:
+        head = asyncio.run(execute(client, request(sut, "head")))
+    except Exception as exc:
+        err(f"head run failed: {type(exc).__name__}: {exc}")
+        raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
+
+    run_store.save(head.manifest, head.result)
+    head_scores = comment_module.per_task_scores(head.result)
+    head_suite = comment_module.suite_score(head.result)
+
+    verdict, reason = decide(
+        GateInput(
+            baseline_suite_passhat_k=baseline_suite,
+            head_suite_passhat_k=head_suite,
+            per_task_baseline=baseline_scores,
+            per_task_head=head_scores,
+            harness_error_rate=head.result.harness_error_rate,
+            run_status=str(head.result.status),
+            tolerance=config.gate.tolerance_value,
+            require_significance=config.gate.require_significance,
+            significance_level=config.gate.significance_value,
+            fail_on_inconclusive=config.gate.fail_on_inconclusive,
+            max_harness_error_rate=config.gate.max_harness_error_rate_value,
+            stale_cassette_rate=comment_module.stale_cassette_rate(head.result),
+        ),
+        lambda base, head_scores_: paired_regression_p_value(
+            base, head_scores_, seed=config.stats.bootstrap_seed
+        ),
+    )
+
+    flipped = flipped_tasks(baseline_scores, head_scores)
+    body = comment_module.render(
+        verdict=verdict,
+        reason=reason,
+        flipped=flipped,
+        head=head.result,
+        baseline_scores=baseline_scores,
+        head_scores=head_scores,
+        baseline_suite=baseline_suite,
+        head_suite=head_suite,
+        baseline_run_id=baseline_info.run_id,
+        manifest_hash=head.manifest.manifest_hash(),
+    )
+
+    if comment_file is not None:
+        comment_file.parent.mkdir(parents=True, exist_ok=True)
+        comment_file.write_text(body + "\n", encoding="utf-8")
+        err(f"wrote {comment_file}")
+
+    print(body)
+    err(f"verdict: {verdict} ({baseline_info.source} baseline)")
+
+    if verdict.blocks_merge:
+        raise typer.Exit(exit_codes.GATE_FAIL)
 
 
 @app.command()
@@ -325,9 +522,7 @@ def replay(
     request = RunRequest(
         suite=loaded,
         config=config,
-        cassette_dir=(cassettes / manifest.suite_slug)
-        if cassettes
-        else default_cassette_dir(loaded),
+        cassette_dir=default_cassette_dir(loaded, cassettes),
         sut_root=sut.resolve() if sut else None,
         # The same run id reproduces the same derived seeds.
         run_id=run_id,

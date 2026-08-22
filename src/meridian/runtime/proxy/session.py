@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import contextlib
 import json
+import os
 import time
 from dataclasses import dataclass
 from pathlib import Path
@@ -56,6 +57,23 @@ def stub_upstream_url(run_id: str) -> str:
 
 HEALTH_TIMEOUT_SECONDS = 30.0
 HEALTH_POLL_SECONDS = 0.2
+
+
+def _writer_identity() -> str | None:
+    """Who the proxy should run as when it has to write cassettes to a host path.
+
+    Docker Desktop on macOS remaps ownership on bind mounts, so the image's own
+    user can write to a host directory. Linux does not, and the proxy's uid
+    cannot write a directory owned by the person who checked the repository out.
+    That difference is invisible until CI is the first Linux host to try it, and
+    then it shows up as every trial failing at once.
+
+    Running as the caller also means recorded cassettes land owned by whoever ran
+    the recording, which is what you want before committing them.
+    """
+    if not hasattr(os, "getuid"):  # pragma: no cover - Windows
+        return None
+    return f"{os.getuid()}:{os.getgid()}"
 
 
 class ProxyStartError(RuntimeError):
@@ -197,9 +215,11 @@ def start_proxy(
             internal=True,
             labels={RUN_LABEL: run_id},
         )
+        writes_cassettes = mode is not ProxyMode.REPLAY
         container = client.containers.create(
             image=image,
             name=f"meridian-proxy-{run_id}",
+            user=_writer_identity() if writes_cassettes else None,
             environment=environment,
             labels={RUN_LABEL: run_id, "meridian.role": "proxy"},
             volumes={
@@ -221,6 +241,12 @@ def start_proxy(
 
         host_url = _published_url(container)
         _await_health(host_url, container)
+        if stub_container is not None:
+            # Checked through the proxy, because the stub sits on an internal
+            # network the host cannot reach. Skipping this turns "the upstream
+            # never started" into "every trial failed", with nothing said about
+            # why.
+            _await_upstream(host_url, stub_container)
     except Exception as exc:
         stop_proxy(
             ProxyHandle("", network_name, container, "", stub_network_name, stub_container),
@@ -259,6 +285,24 @@ def _await_health(host_url: str, container: Any) -> None:
         time.sleep(HEALTH_POLL_SECONDS)
     logs = container.logs(tail=40).decode("utf-8", errors="replace") if container else ""
     raise ProxyStartError(f"proxy never became healthy ({last}); logs:\n{logs}")
+
+
+def _await_upstream(host_url: str, stub_container: Any) -> None:
+    deadline = time.monotonic() + HEALTH_TIMEOUT_SECONDS
+    last = ""
+    while time.monotonic() < deadline:
+        try:
+            response = httpx.get(f"{host_url}/healthz/upstream", timeout=5.0)
+            if response.status_code == 200:
+                return
+            last = response.text[:300]
+        except Exception as exc:
+            last = f"{type(exc).__name__}: {exc}"
+        time.sleep(HEALTH_POLL_SECONDS)
+    logs = stub_container.logs(tail=40).decode("utf-8", errors="replace")
+    raise ProxyStartError(
+        f"the proxy could not reach its upstream provider ({last}); provider logs:\n{logs}"
+    )
 
 
 def stop_proxy(handle: ProxyHandle | None, *, client: DockerClient) -> None:

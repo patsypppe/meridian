@@ -57,17 +57,36 @@ def list_runs(root: Path | None = None) -> list[str]:
     return sorted(p.name for p in directory.iterdir() if (p / MANIFEST_FILE).is_file())
 
 
-def find_by_commit(commit_sha: str, *, root: Path | None = None) -> str | None:
-    """The most recent archived run recorded at a given commit.
+def find_by_commit(
+    commit_sha: str,
+    *,
+    root: Path | None = None,
+    n_trials: int | None = None,
+    k: int | None = None,
+    suite_content_hash: str | None = None,
+) -> str | None:
+    """The most recent archived run at a commit that is *comparable* to this one.
 
-    This is how the gate resolves a baseline. Returning None is a normal answer,
-    not an error: the first run on a branch has no baseline, and a gate that
-    fails for that reason gets disabled the next day.
+    Matching the commit is not enough. An archived run at n=3, k=2 compared
+    against a head run at n=5, k=3 produces a difference that is entirely an
+    artefact of the configuration — and it looks exactly like a regression. Same
+    for a run of a different version of the suite.
+
+    Returning None is a normal answer, not an error: the first run on a branch
+    has no baseline, and a gate that fails for that reason gets disabled the
+    next day.
     """
     for run_id in reversed(list_runs(root)):
         manifest = load_manifest(run_id, root=root)
-        if manifest.commit_sha == commit_sha:
-            return run_id
+        if manifest.commit_sha != commit_sha:
+            continue
+        if n_trials is not None and manifest.n_trials != n_trials:
+            continue
+        if k is not None and manifest.k != k:
+            continue
+        if suite_content_hash is not None and manifest.suite_content_hash != suite_content_hash:
+            continue
+        return run_id
     return None
 
 

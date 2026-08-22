@@ -238,7 +238,12 @@ def docker_version(client: DockerClient) -> str | None:
 
 
 def default_cassette_dir(suite: Suite, root: Path | None = None) -> Path:
-    base = root or Path("fixtures") / "cassettes"
+    """Cassettes live under a root, one directory per suite.
+
+    `--cassettes` is always the *root*, never the suite's own directory, so the
+    same flag means the same thing to `run`, `replay`, and `gate`.
+    """
+    base = root if root is not None else Path("fixtures") / "cassettes"
     return Path(base) / suite.slug
 
 

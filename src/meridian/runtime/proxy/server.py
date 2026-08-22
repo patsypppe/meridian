@@ -176,7 +176,23 @@ async def messages(request: Request) -> Response:
             input_tokens=input_tokens,
             output_tokens=output_tokens,
         )
-        state.cassettes.save(cassette)
+        try:
+            state.cassettes.save(cassette)
+        except OSError as exc:
+            # Recording that cannot be written is a harness failure, and it has
+            # to say so. Returning the model response anyway would produce a run
+            # that looks fine and cannot be replayed.
+            return JSONResponse(
+                {
+                    "type": "error",
+                    "error": {
+                        "type": "cassette_write_failed",
+                        "message": f"could not write the cassette for {task_slug}: {exc}. "
+                        f"The proxy needs write access to its cassette directory.",
+                    },
+                },
+                status_code=500,
+            )
 
     return JSONResponse(response_body)
 
@@ -184,6 +200,35 @@ async def messages(request: Request) -> Response:
 async def healthz(request: Request) -> Response:
     state: ProxyState = request.app.state.proxy
     return JSONResponse({"ok": True, "mode": str(state.config.mode)})
+
+
+async def upstream_health(request: Request) -> Response:
+    """Whether the proxy can actually reach its upstream.
+
+    The upstream sits on an internal network the host cannot reach, so this is
+    the only vantage point from which it can be checked. Without it, an upstream
+    that never started shows up as every trial failing for no stated reason --
+    which is exactly how it first showed up in CI.
+    """
+    state: ProxyState = request.app.state.proxy
+    if state.config.mode is ProxyMode.REPLAY:
+        return JSONResponse({"ok": True, "upstream": "not used in replay"})
+    try:
+        async with httpx.AsyncClient(timeout=3.0) as client:
+            response = await client.get(f"{state.config.upstream_base_url}/healthz")
+        return JSONResponse(
+            {"ok": response.status_code == 200, "upstream": state.config.upstream_base_url},
+            status_code=200 if response.status_code == 200 else 503,
+        )
+    except Exception as exc:
+        return JSONResponse(
+            {
+                "ok": False,
+                "upstream": state.config.upstream_base_url,
+                "error": f"{type(exc).__name__}: {exc}",
+            },
+            status_code=503,
+        )
 
 
 async def usage(request: Request) -> Response:
@@ -197,6 +242,7 @@ def create_app(config: ProxyConfig) -> Starlette:
         routes=[
             Route("/v1/messages", messages, methods=["POST"]),
             Route("/healthz", healthz, methods=["GET"]),
+            Route("/healthz/upstream", upstream_health, methods=["GET"]),
             Route("/v1/usage", usage, methods=["GET"]),
         ]
     )
