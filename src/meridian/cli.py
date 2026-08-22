@@ -151,6 +151,122 @@ def snapshot_show(
     out(digest)
 
 
+@suite_app.command("audit")
+def suite_audit(
+    suite: Path = typer.Option(..., "--suite", help="Path to the suite directory."),
+    sut: Path = typer.Option(Path("fixtures"), "--sut", help="System under test root."),
+    out: Path | None = typer.Option(None, "--out", help="Write the findings as JSON."),
+) -> None:
+    """Check whether any task can be passed without doing the work.
+
+    Runs the suite against agents that are known not to have solved anything — one
+    that touches nothing, one that creates an empty output directory, one that
+    writes well-formed JSON full of invented values. Any task that still passes is
+    measuring something weaker than it claims.
+
+    This is the contamination probe's idea turned on the *user's* assertions
+    rather than on Meridian's isolation: a check that cannot fail proves nothing.
+
+    **Exit code.** Always 0 unless the harness itself broke. A weak task is a
+    finding about the suite, and `1` is reserved exclusively for `meridian gate`
+    returning FAIL (`HANDOFF §8.4`) — CI must never have to guess which of the two
+    it is looking at. Gate on the JSON from `--out` instead.
+    """
+    import asyncio
+    import json as json_module
+
+    from meridian.config import RunMode, load_config
+    from meridian.models.run import Outcome
+    from meridian.models.suite import Suite
+    from meridian.runtime.orchestrator import RunRequest, default_cassette_dir, execute
+    from meridian.suites.audit import ADVERSARIES, audit_report, findings
+
+    try:
+        loaded = load_suite(suite)
+    except SuiteValidationError as exc:
+        _report_validation_failure(exc)
+        raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
+
+    # One trial per task: these adversaries are deterministic, so a second trial
+    # would cost time and tell us nothing.
+    config = load_config(
+        "meridian.yaml",
+        overrides={"execution": {"n_trials": 1, "k": 1, "proxy_mode": "replay"}},
+    )
+
+    try:
+        config.validate_for(RunMode.EXPLORATORY)
+        client = get_client()
+    except (ValueError, DockerUnavailableError) as exc:
+        err(str(exc))
+        raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
+
+    audited = [task.slug for task in loaded.tasks]
+    passes: dict[str, list[str]] = {}
+
+    for adversary in ADVERSARIES:
+        err(f"running the {adversary.name} adversary over {len(audited)} task(s)")
+        # Every task keeps its assertions and its environment and loses only its
+        # agent. That is the whole experiment: same measuring instrument, an agent
+        # that certainly did not earn a pass.
+        rigged = Suite(
+            header=loaded.header,
+            tasks=tuple(
+                task.model_copy(update={"adapter": adversary.adapter}) for task in loaded.tasks
+            ),
+            root=loaded.root,
+        )
+        request = RunRequest(
+            suite=rigged,
+            config=config,
+            cassette_dir=default_cassette_dir(rigged, None),
+            sut_root=sut.resolve() if sut else None,
+            mode=RunMode.EXPLORATORY,
+            include_probes=False,
+            use_stub_provider=True,
+            progress=None,
+        )
+        try:
+            outcome = asyncio.run(execute(client, request))
+        except Exception as exc:
+            err(f"the {adversary.name} adversary could not be run: {type(exc).__name__}: {exc}")
+            raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
+
+        passes[adversary.name] = [
+            task.task_slug
+            for task in outcome.result.tasks
+            if any(trial.outcome is Outcome.PASS for trial in task.trials)
+        ]
+
+    found = findings(passes)
+    print(audit_report(found, audited))
+
+    if out is not None:
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(
+            json_module.dumps(
+                {
+                    "audited_tasks": audited,
+                    "adversaries": [a.name for a in ADVERSARIES],
+                    "findings": [
+                        {
+                            "task_slug": f.task_slug,
+                            "adversary": f.adversary,
+                            "why_it_should_fail": f.why_it_should_fail,
+                        }
+                        for f in found
+                    ],
+                    "weak_task_count": len({f.task_slug for f in found}),
+                },
+                indent=2,
+                sort_keys=True,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        err(f"wrote {out}")
+
+
 @app.command()
 def run(
     suite: Path = typer.Option(..., "--suite", help="Path to the suite directory."),

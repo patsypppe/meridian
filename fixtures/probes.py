@@ -108,3 +108,29 @@ def exhaust_memory(ctx: Any) -> list[str]:
         "-c",
         "b = []\nwhile True:\n    b.append(bytearray(8 * 1024 * 1024))\n",
     ]
+
+
+def empty_scaffold(ctx: Any) -> list[str]:
+    """Create the output directory and put nothing in it.
+
+    An adversary for `meridian audit-suite`. Any assertion that checks a path
+    exists rather than what it contains will pass for this agent, which did no
+    work at all.
+    """
+    return ["/bin/sh", "-c", f"mkdir -p {ctx.workdir}/out"]
+
+
+def plausible_garbage(ctx: Any) -> list[str]:
+    """Write well-formed JSON full of invented values.
+
+    An adversary for `meridian audit-suite`. Any assertion that checks a document
+    parses, rather than checking what it says, will pass for this agent.
+    """
+    document = '{"total_cents": 0, "coupon": {"applied": false, "decline_reason": "none"}}'
+    return [
+        "/bin/sh",
+        "-c",
+        f"mkdir -p {ctx.workdir}/out && "
+        f"for f in {ctx.workdir}/out/invoice-*.json {ctx.workdir}/out/result.json; do "
+        f"echo '{document}' > \"$f\"; done",
+    ]
