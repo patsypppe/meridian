@@ -55,7 +55,10 @@ async def test_a_run_replays_exactly(docker_client: Any, tmp_path: Path) -> None
     # Re-materialized from the manifest, with the same run id so the derived
     # seeds match.
     replayed = await execute(docker_client, request_for(manifest_run_id(manifest), tmp_path))
-    report = compare(manifest, recorded, replayed.result, expected_hash=manifest.manifest_hash())
+    # No expected_hash: `compare` checks the manifest against the hash the
+    # archived run persisted. Passing manifest.manifest_hash() here would
+    # compare the manifest against itself and assert nothing.
+    report = compare(manifest, recorded, replayed.result)
 
     assert report.manifest_hash_matches
     assert report.missing == []

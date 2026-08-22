@@ -308,12 +308,9 @@ async def measure_replay_fidelity(bench: Bench, *, manifests: int) -> dict[str, 
         run_id = f"self-eval-replay-{index}"
         recorded = await bench.run(run_id)
         replayed = await bench.run(run_id, proxy_mode="replay")
-        report = compare(
-            recorded.manifest,
-            recorded.result,
-            replayed.result,
-            expected_hash=recorded.manifest.manifest_hash(),
-        )
+        # No expected_hash: comparing a manifest against its own hash verifies
+        # nothing, and this number is published.
+        report = compare(recorded.manifest, recorded.result, replayed.result)
         if report.exact:
             exact += 1
         else:

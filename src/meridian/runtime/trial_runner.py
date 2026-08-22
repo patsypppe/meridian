@@ -224,8 +224,19 @@ class TrialRunner:
         try:
             adapter_result = self._read_adapter_result(state_dir, task, phase.exit_code)
         except HarnessFault as exc:
-            return self._harness_error(
-                spec, started, attempt, str(exc), removed=phase.container_removed
+            if not (phase.timed_out or phase.oom_killed):
+                return self._harness_error(
+                    spec, started, attempt, str(exc), removed=phase.container_removed
+                )
+            # A killed container is SIGKILLed mid-write, so a half-written
+            # result.json is the *expected* outcome of a timeout or an OOM rather
+            # than evidence of a broken harness. Reported as a harness error it
+            # would be retried — and a retried timeout is exactly the thing the
+            # retry policy exists to forbid, arriving through the back door.
+            adapter_result = AdapterResult(
+                completed=False,
+                error="the agent was killed before it finished writing its result",
+                exit_code=phase.exit_code,
             )
 
         if phase.timed_out:

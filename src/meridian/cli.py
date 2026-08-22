@@ -676,7 +676,6 @@ def replay(
         err(str(exc))
         raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
 
-    recorded_hash = manifest.manifest_hash()
     suite_path = suite or Path("suites") / manifest.suite_slug
 
     try:
@@ -728,7 +727,9 @@ def replay(
         err(f"replay failed: {type(exc).__name__}: {exc}")
         raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
 
-    report = compare(manifest, recorded, outcome.result, expected_hash=recorded_hash)
+    # No expected_hash: `compare` uses the hash the archived run persisted, which
+    # is the only value here independent of the manifest being verified.
+    report = compare(manifest, recorded, outcome.result)
     print(report.render())
     if not report.exact:
         err("replay did not reproduce exactly; something outside the manifest moved")

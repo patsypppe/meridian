@@ -82,7 +82,15 @@ def recorded_pass_hat_k(result: RunResult) -> dict[str, float]:
 
 
 def verify_manifest(manifest: Manifest, expected_hash: str | None) -> bool:
-    """Whether the manifest still hashes to what it did when it was written."""
+    """Whether the manifest still hashes to what it did when it was written.
+
+    `expected_hash` must come from the **archived run**, not from the manifest
+    object in hand. Both callers used to pass `manifest.manifest_hash()`, which
+    made this `x == x` — so `ReplayReport.exact`, and the `replay_fidelity`
+    number published in the README, reported a check that never ran. `compare`
+    now defaults it to the hash the run persisted at record time, which is the
+    only value here that is independent of the manifest being verified.
+    """
     return expected_hash is None or manifest.manifest_hash() == expected_hash
 
 
@@ -112,13 +120,19 @@ def compare(
     *,
     expected_hash: str | None = None,
 ) -> ReplayReport:
-    """Build the fidelity report from a recorded run and its replay."""
+    """Build the fidelity report from a recorded run and its replay.
+
+    `expected_hash` defaults to the hash the recorded run persisted when it was
+    archived. Passing `manifest.manifest_hash()` here verifies nothing.
+    """
     before = recorded_pass_hat_k(recorded)
     after = recorded_pass_hat_k(replayed)
 
     report = ReplayReport(
         run_id=recorded.run_id,
-        manifest_hash_matches=verify_manifest(manifest, expected_hash),
+        manifest_hash_matches=verify_manifest(
+            manifest, expected_hash if expected_hash is not None else recorded.manifest_hash
+        ),
         missing=sorted(set(before) - set(after)),
     )
     for slug in sorted(set(before) & set(after)):
