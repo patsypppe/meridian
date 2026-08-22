@@ -132,6 +132,30 @@ the gate on the result. Task paths are contained to the suite directory, grader
 paths to the extracted state, cassette names to the task schema's alphabet, and
 per-trial budgets to slugs the harness recognises.
 
+### And it audits your suite the same way
+
+```bash
+meridian suite audit --suite ./suites/checkout-agent
+```
+
+Runs your tasks against agents known not to have solved anything — one that
+touches nothing, one that creates the output directory and leaves it empty, one
+that writes well-formed JSON full of invented values. Any task that still passes
+is measuring something weaker than it claims:
+
+```
+1 task(s) can be passed without doing the work:
+
+  weak-task passes for the empty-scaffold agent, which creates the output
+  directory and leaves it empty, which passes any assertion checking that a
+  path exists rather than what is in it
+```
+
+Tasks get written by watching an agent fail, so they are only ever checked
+against agents that are *trying*. A do-nothing agent has passed 38% of one widely
+used benchmark's tasks. This is the contamination probe's idea pointed at your
+assertions instead of at Meridian's isolation.
+
 **[See it fail and pass on a real PR →](docs/demo/)**
 
 The change under review was a three-line diff removing one sentence from a

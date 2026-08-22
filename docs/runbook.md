@@ -357,3 +357,79 @@ pinned by digest — editing that on the host changes nothing a trial ever sees.
 A genuine miss with the regression correctly applied is a real result. Report it;
 do not tune the tolerance to make it go away. A benchmark that tunes the thing it
 is measuring measures nothing.
+
+---
+
+## 18. A trial failed and the reason names a memory limit
+
+```
+expired-coupon[2] fail: exceeded the 2048MB memory limit and was killed by the cgroup
+```
+
+This is a `fail`, not a `harness_error`, and it is not retried. The ceiling comes
+from the task's `environment.resources.memory_mb`, so an agent that walks into it
+has failed under the budget it was given — the same reasoning that makes a
+timeout a statement about the agent.
+
+**If the limit is genuinely too low**, raise `memory_mb` in the task and re-run.
+That changes the task definition, so it changes the manifest, and the comparison
+against an older baseline is no longer apples-to-apples. Re-baseline deliberately
+rather than comparing across the change.
+
+**Do not** confuse this with a timeout. Both surface as exit 137, which is why
+the classification reads `State.OOMKilled` from the daemon instead. If you see a
+timeout reported as an OOM, that ordering has regressed and
+`test_an_oom_is_the_agents_failure_and_is_not_retried` should have caught it.
+
+Note that swap is disabled for trial containers (`memswap_limit == mem_limit`).
+Without that, Docker allows twice the requested memory and the ceiling stops
+meaning what the task says.
+
+---
+
+## 19. Every trial failed at once and the agent looks catastrophically broken
+
+Check the proxy before you believe it.
+
+An agent that cannot reach the model fails every trial of every task, and the
+gate reports the largest regression it has ever seen. The failure mode that costs
+an afternoon is reverting a change that was never the cause, watching the revert
+not help, and only then looking at the harness.
+
+Meridian classifies this for you: when a trial reports an error *and* the proxy
+does not answer its health check, the trial is a `harness_error` rather than a
+`fail`, and the gate returns INCONCLUSIVE rather than FAIL. So:
+
+```
+harness error rate: 100.0%
+```
+
+is the signal. A run that executed nothing reports that it executed nothing.
+
+If instead you see a clean sweep of `fail` with agent-side errors, the proxy was
+answering and the failures are real.
+
+---
+
+## 20. `meridian suite audit` says a task can be passed without doing the work
+
+```
+weak-task passes for the empty-scaffold agent, which creates the output
+directory and leaves it empty
+```
+
+The task's assertions are satisfiable without solving it, so every pass it has
+ever recorded is worth less than it looked. The usual cause is an assertion that
+checks a path **exists**, or that a document **parses**, rather than checking what
+it says.
+
+Fix the assertion, not the adversary:
+
+- `file_exists` on a directory → assert on a specific file, or use
+  `json_path_equals` on its contents.
+- `file_exists` on a document the agent writes → assert a value inside it.
+- A `json_path_matches` pattern loose enough to match invented values → tighten it,
+  or pin the value with `json_path_equals`.
+
+Re-run the audit after the fix. A clean audit does not prove the assertions are
+*right* — only that they are not trivially satisfiable, which is the floor.
