@@ -221,6 +221,12 @@ def start_proxy(
 
         host_url = _published_url(container)
         _await_health(host_url, container)
+        if stub_container is not None:
+            # Checked through the proxy, because the stub sits on an internal
+            # network the host cannot reach. Skipping this turns "the upstream
+            # never started" into "every trial failed", with nothing said about
+            # why.
+            _await_upstream(host_url, stub_container)
     except Exception as exc:
         stop_proxy(
             ProxyHandle("", network_name, container, "", stub_network_name, stub_container),
@@ -259,6 +265,24 @@ def _await_health(host_url: str, container: Any) -> None:
         time.sleep(HEALTH_POLL_SECONDS)
     logs = container.logs(tail=40).decode("utf-8", errors="replace") if container else ""
     raise ProxyStartError(f"proxy never became healthy ({last}); logs:\n{logs}")
+
+
+def _await_upstream(host_url: str, stub_container: Any) -> None:
+    deadline = time.monotonic() + HEALTH_TIMEOUT_SECONDS
+    last = ""
+    while time.monotonic() < deadline:
+        try:
+            response = httpx.get(f"{host_url}/healthz/upstream", timeout=5.0)
+            if response.status_code == 200:
+                return
+            last = response.text[:300]
+        except Exception as exc:
+            last = f"{type(exc).__name__}: {exc}"
+        time.sleep(HEALTH_POLL_SECONDS)
+    logs = stub_container.logs(tail=40).decode("utf-8", errors="replace")
+    raise ProxyStartError(
+        f"the proxy could not reach its upstream provider ({last}); provider logs:\n{logs}"
+    )
 
 
 def stop_proxy(handle: ProxyHandle | None, *, client: DockerClient) -> None:
