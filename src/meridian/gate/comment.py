@@ -9,10 +9,20 @@ A failing check that does not explain itself gets disabled within a week.
 
 from __future__ import annotations
 
+import math
+from statistics import NormalDist
+
 from meridian.gate.decide import FlippedTasks, Verdict
 from meridian.models.run import RunResult
 from meridian.runtime.secrets import redact
 from meridian.stats.passk import pass_hat_k
+from meridian.stats.power import (
+    DEFAULT_ALPHA,
+    DEFAULT_POWER,
+    minimum_detectable_effect,
+    paired_differences,
+    required_tasks,
+)
 
 BADGE = {
     Verdict.PASS: "✅ **PASS**",
@@ -22,6 +32,10 @@ BADGE = {
 }
 
 MAX_FAILURE_LINES = 8
+
+# The same one-sided z-sum `power.py` uses, recovered rather than restated so the
+# two cannot drift into quoting different arithmetic at the reader.
+_Z_SUM = NormalDist().inv_cdf(1.0 - DEFAULT_ALPHA) + NormalDist().inv_cdf(DEFAULT_POWER)
 
 
 def _fmt(value: float | None) -> str:
@@ -71,6 +85,43 @@ def failure_details(run: RunResult, limit: int = MAX_FAILURE_LINES) -> list[str]
     return lines
 
 
+def sensitivity_note(
+    baseline: dict[str, float], head: dict[str, float], *, target: float
+) -> list[str]:
+    """State what this run could and could not have seen.
+
+    A verdict without this is half a sentence. `PASS` from a suite too small to
+    resolve the regression you are worried about is not evidence that nothing
+    broke — and a reviewer has no way to tell those apart from the badge alone.
+
+    The second half is the actionable one: the remedy for an insensitive gate is
+    a number of tasks to write, not a threshold to loosen.
+    """
+    differences = paired_differences(baseline, head)
+    mde = minimum_detectable_effect(differences)
+    if mde is None:
+        return [
+            f"**Sensitivity.** Too few comparable tasks ({len(differences)}) to estimate "
+            f"what this run could detect. Treat the verdict as directional.",
+            "",
+        ]
+
+    note = (
+        f"**Sensitivity.** This run could reliably detect a suite-level drop of "
+        f"**{mde:.3f}** or larger ({DEFAULT_POWER:.0%} power, one-sided "
+        f"alpha={DEFAULT_ALPHA}). A real regression smaller than that would most "
+        f"likely have passed."
+    )
+    if mde > target:
+        spread = mde * math.sqrt(len(differences)) / _Z_SUM
+        needed = required_tasks(spread, target)
+        note += (
+            f" Resolving the configured tolerance of {target:.3f} would take about "
+            f"**{needed} comparable tasks**; this comparison has {len(differences)}."
+        )
+    return [note, ""]
+
+
 def render(
     *,
     verdict: Verdict,
@@ -83,6 +134,7 @@ def render(
     head_suite: float,
     baseline_run_id: str | None,
     manifest_hash: str | None = None,
+    tolerance: float = 0.02,
 ) -> str:
     """Render the comment body."""
     k = head.k
@@ -127,6 +179,9 @@ def render(
         "|---|---|---|",
         f"| suite pass^{k} | {_fmt(baseline_suite)} | {_fmt(head_suite)} |",
         "",
+    ]
+    lines += sensitivity_note(baseline_scores, head_scores, target=tolerance)
+    lines += [
         f"`n={head.n_requested}` · `k={k}` · status `{head.status}` · "
         f"harness errors {head.harness_error_rate:.1%} · cost {head.cost_cents}c",
         "",

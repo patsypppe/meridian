@@ -7,6 +7,7 @@ import pytest
 from meridian.gate.comment import (
     per_task_scores,
     render,
+    sensitivity_note,
     stale_cassette_rate,
     suite_score,
 )
@@ -164,3 +165,41 @@ def test_stale_cassette_rate_counts_only_recording_misses() -> None:
     )
     assert stale_cassette_rate(stale) == pytest.approx(1 / 3)
     assert stale_cassette_rate(run()) == 0.0
+
+
+# -- sensitivity -------------------------------------------------------------
+
+
+def test_the_comment_says_what_the_run_could_not_have_detected() -> None:
+    """A verdict without its sensitivity is half a sentence."""
+    baseline = {f"t{i}": 1.0 for i in range(7)}
+    head = {**baseline, "t5": 0.6, "t6": 0.6}
+    note = "\n".join(sensitivity_note(baseline, head, target=0.03))
+
+    assert "Sensitivity" in note
+    assert "could reliably detect" in note
+
+
+def test_an_insensitive_run_says_how_many_tasks_it_would_take() -> None:
+    """The remedy is tasks to write, not a threshold to loosen."""
+    baseline = {f"t{i}": 1.0 for i in range(7)}
+    head = {**baseline, "t5": 0.6, "t6": 0.6}
+    note = "\n".join(sensitivity_note(baseline, head, target=0.03))
+
+    assert "comparable tasks" in note
+    assert "this comparison has 7" in note
+
+
+def test_a_sensitive_enough_run_does_not_nag_about_task_count() -> None:
+    baseline = {f"t{i}": 1.0 for i in range(40)}
+    head = {**baseline, "t5": 0.98}
+    note = "\n".join(sensitivity_note(baseline, head, target=0.5))
+
+    assert "Sensitivity" in note
+    assert "comparable tasks" not in note
+
+
+def test_too_few_tasks_says_so_rather_than_quoting_a_number() -> None:
+    note = "\n".join(sensitivity_note({"a": 1.0}, {"a": 0.5}, target=0.03))
+    assert "Too few comparable tasks" in note
+    assert "could reliably detect" not in note

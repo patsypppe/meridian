@@ -517,6 +517,7 @@ def gate(
         head_suite=head_suite,
         baseline_run_id=baseline_info.run_id,
         manifest_hash=head.manifest.manifest_hash(),
+        tolerance=config.gate.tolerance_value,
     )
 
     if comment_file is not None:
