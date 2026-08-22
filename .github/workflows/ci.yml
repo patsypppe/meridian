@@ -20,9 +20,9 @@ jobs:
           enable-cache: true
       - run: uv sync --frozen
       - name: ruff lint
-        run: uv run ruff check src tests
+        run: uv run ruff check src tests benchmarks
       - name: ruff format check
-        run: uv run ruff format --check src tests
+        run: uv run ruff format --check src tests benchmarks
       - name: mypy --strict
         run: uv run mypy
       - name: unit tests

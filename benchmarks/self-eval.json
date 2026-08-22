@@ -1,0 +1,45 @@
+{
+  "baseline_suite_pass_hat_k": 0.4857,
+  "config": {
+    "k": 3,
+    "n": 5,
+    "tolerance": 0.03
+  },
+  "contamination_probe": {
+    "with_isolation": "pass",
+    "without_isolation": "fail"
+  },
+  "false_regression_rate": {
+    "false_fails": 0,
+    "rate": 0.0,
+    "runs": 30
+  },
+  "generated_at": "2026-08-22T02:37:14Z",
+  "meridian_version": "0.1.0",
+  "replay_fidelity": {
+    "diffs": [],
+    "exact": 5,
+    "manifests": 5,
+    "rate": 1.0
+  },
+  "run_cost_cents": {
+    "mean": 51
+  },
+  "run_duration_ms": {
+    "mean": 32388,
+    "p95": 33759
+  },
+  "total_duration_s": 1477,
+  "true_positive_rate": {
+    "detected": 4,
+    "missed": [
+      {
+        "name": "break-the-invoice-rounding",
+        "reason": "suite pass^k dropped 0.114 but p=0.091 > 0.050; the drop is not distinguishable from noise across this task set",
+        "verdict": "pass_with_warning"
+      }
+    ],
+    "rate": 0.8,
+    "seeded_regressions": 5
+  }
+}

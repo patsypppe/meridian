@@ -49,7 +49,7 @@ packages = ["src/meridian"]
 [tool.ruff]
 line-length = 100
 target-version = "py312"
-src = ["src", "tests"]
+src = ["src", "tests", "benchmarks"]
 
 [tool.ruff.lint]
 select = [
@@ -72,7 +72,7 @@ ignore = [
 
 [tool.mypy]
 python_version = "3.13"
-files = ["src/meridian"]
+files = ["src/meridian", "benchmarks"]
 strict = true
 warn_unreachable = true
 show_error_codes = true

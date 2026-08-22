@@ -1,0 +1,86 @@
+name: self-eval
+
+# The harness measures itself on every push to main.
+#
+# Its own workflow rather than a job in ci.yml: this takes hours because it runs
+# real gate runs end to end, and pull request feedback must not wait behind it.
+#
+# The job fails if the benchmark cannot be regenerated. It does **not** fail when
+# the numbers move — they are measurements, and a build that goes red on
+# statistical noise gets ignored within a week. Drift is surfaced as a diff in
+# the summary, for a human to read.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      stable_runs:
+        description: Gate runs of the unchanged agent, for the false-regression rate
+        default: "30"
+
+concurrency:
+  group: self-eval-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  self-eval:
+    name: measure Meridian with Meridian
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - run: uv sync --frozen
+
+      # An image ID is architecture-specific: the digest committed from an arm64
+      # laptop does not exist on this amd64 runner. Rebuild and repin first.
+      - name: Build images and repin the suite
+        run: |
+          uv run meridian snapshot build ./envs/checkout --tag checkout:dev \
+            --write-ref --update-suite ./suites/checkout-agent
+          uv run meridian snapshot build ./envs/proxy --tag meridian-proxy:dev --context .
+
+      # No API key in this job. The benchmark records against the deterministic
+      # stand-in provider, into a throwaway directory — never fixtures/cassettes/.
+      - name: Regenerate the self-eval
+        run: |
+          uv run python -m benchmarks.self_eval \
+            --out benchmarks/self-eval.json \
+            --stable-runs "${{ github.event.inputs.stable_runs || '30' }}"
+
+      - name: Summarise
+        if: always()
+        run: |
+          {
+            echo '## Self-eval'
+            echo
+            if [ -f benchmarks/self-eval.json ]; then
+              echo '```json'
+              cat benchmarks/self-eval.json
+              echo '```'
+              echo
+              echo '### Drift against the committed numbers'
+              echo
+              echo '```diff'
+              git diff -- benchmarks/self-eval.json || true
+              echo '```'
+            else
+              echo 'The benchmark did not produce a report.'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: self-eval
+          path: benchmarks/self-eval.json
+          if-no-files-found: error
+
+      # Trial containers are labelled precisely so a sweep can find them. A
+      # runner that leaks them is a runner that runs out of disk mid-benchmark.
+      - name: Sweep
+        if: always()
+        run: uv run meridian sweep
