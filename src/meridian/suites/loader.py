@@ -135,6 +135,26 @@ def load_suite(path: str | Path) -> Suite:
         seen_slugs[task.slug] = display
 
         for reference in task.referenced_files():
+            # Containment before existence, and both before the file is ever
+            # read. `root / reference` happily resolves `../../.git/config` and
+            # absolute paths, and `build_payload` later reads whatever this
+            # names and ships it into the trial container. In the case Meridian
+            # exists for, the task file is attacker-controlled: a pull request
+            # edits it and CI runs the gate on the result.
+            if not (root / reference).resolve().is_relative_to(root.resolve()):
+                issues.append(
+                    ValidationIssue(
+                        code="input_file_outside_suite",
+                        file=display,
+                        task_slug=task.slug,
+                        field=reference,
+                        message=(
+                            f"{reference} resolves outside the suite directory; a task "
+                            f"may only ship files that live beside it"
+                        ),
+                    )
+                )
+                continue
             if not (root / reference).is_file():
                 issues.append(
                     ValidationIssue(

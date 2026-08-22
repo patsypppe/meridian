@@ -23,10 +23,15 @@ the older agent's calls forever.
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from typing import Any
 
 from meridian.hashing import content_hash
+from meridian.models.task import SLUG_PATTERN
+
+# The task schema's own slug rule, restated where a slug becomes a file path.
+_SAFE_SLUG = re.compile(SLUG_PATTERN)
 
 CASSETTE_VERSION = 1
 
@@ -47,10 +52,39 @@ class CassetteMiss(LookupError):
     """A replayed request was not recorded, or arrived out of order."""
 
 
+def _stable_floats(obj: Any) -> Any:
+    """Rewrite floats to their shortest round-tripping decimal string.
+
+    The no-floats rule exists because a *manifest* hash that drifts across
+    platforms silently invalidates every archived run. A request key is a
+    different object: it addresses a tape inside one recording and is never
+    compared across machines or across time.
+
+    Refusing floats here does not enforce the rule, it only breaks the proxy —
+    `temperature` and `top_p` are floats in essentially every real provider
+    request, so a raised exception becomes a 500, which the agent reports as a
+    model error, which the grader scores as an agent failure. A correctness
+    invariant applied to somebody else's JSON turned into a denial of service.
+
+    `repr` of a Python float is the shortest string that round-trips to the same
+    IEEE-754 double, and is stable across platforms — so the key stays
+    deterministic without pretending the float was never there.
+    """
+    if isinstance(obj, bool):
+        return obj
+    if isinstance(obj, float):
+        return repr(obj)
+    if isinstance(obj, dict):
+        return {key: _stable_floats(value) for key, value in obj.items()}
+    if isinstance(obj, (list, tuple)):
+        return [_stable_floats(value) for value in obj]
+    return obj
+
+
 def request_key(body: dict[str, Any]) -> str:
     """Hash a request after stripping volatile fields."""
     stripped = {k: v for k, v in body.items() if k not in VOLATILE_REQUEST_FIELDS}
-    return content_hash(stripped)
+    return content_hash(_stable_floats(stripped))
 
 
 class Cassette:
@@ -163,6 +197,19 @@ class CassetteStore:
         self._loaded: dict[str, Cassette] = {}
 
     def path_for(self, task_slug: str) -> Path:
+        """Name a tape file, refusing anything that is not a bare slug.
+
+        The slug arrives from a request header, so the container chooses it. In
+        record mode this value picks the file the proxy *writes*, and the proxy
+        holds the credential — an unchecked `../` here is an agent choosing where
+        the harness writes. The task schema already restricts slugs to this
+        alphabet; this restates it at the point where it becomes a filesystem
+        path, because that is where getting it wrong is expensive.
+        """
+        if not _SAFE_SLUG.fullmatch(task_slug):
+            raise ValueError(
+                f"{task_slug!r} is not a valid task slug, so it cannot name a cassette"
+            )
         return self.root / f"{task_slug}.json"
 
     def get(self, task_slug: str) -> Cassette:

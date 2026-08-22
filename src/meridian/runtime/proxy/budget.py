@@ -113,6 +113,18 @@ class BudgetLedger:
         """Refuse a call that a already-exhausted trial or run is trying to make."""
         limits = self.limits.get(task_slug)
         usage = self.usage_for(task_slug, trial_index)
+        if limits is None and self.limits:
+            # An unrecognised slug used to fall past the per-trial check and get
+            # an unlimited budget, which made the ceiling opt-out: the container
+            # names itself in a header, so an agent that sent any other task name
+            # escaped its own limit. A ceiling the agent can step around is not a
+            # ceiling. Only a run with no per-task limits at all is exempt.
+            raise BudgetExceeded(
+                f"{task_slug} trial {trial_index}",
+                "unknown_task",
+                0,
+                0,
+            )
         if limits is not None:
             if usage.total_tokens >= limits.max_tokens:
                 raise BudgetExceeded(

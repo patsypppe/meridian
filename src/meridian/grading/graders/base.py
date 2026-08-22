@@ -25,6 +25,14 @@ def resolve(state_dir: Path, container_path: str, workdir: str) -> Path:
     Paths outside the workdir are not extractable — the rest of the container
     filesystem is a read-only image layer — so asserting on one is an authoring
     mistake, not an agent failure.
+
+    **The containment check is a security boundary, not tidiness.** A task file
+    is attacker-controlled in the case Meridian is built for: a pull request
+    changes a task, CI runs the gate on it, and the grader's failure detail is
+    posted to the PR as a comment. A prefix test alone is not enough —
+    ``/work/../../etc/hosts`` starts with ``/work/`` and still escapes once
+    joined — so the resolved path is checked against the state directory itself,
+    the same way `payload.extract_archive` checks tar members.
     """
     normalized = container_path.rstrip("/") or "/"
     workdir = workdir.rstrip("/")
@@ -34,7 +42,18 @@ def resolve(state_dir: Path, container_path: str, workdir: str) -> Path:
             f"is extracted, because the rest of the filesystem is a read-only layer"
         )
     relative = normalized[len(workdir) :].lstrip("/")
-    return state_dir / relative if relative else state_dir
+    target = state_dir / relative if relative else state_dir
+    # `resolve()` collapses `..` and follows symlinks, so this catches both a
+    # traversal written into the task and one an agent planted in the workdir it
+    # controls. Never render the resolved path back to the caller: on a hit it
+    # names a host path, and that detail is bound for a public PR comment.
+    if not target.resolve().is_relative_to(state_dir.resolve()):
+        raise GraderError(
+            f"{container_path!r} escapes the workdir {workdir!r} once its path "
+            f"segments are applied; an assertion may only read state the trial "
+            f"produced"
+        )
+    return target
 
 
 def passed(kind: str, detail: str) -> AssertionResult:

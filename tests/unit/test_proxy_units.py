@@ -80,7 +80,7 @@ def test_each_trial_replays_its_own_recording() -> None:
     A map would serve both trials the same response, every recorded run would be
     deterministic, and pass^k could only ever be 0 or 1.
     """
-    cassette = Cassette("t")
+    cassette = Cassette("tape-task")
     key = request_key(REQUEST)
     cassette.record(0, key=key, response=response_body("first"), input_tokens=1, output_tokens=1)
     cassette.record(1, key=key, response=response_body("second"), input_tokens=1, output_tokens=1)
@@ -90,7 +90,7 @@ def test_each_trial_replays_its_own_recording() -> None:
 
 
 def test_replay_is_ordered_within_a_trial() -> None:
-    cassette = Cassette("t")
+    cassette = Cassette("tape-task")
     first, second = request_key(REQUEST), request_key(dict(REQUEST) | {"max_tokens": 256})
     cassette.record(0, key=first, response=response_body("a"), input_tokens=1, output_tokens=1)
     cassette.record(0, key=second, response=response_body("b"), input_tokens=1, output_tokens=1)
@@ -100,7 +100,7 @@ def test_replay_is_ordered_within_a_trial() -> None:
 
 
 def test_an_unrecorded_trial_misses() -> None:
-    cassette = Cassette("t")
+    cassette = Cassette("tape-task")
     cassette.record(
         0, key=request_key(REQUEST), response=response_body(), input_tokens=1, output_tokens=1
     )
@@ -109,7 +109,7 @@ def test_an_unrecorded_trial_misses() -> None:
 
 
 def test_running_off_the_end_of_the_tape_misses() -> None:
-    cassette = Cassette("t")
+    cassette = Cassette("tape-task")
     cassette.record(
         0, key=request_key(REQUEST), response=response_body(), input_tokens=1, output_tokens=1
     )
@@ -119,7 +119,7 @@ def test_running_off_the_end_of_the_tape_misses() -> None:
 
 
 def test_a_changed_request_misses_rather_than_serving_the_wrong_response() -> None:
-    cassette = Cassette("t")
+    cassette = Cassette("tape-task")
     cassette.record(
         0, key=request_key(REQUEST), response=response_body(), input_tokens=1, output_tokens=1
     )
@@ -148,13 +148,13 @@ def test_re_recording_a_trial_replaces_its_tape(tmp_path: Path) -> None:
     longer exists.
     """
     store = CassetteStore(tmp_path)
-    first = store.get("t")
+    first = store.get("tape-task")
     first.record(
         0, key=request_key(REQUEST), response=response_body("old"), input_tokens=1, output_tokens=1
     )
     store.save(first)
 
-    second = CassetteStore(tmp_path).get("t")
+    second = CassetteStore(tmp_path).get("tape-task")
     second.record(
         0, key=request_key(REQUEST), response=response_body("new"), input_tokens=1, output_tokens=1
     )
@@ -166,7 +166,7 @@ def test_re_recording_a_trial_replaces_its_tape(tmp_path: Path) -> None:
 def test_re_recording_one_trial_leaves_the_others_alone(tmp_path: Path) -> None:
     """A run that records fewer trials must not truncate the trials it skipped."""
     store = CassetteStore(tmp_path)
-    cassette = store.get("t")
+    cassette = store.get("tape-task")
     for trial in (0, 1):
         cassette.record(
             trial,
@@ -177,7 +177,7 @@ def test_re_recording_one_trial_leaves_the_others_alone(tmp_path: Path) -> None:
         )
     store.save(cassette)
 
-    reloaded = CassetteStore(tmp_path).get("t")
+    reloaded = CassetteStore(tmp_path).get("tape-task")
     reloaded.record(
         0,
         key=request_key(REQUEST),
@@ -192,7 +192,7 @@ def test_re_recording_one_trial_leaves_the_others_alone(tmp_path: Path) -> None:
 
 def test_a_second_call_within_one_recording_still_appends() -> None:
     """Replacement is per recording session, not per call."""
-    cassette = Cassette("t")
+    cassette = Cassette("tape-task")
     first, second = request_key(REQUEST), request_key(dict(REQUEST) | {"max_tokens": 256})
     cassette.record(0, key=first, response=response_body("a"), input_tokens=1, output_tokens=1)
     cassette.record(0, key=second, response=response_body("b"), input_tokens=1, output_tokens=1)
@@ -202,7 +202,7 @@ def test_a_second_call_within_one_recording_still_appends() -> None:
 
 def test_an_unknown_cassette_version_is_refused() -> None:
     with pytest.raises(ValueError, match="re-record"):
-        Cassette.from_dict({"version": 99, "task": "t", "trials": {}})
+        Cassette.from_dict({"version": 99, "task": "tape-task", "trials": {}})
 
 
 # -- budget --------------------------------------------------------------------
