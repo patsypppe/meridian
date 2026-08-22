@@ -10,8 +10,21 @@ named at the top of it, so anything here can be regenerated and checked.
 | [`gate-comment-pass.md`](gate-comment-pass.md) | The same gate after the change is reverted |
 | [`contamination-probe.txt`](contamination-probe.txt) | The isolation probe passing **and** failing |
 
-The live version of the failing check is on the demo pull request; see the link
-in the repository README.
+## The live demonstration
+
+[**PR #12 — "refactor: tighten the planner prompt"**](https://github.com/patsypppe/meridian/pull/12)
+
+| Run | Verdict |
+|---|---|
+| [`32539893977`](https://github.com/patsypppe/meridian/actions/runs/32539893977) | ❌ **failure** — named `expired-coupon`, `expired-on-bulk-order`, `stale-coupon` as now failing every trial |
+| [`32540053647`](https://github.com/patsypppe/meridian/actions/runs/32540053647) | ✅ **success** after the revert, same PR, comment updated in place |
+
+Closed unmerged, which is the correct outcome: the gate said no.
+
+What a human reviewer had to go on was a three-line diff removing a sentence that
+restates the policy document the agent already reads. The suite *mean* would have
+moved from 86% to 80%. `pass^3` moved 0.486 → 0.314, and three tasks went from
+working sometimes to never working at all.
 
 ## Regenerating them
 
