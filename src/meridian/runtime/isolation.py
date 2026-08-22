@@ -93,6 +93,13 @@ def container_kwargs(
         "security_opt": ["no-new-privileges:true"],
         "pids_limit": resources.pids,
         "mem_limit": f"{resources.memory_mb}m",
+        # Equal to mem_limit, which means no swap. Docker otherwise defaults
+        # memory-swap to twice memory, so a task asking for 2048MB silently gets
+        # 4096MB of address space — the ceiling stops meaning what the task says
+        # it means. Worse, a swapping trial is a slow trial, so the memory limit
+        # leaks into the *timeout* and one task's ceiling starts deciding another
+        # task's deadline.
+        "memswap_limit": f"{resources.memory_mb}m",
         "nano_cpus": resources.nano_cpus,
         # We remove explicitly, in a finally, AFTER extracting final state.
         # auto_remove=True deletes the container out from under the extraction

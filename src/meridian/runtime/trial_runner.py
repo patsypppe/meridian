@@ -78,6 +78,10 @@ class ContainerPhase:
     timed_out: bool
     exit_code: int | None
     container_removed: bool
+    # Read from the daemon rather than inferred from the exit code, which cannot
+    # tell an OOM kill from any other SIGKILL — including the one Meridian sends
+    # to enforce a timeout. See `_wait`.
+    oom_killed: bool = False
 
 
 def _now_ms() -> int:
@@ -183,7 +187,9 @@ class TrialRunner:
             await _to_thread(container.start)
             await self._materialize(container, task, spec)
 
-            timed_out, exit_code = await self._wait(container, task.limits.timeout_seconds)
+            timed_out, exit_code, oom_killed = await self._wait(
+                container, task.limits.timeout_seconds
+            )
             await self._extract(container, task, state_dir)
         except HarnessFault as fault:
             if container is not None:
@@ -199,7 +205,12 @@ class TrialRunner:
             # extract, and not one step longer.
             await self._destroy_volume(volume)
 
-        return ContainerPhase(timed_out=timed_out, exit_code=exit_code, container_removed=removed)
+        return ContainerPhase(
+            timed_out=timed_out,
+            exit_code=exit_code,
+            container_removed=removed,
+            oom_killed=oom_killed,
+        )
 
     def _verdict(
         self,
@@ -226,6 +237,28 @@ class TrialRunner:
                 seed=spec.seed,
                 outcome=Outcome.TIMEOUT,
                 detail=f"exceeded the {task.limits.timeout_seconds}s deadline",
+                attempts=attempt,
+                efficiency=self._efficiency(adapter_result, started),
+                container_removed=phase.container_removed,
+                started_unix_ms=started,
+            )
+
+        if phase.oom_killed:
+            # Never retried, for the same reason a timeout is not. The ceiling is
+            # set by the *task* — `limits_come_from_the_task_not_the_agent` — so
+            # an agent that walks into it has failed the task under the budget it
+            # was given. Retrying would buy it a second attempt the ranking never
+            # shows, which is how a harness reports better than reality.
+            return TrialResult(
+                run_id=spec.run_id,
+                task_slug=spec.task_slug,
+                trial_index=spec.trial_index,
+                seed=spec.seed,
+                outcome=Outcome.FAIL,
+                detail=(
+                    f"exceeded the {task.environment.resources.memory_mb}MB memory "
+                    f"limit and was killed by the cgroup"
+                ),
                 attempts=attempt,
                 efficiency=self._efficiency(adapter_result, started),
                 container_removed=phase.container_removed,
@@ -356,12 +389,17 @@ class TrialRunner:
         except Exception as exc:
             raise HarnessFault(f"materializing inputs failed: {type(exc).__name__}: {exc}") from exc
 
-    async def _wait(self, container: Any, timeout_seconds: int) -> tuple[bool, int | None]:
+    async def _wait(self, container: Any, timeout_seconds: int) -> tuple[bool, int | None, bool]:
         """Wait for the container, killing it if the deadline passes.
 
         Cancelling the Python future does not stop a container: it keeps running,
         keeps holding resources, and keeps spending tokens. The container is what
         gets killed.
+
+        Returns `(timed_out, exit_code, oom_killed)`. The OOM flag comes from the
+        daemon, never from the exit code: a cgroup kill and Meridian's own timeout
+        kill both surface as 137, so classifying on the code alone would report
+        every timeout as an out-of-memory failure.
         """
         try:
             status = await asyncio.wait_for(
@@ -369,13 +407,30 @@ class TrialRunner:
             )
         except TimeoutError:
             await self._kill(container)
-            return True, None
+            return True, None, False
         except Exception as exc:
             raise HarnessFault(
                 f"waiting on the container failed: {type(exc).__name__}: {exc}"
             ) from exc
         code = status.get("StatusCode") if isinstance(status, dict) else None
-        return False, int(code) if code is not None else None
+        return False, int(code) if code is not None else None, await self._oom_killed(container)
+
+    async def _oom_killed(self, container: Any) -> bool:
+        """Ask the daemon whether the cgroup killed this container.
+
+        `container.attrs` is a snapshot taken at creation, so it has to be
+        refreshed before `State` says anything about how the container ended.
+
+        A daemon that will not answer is not grounds for failing the trial: the
+        question is only ever used to make a verdict *more* specific, so an
+        unanswerable one falls back to the ordinary exit-code path.
+        """
+        try:
+            await _to_thread(container.reload)
+            state = container.attrs.get("State", {})
+        except Exception:
+            return False
+        return bool(state.get("OOMKilled", False))
 
     async def _kill(self, container: Any) -> None:
         # Already dead is fine; `_destroy` still force-removes.

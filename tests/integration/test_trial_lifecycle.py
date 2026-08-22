@@ -41,6 +41,7 @@ def task_running(
     *,
     marker: str = "done.txt",
     timeout_seconds: int | None = None,
+    memory_mb: int | None = None,
 ) -> TaskDefinition:
     updates: dict[str, Any] = {
         "slug": f"lifecycle-{target.replace('_', '-')}",
@@ -51,6 +52,11 @@ def task_running(
     }
     if timeout_seconds is not None:
         updates["limits"] = Limits(timeout_seconds=timeout_seconds, max_tokens=1000, budget_cents=1)
+    if memory_mb is not None:
+        environment = base.environment
+        updates["environment"] = environment.model_copy(
+            update={"resources": environment.resources.model_copy(update={"memory_mb": memory_mb})}
+        )
     return base.model_copy(update=updates)
 
 
@@ -157,6 +163,66 @@ async def test_persistent_infra_fault_is_a_harness_error(
     result = await run(make_runner(docker_client, suite), task, "life-infra-dead")
 
     assert result.outcome is Outcome.HARNESS_ERROR
+    assert result.attempts == 2, "retried once, then reported — never retried forever"
+    assert calls["n"] == 2
+
+
+async def test_an_oom_is_the_agents_failure_and_is_not_retried(
+    docker_client: Any, suite: Suite
+) -> None:
+    """§11.4 — container OOM.
+
+    The memory ceiling is set by the *task*, so an agent that walks into it has
+    failed under the budget it was given. Retrying would hand it a second attempt
+    the reported number never shows.
+
+    The detail has to name memory. Without that an OOM is indistinguishable from
+    an ordinary assertion failure, and the operator debugs the agent's logic for
+    an hour before finding the real cause.
+    """
+    task = task_running(
+        suite.task("contamination-probe"),
+        "exhaust_memory",
+        memory_mb=64,
+        timeout_seconds=TIMEOUT_SECONDS * 3,
+    )
+    result = await run(make_runner(docker_client, suite), task, "life-oom")
+
+    assert result.outcome is Outcome.FAIL, result.detail
+    assert "memory" in result.detail.lower(), (
+        f"an OOM reported as {result.detail!r} — the operator cannot tell this "
+        f"from a logic bug in the agent"
+    )
+    assert result.attempts == 1, "an OOM is a statement about the agent and is never retried"
+
+
+async def test_a_missing_image_is_a_harness_error_not_an_agent_failure(
+    docker_client: Any, suite: Suite, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """§11.4 — image pull failure.
+
+    An image Meridian cannot obtain says nothing whatsoever about the agent.
+    Counted as a failure it would look exactly like a regression, and the revert
+    that follows would change nothing.
+    """
+    import docker.errors
+    from docker.models.containers import ContainerCollection
+
+    task = task_running(suite.task("contamination-probe"), "touch_output")
+    calls = {"n": 0}
+
+    def missing_image(self: Any, **kwargs: Any) -> Any:
+        calls["n"] += 1
+        raise docker.errors.ImageNotFound("no such image: sha256:deadbeef")
+
+    monkeypatch.setattr(ContainerCollection, "create", missing_image)
+    result = await run(make_runner(docker_client, suite), task, "life-nopull")
+
+    assert result.outcome is Outcome.HARNESS_ERROR, result.detail
+    assert "no such image" in result.detail, (
+        f"classified as a harness error but the detail {result.detail!r} does not "
+        f"name the image — this would pass even if the classification were incidental"
+    )
     assert result.attempts == 2, "retried once, then reported — never retried forever"
     assert calls["n"] == 2
 

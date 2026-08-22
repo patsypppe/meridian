@@ -49,6 +49,18 @@ def test_resource_ceilings_come_from_the_task(kwargs: dict[str, object]) -> None
     assert kwargs["nano_cpus"] == 2_000_000_000
 
 
+def test_swap_is_disabled_so_the_memory_ceiling_means_what_it_says(
+    kwargs: dict[str, object],
+) -> None:
+    """Docker defaults memory-swap to twice memory when only memory is set.
+
+    Left at the default, a task asking for 2048MB quietly gets 4096MB of address
+    space, and a trial that swaps runs slowly enough that one task's memory
+    ceiling starts deciding another task's timeout.
+    """
+    assert kwargs["memswap_limit"] == kwargs["mem_limit"]
+
+
 def test_no_secrets_are_passed_into_the_container(kwargs: dict[str, object]) -> None:
     """The container talks to the proxy; the proxy holds the credential."""
     environment = kwargs["environment"]

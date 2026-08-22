@@ -94,3 +94,17 @@ def reach_internet(ctx: Any) -> list[str]:
         "python3 -c \"import socket; socket.create_connection(('1.1.1.1', 443), timeout=4)\" "
         f"2>/dev/null || touch {ctx.workdir}/out/internet-unreachable",
     ]
+
+
+def exhaust_memory(ctx: Any) -> list[str]:
+    """Allocate until the cgroup kills us.
+
+    Used to prove an OOM is classified as the agent's failure and never retried.
+    Allocates in 8MB steps and touches each block, because an untouched
+    allocation is not resident and the cgroup never notices it.
+    """
+    return [
+        "python3",
+        "-c",
+        "b = []\nwhile True:\n    b.append(bytearray(8 * 1024 * 1024))\n",
+    ]
