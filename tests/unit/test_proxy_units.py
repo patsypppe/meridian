@@ -140,6 +140,66 @@ def test_cassettes_round_trip_through_disk(tmp_path: Path) -> None:
     assert reloaded.replay(0, request_key(REQUEST))["input_tokens"] == 3
 
 
+def test_re_recording_a_trial_replaces_its_tape(tmp_path: Path) -> None:
+    """Recording twice must not leave the first take in front of the second.
+
+    An appended tape replays the *previous* agent's calls and never reaches the
+    ones just recorded — a cassette that silently answers for code that no
+    longer exists.
+    """
+    store = CassetteStore(tmp_path)
+    first = store.get("t")
+    first.record(
+        0, key=request_key(REQUEST), response=response_body("old"), input_tokens=1, output_tokens=1
+    )
+    store.save(first)
+
+    second = CassetteStore(tmp_path).get("t")
+    second.record(
+        0, key=request_key(REQUEST), response=response_body("new"), input_tokens=1, output_tokens=1
+    )
+
+    assert len(second.trials["0"]) == 1
+    assert second.replay(0, request_key(REQUEST))["response"]["content"][0]["text"] == "new"
+
+
+def test_re_recording_one_trial_leaves_the_others_alone(tmp_path: Path) -> None:
+    """A run that records fewer trials must not truncate the trials it skipped."""
+    store = CassetteStore(tmp_path)
+    cassette = store.get("t")
+    for trial in (0, 1):
+        cassette.record(
+            trial,
+            key=request_key(REQUEST),
+            response=response_body(f"take-{trial}"),
+            input_tokens=1,
+            output_tokens=1,
+        )
+    store.save(cassette)
+
+    reloaded = CassetteStore(tmp_path).get("t")
+    reloaded.record(
+        0,
+        key=request_key(REQUEST),
+        response=response_body("fresh"),
+        input_tokens=1,
+        output_tokens=1,
+    )
+
+    assert reloaded.replay(0, request_key(REQUEST))["response"]["content"][0]["text"] == "fresh"
+    assert reloaded.replay(1, request_key(REQUEST))["response"]["content"][0]["text"] == "take-1"
+
+
+def test_a_second_call_within_one_recording_still_appends() -> None:
+    """Replacement is per recording session, not per call."""
+    cassette = Cassette("t")
+    first, second = request_key(REQUEST), request_key(dict(REQUEST) | {"max_tokens": 256})
+    cassette.record(0, key=first, response=response_body("a"), input_tokens=1, output_tokens=1)
+    cassette.record(0, key=second, response=response_body("b"), input_tokens=1, output_tokens=1)
+
+    assert len(cassette.trials["0"]) == 2
+
+
 def test_an_unknown_cassette_version_is_refused() -> None:
     with pytest.raises(ValueError, match="re-record"):
         Cassette.from_dict({"version": 99, "task": "t", "trials": {}})

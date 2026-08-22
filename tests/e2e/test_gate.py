@@ -76,6 +76,11 @@ def test_a_degraded_prompt_fails_the_gate_and_a_revert_passes(
     """
     original = PLANNER.read_text(encoding="utf-8")
     comment = tmp_path / "comment.md"
+    # Record into a throwaway directory. `gate` records by default, and recording
+    # replaces the tapes a run touches — pointed at fixtures/cassettes/ this test
+    # would rewrite the committed artifact, briefly with a *degraded* agent's
+    # calls, and leave the tree dirty after every `make e2e`.
+    cassettes = tmp_path / "cassettes"
 
     try:
         PLANNER.write_text(DEGRADED.read_text(encoding="utf-8"), encoding="utf-8")
@@ -91,6 +96,8 @@ def test_a_degraded_prompt_fails_the_gate_and_a_revert_passes(
             "3",
             "--tolerance",
             "0.03",
+            "--cassettes",
+            str(cassettes),
             "--comment-file",
             str(comment),
         )
@@ -116,6 +123,8 @@ def test_a_degraded_prompt_fails_the_gate_and_a_revert_passes(
         "3",
         "--tolerance",
         "0.03",
+        "--cassettes",
+        str(cassettes),
         "--comment-file",
         str(comment),
     )

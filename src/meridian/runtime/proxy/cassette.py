@@ -13,6 +13,11 @@ and pass^k means what it says.
 Replay **fails closed**: an unrecorded or out-of-order request is an error, never
 a live call. A cassette that silently falls through to the network is a cassette
 that does not guarantee anything.
+
+Recording **replaces** the tapes a run touches rather than appending to them. Two
+record passes over one cassette directory would otherwise leave the first take in
+front of the second, and replay — which reads a tape from the start — would serve
+the older agent's calls forever.
 """
 
 from __future__ import annotations
@@ -55,6 +60,10 @@ class Cassette:
         self.task_slug = task_slug
         self.trials: dict[str, list[dict[str, Any]]] = trials or {}
         self._cursors: dict[str, int] = {}
+        # Tapes this recording session has already opened. Recording is a
+        # *replacement* of the tapes a run touches, not an accumulation across
+        # runs — see `record`.
+        self._opened: set[str] = set()
 
     # -- recording ---------------------------------------------------------
 
@@ -67,7 +76,16 @@ class Cassette:
         input_tokens: int,
         output_tokens: int,
     ) -> None:
-        tape = self.trials.setdefault(str(trial_index), [])
+        tape_id = str(trial_index)
+        if tape_id not in self._opened:
+            # First call of this trial in this recording session. Any tape
+            # already on disk is a previous take, and appending to it would put
+            # the old agent's calls in front of the new ones: replay would serve
+            # those and never reach what was just recorded. Trials this run does
+            # not touch keep their tapes.
+            self.trials[tape_id] = []
+            self._opened.add(tape_id)
+        tape = self.trials[tape_id]
         tape.append(
             {
                 "request_hash": key,
