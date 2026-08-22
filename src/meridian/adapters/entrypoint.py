@@ -28,6 +28,10 @@ EXIT_ENTRYPOINT_FAILED = 70
 # was.
 HARNESS_ERROR_FILE = "harness_error.txt"
 
+# Short: this only ever runs after the agent has already failed, and the answer
+# is "is anything listening", not "is it fast".
+PROXY_HEALTH_TIMEOUT_SECONDS = 5.0
+
 
 def build_adapter(spec: AdapterSpec) -> Any:
     """Pick the adapter implementation for a spec kind.
@@ -51,6 +55,33 @@ def record_harness_error(payload_dir: Path, message: str) -> int:
     (payload_dir / HARNESS_ERROR_FILE).write_text(message, encoding="utf-8")
     (payload_dir / "traceback.txt").write_text(traceback.format_exc(), encoding="utf-8")
     return EXIT_ENTRYPOINT_FAILED
+
+
+def proxy_is_unreachable(base_url: str) -> bool:
+    """Ask the proxy whether it is alive. Used only to explain a failure.
+
+    This is the seam that separates "the agent failed" from "the agent was never
+    given a model". It asks the proxy directly rather than matching on the text of
+    the agent's error, because the wording of that error belongs to whatever
+    framework raised it and will not survive an upgrade — and a classification
+    rule built on someone else's error string fails silently and in the expensive
+    direction.
+
+    Unreachable means *refused or unanswered*, not "returned an error". A proxy
+    that answers with a budget refusal or a cassette miss is working exactly as
+    designed, and those are genuine agent-visible failures.
+    """
+    if not base_url:
+        return False
+    import httpx
+
+    try:
+        response = httpx.get(
+            f"{base_url.rstrip('/')}/healthz", timeout=PROXY_HEALTH_TIMEOUT_SECONDS
+        )
+    except httpx.HTTPError:
+        return True
+    return response.status_code >= 500
 
 
 async def run(context_path: Path) -> int:
@@ -81,6 +112,24 @@ async def run(context_path: Path) -> int:
         (payload_dir / "traceback.txt").write_text(traceback.format_exc(), encoding="utf-8")
     finally:
         await adapter.teardown()
+
+    # An agent that could not reach the model has not been evaluated, so its
+    # failure is Meridian's and not the agent's. Checked here rather than at the
+    # exception site because an agent may *return* the failure instead of raising
+    # it -- the checkout fixture catches httpx errors and reports them as an
+    # AdapterResult -- and both paths must classify the same way.
+    #
+    # Getting this wrong is expensive in the direction that wastes a person's
+    # afternoon: a dead proxy fails every trial of every task, the gate reports
+    # the largest regression it has ever seen, and the developer reverts a change
+    # that was never the cause.
+    if result.error and proxy_is_unreachable(ctx.model_base_url):
+        return record_harness_error(
+            payload_dir,
+            f"the model proxy at {ctx.model_base_url} did not answer its health "
+            f"check, so the agent was never given a model. The agent reported: "
+            f"{result.error}",
+        )
 
     (payload_dir / "result.json").write_text(
         result.model_dump_json(indent=2),

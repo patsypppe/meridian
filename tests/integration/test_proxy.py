@@ -235,3 +235,44 @@ async def test_limits_come_from_the_task_not_the_agent(suite: Suite, proxy: Any)
     assert (
         limits["expired-coupon"]["budget_cents"] == suite.task("expired-coupon").limits.budget_cents
     )
+
+
+async def test_an_unreachable_proxy_is_a_harness_error_not_an_agent_failure(
+    docker_client: Any, suite: Suite, proxy: Any
+) -> None:
+    """§11.4 — proxy unreachable.
+
+    This is the misclassification that costs the most. The agent cannot reach the
+    model, so it fails every trial of every task, and the gate reports the largest
+    regression it has ever seen. A developer reverts a change that was never the
+    cause, the revert does not help, and the harness has spent their afternoon.
+
+    An agent that cannot reach the model has not been evaluated at all, so the
+    trial is a harness error and the run says it executed nothing rather than
+    reporting a regression it did not measure.
+    """
+    task = suite.task("happy-path")
+    runner = TrialRunner(
+        docker_client,
+        suite_root=suite.root,
+        sut_root=FIXTURES_ROOT,
+        grader=grade_task,
+        network_name=proxy.network_name,
+    )
+    spec = TrialSpec(
+        run_id="proxytest",
+        task_slug=task.slug,
+        trial_index=0,
+        seed=0,
+        adapter_spec=task.adapter or suite.adapter_spec,
+        # Port 9 (discard) inside the container: nothing is listening, so every
+        # model call is refused rather than merely slow.
+        proxy_base_url="http://127.0.0.1:9",
+    )
+    result = await runner.run_trial(task, spec)
+
+    assert result.outcome is Outcome.HARNESS_ERROR, (
+        f"a trial that could never reach the model was reported as "
+        f"{result.outcome} — this is a harness outage being scored as a regression"
+    )
+    assert "proxy" in result.detail.lower()
