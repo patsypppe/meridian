@@ -166,6 +166,24 @@ async def execute(client: DockerClient, request: RunRequest) -> RunOutcome:
                 f"halted at the {config.execution.budget_cents}c cost cap after "
                 f"{len(results)} of {len(tasks)} tasks; not run: {', '.join(skipped)}"
             )
+        elif budget_exhausted():
+            # Every task got a turn, but the cap was reached — which means it was
+            # reached *inside* the last one. `should_halt` is only consulted
+            # between tasks, so those trials were not skipped: they ran, the
+            # ledger refused their model calls with a 429, the agent reported the
+            # error, and they were graded `fail`.
+            #
+            # Left as `complete` this is the gate's worst input. It looks exactly
+            # like a regression, the `halted_budget` guard in `decide()` never
+            # fires, and the verdict is FAIL on what is purely a cost artifact.
+            # Erring toward INCONCLUSIVE is the right direction: a run that spent
+            # its budget mid-flight is not evidence about the agent.
+            status = RunStatus.HALTED_BUDGET
+            detail = (
+                f"reached the {config.execution.budget_cents}c cost cap during the "
+                f"final task; trials after that point were refused and are not "
+                f"evidence about the agent"
+            )
     finally:
         stop_proxy(handle, client=client)
         sweep_orphans(client, run_id=request.run_id)
