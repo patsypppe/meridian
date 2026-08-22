@@ -5,6 +5,7 @@ from __future__ import annotations
 import pytest
 
 from meridian.gate.comment import (
+    paired_suite_scores,
     per_task_scores,
     render,
     sensitivity_note,
@@ -263,3 +264,53 @@ def test_a_starved_task_does_not_reach_the_suite_aggregate() -> None:
         k=3,
     )
     assert set(per_task_scores(run)) == {"healthy"}
+
+
+def test_a_zero_tolerance_does_not_crash_the_gate() -> None:
+    """`gate.tolerance: "0"` is a valid config — "any drop is a regression".
+
+    `required_tasks` refuses a non-positive effect, and an escaping ValueError
+    would leave typer uncaught and exit 1 — which under the exit-code contract
+    means `gate` returned FAIL. CI would read a harness crash as a regression.
+    """
+    baseline = {f"t{i}": 1.0 for i in range(7)}
+    head = {**baseline, "t5": 0.6, "t6": 0.4}
+    note = "\n".join(sensitivity_note(baseline, head, target=0.0))
+    assert "Sensitivity" in note
+    assert "comparable tasks" not in note
+
+
+# -- both suite means must share a denominator --------------------------------
+
+
+def test_the_two_suite_means_are_averaged_over_the_tasks_they_share() -> None:
+    """The verdict is their difference, so a shared denominator is not optional."""
+    baseline = {"a": 1.0, "b": 1.0, "dropped": 0.0}
+    head = {"a": 1.0, "b": 1.0}
+    base_mean, head_mean = paired_suite_scores(baseline, head)
+    assert base_mean == pytest.approx(1.0)
+    assert head_mean == pytest.approx(1.0)
+
+
+def test_a_task_lost_on_head_cannot_manufacture_a_drop() -> None:
+    """The regression this fixes: identical agent behaviour reported as a drop.
+
+    Three harness errors on one passing task of twelve drop it from head's
+    scores. Averaged over different denominators that moves the suite mean
+    enough to trip a 0.02 tolerance while the agent behaved identically.
+    """
+    baseline = {f"pass{i}": 1.0 for i in range(6)} | {f"fail{i}": 0.0 for i in range(6)}
+    head = {slug: value for slug, value in baseline.items() if slug != "pass0"}
+
+    naive_drop = (sum(baseline.values()) / len(baseline)) - (sum(head.values()) / len(head))
+    assert naive_drop > 0.02, "the unpaired comparison really does invent a drop"
+
+    base_mean, head_mean = paired_suite_scores(baseline, head)
+    assert base_mean is not None
+    assert base_mean - head_mean == pytest.approx(0.0)
+
+
+def test_no_shared_tasks_reports_no_baseline() -> None:
+    base_mean, head_mean = paired_suite_scores({"gone": 1.0}, {"new": 0.5})
+    assert base_mean is None
+    assert head_mean == pytest.approx(0.5)

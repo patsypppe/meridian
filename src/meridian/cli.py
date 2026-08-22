@@ -201,7 +201,9 @@ def suite_audit(
         err(str(exc))
         raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
 
-    audited = [task.slug for task in loaded.tasks]
+    # The scored tasks, not every task: `include_probes=False` below means the
+    # contamination pair never runs, and counting them would overclaim coverage.
+    audited = [task.slug for task in loaded.scored_tasks]
     passes: dict[str, list[str]] = {}
 
     for adversary in ADVERSARIES:
@@ -231,6 +233,26 @@ def suite_audit(
         except Exception as exc:
             err(f"the {adversary.name} adversary could not be run: {type(exc).__name__}: {exc}")
             raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
+
+        # An adversary that never actually ran passes nothing, and "passed
+        # nothing" is exactly what a clean bill of health looks like. Left
+        # unchecked, a bad --sut, a Docker hiccup, or a missing snapshot prints
+        # "No task passed for an agent that did no work" and exits 0 — a check
+        # that cannot fail, shipped by the command whose whole thesis is that a
+        # check which cannot fail proves nothing.
+        unevaluated = sorted(
+            task.task_slug
+            for task in outcome.result.tasks
+            if not any(trial.outcome is not Outcome.HARNESS_ERROR for trial in task.trials)
+        )
+        missing = sorted(set(audited) - {task.task_slug for task in outcome.result.tasks})
+        if unevaluated or missing:
+            err(
+                f"the {adversary.name} adversary produced no verdict for: "
+                f"{', '.join(unevaluated + missing)}. The audit cannot report a "
+                f"result it did not measure."
+            )
+            raise typer.Exit(exit_codes.HARNESS_ERROR)
 
         passes[adversary.name] = [
             task.task_slug
@@ -600,6 +622,14 @@ def gate(
     run_store.save(head.manifest, head.result)
     head_scores = comment_module.per_task_scores(head.result)
     head_suite = comment_module.suite_score(head.result)
+
+    if baseline_suite is not None:
+        # Re-average both sides over the tasks they share. The verdict is the
+        # difference of these two numbers, and a difference of means taken over
+        # different denominators is not a comparison.
+        baseline_suite, head_suite = comment_module.paired_suite_scores(
+            baseline_scores, head_scores
+        )
 
     verdict, reason = decide(
         GateInput(

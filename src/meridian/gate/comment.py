@@ -126,7 +126,13 @@ def sensitivity_note(
         f"often than not have gone unnoticed by this comparison "
         f"({DEFAULT_POWER:.0%} power, one-sided alpha={DEFAULT_ALPHA})."
     )
-    if mde > target:
+    # `target > 0` is not decoration. `gate.tolerance: "0"` — "any drop at all is a
+    # regression" — is a valid configuration, and `required_tasks` refuses a
+    # non-positive effect. Unguarded, that ValueError escapes `render()`, leaves
+    # typer uncaught, and Python exits 1 — which under the exit-code contract
+    # means `gate` returned FAIL. A harness crash would be read by CI as "the
+    # agent got worse", which is the one confusion the contract exists to forbid.
+    if target > 0 and mde > target:
         spread = mde * math.sqrt(len(differences)) / _Z_SUM
         needed = required_tasks(spread, target)
         note += (
@@ -236,6 +242,35 @@ def per_task_scores(run: RunResult) -> dict[str, float]:
 def suite_score(run: RunResult) -> float:
     scores = per_task_scores(run)
     return sum(scores.values()) / len(scores) if scores else 0.0
+
+
+def paired_suite_scores(
+    baseline: dict[str, float], head: dict[str, float]
+) -> tuple[float | None, float]:
+    """Both suite means, over the tasks the two runs actually share.
+
+    The gate's verdict is computed from the *difference* of two suite means, so
+    both have to be averages over the same denominator or the difference is not a
+    comparison at all. They can otherwise diverge for a reason that has nothing to
+    do with the agent: `per_task_scores` drops a task with fewer than `k`
+    scoreable trials, so three Docker hiccups on one task of twelve shift the head
+    mean by enough to trip a 0.02 tolerance while the agent behaved identically.
+
+    That failure is invisible in the worst way — the harness-error rate stays
+    under the gate's guard, the paired bootstrap only ever looked at the
+    intersection, and so the p-value quietly disagrees with the drop that
+    triggered the verdict.
+
+    Returns `(None, head_mean)` when there is nothing in common, which the caller
+    already handles as "no baseline".
+    """
+    shared = sorted(set(baseline) & set(head))
+    if not shared:
+        return None, sum(head.values()) / len(head) if head else 0.0
+    return (
+        sum(baseline[slug] for slug in shared) / len(shared),
+        sum(head[slug] for slug in shared) / len(shared),
+    )
 
 
 def stale_cassette_rate(run: RunResult) -> float:

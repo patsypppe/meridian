@@ -104,11 +104,17 @@ def minimum_detectable_effect(
     if n < MIN_TASKS_FOR_POWER:
         return None
     spread = _stdev(differences)
-    if spread == 0.0:
-        # Every task moved by exactly the same amount. Real for a suite where a
-        # change lands uniformly, and the paired test has essentially unlimited
-        # sensitivity there — but reporting 0.0 would overstate it, so say
-        # nothing rather than something false.
+    # Not `== 0.0`. `pass^k` values are ratios of binomial coefficients, so tasks
+    # that moved by *exactly* the same amount routinely differ in the last ulp and
+    # leave a spread around 1e-17 — which sails past an equality check and renders
+    # as "regressions smaller than about 0.000 would have gone unnoticed", i.e. a
+    # claim of unlimited sensitivity. That is the precise thing this guard exists
+    # to prevent, so it is scaled to the size of the differences rather than
+    # compared against zero.
+    scale = max((abs(d) for d in differences), default=0.0)
+    if spread <= 1e-12 * max(scale, 1.0):
+        # Every task moved by the same amount. Real when a change lands uniformly,
+        # and there is genuinely no spread to estimate sensitivity from.
         return None
     return _z(alpha, power) * spread / math.sqrt(n)
 

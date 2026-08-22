@@ -127,3 +127,24 @@ def test_meridians_own_seven_task_suite_cannot_resolve_its_known_miss() -> None:
         f"MDE {mde:.3f} — if this ever drops below the observed 0.114 the "
         f"published explanation for the miss no longer holds"
     )
+
+
+def test_a_last_ulp_spread_is_not_mistaken_for_real_sensitivity() -> None:
+    """`pass^k` values are ratios of binomials, so equal moves differ in the last bit.
+
+    An exact `== 0.0` check let a spread of ~1e-17 through, and the note then
+    claimed regressions smaller than 0.000 would be missed — i.e. unlimited
+    sensitivity, the exact claim this guard exists to prevent.
+    """
+    baseline = {"t1": 0.2857142857142857, "t2": 0.7142857142857143, "t3": 0.2857142857142857}
+    head = {"t1": 0.047619047619047616, "t2": 0.47619047619047616, "t3": 0.047619047619047616}
+    differences = paired_differences(baseline, head)
+
+    assert len(set(differences)) > 1, "the differences must genuinely differ in the last ulp"
+    assert minimum_detectable_effect(differences) is None
+
+
+def test_a_genuinely_small_but_real_spread_is_still_estimated() -> None:
+    """The epsilon must not swallow a real, if tiny, difference between tasks."""
+    mde = minimum_detectable_effect([-0.10, -0.11, -0.12, -0.13])
+    assert mde is not None and mde > 0

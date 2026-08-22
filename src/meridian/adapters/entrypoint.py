@@ -73,13 +73,26 @@ def proxy_is_unreachable(base_url: str) -> bool:
     """
     if not base_url:
         return False
-    import httpx
+    try:
+        import httpx
+    except ImportError:
+        # The trial image supplies httpx, not the payload. An environment without
+        # it must not turn every agent failure into an unanswerable question:
+        # raising here would escape `run()`, exit EXIT_ENTRYPOINT_FAILED, and be
+        # classified as a harness error — which is *retried*. Every genuine agent
+        # `fail` on such an image would then get a second attempt, which is the
+        # one thing the retry policy exists to forbid.
+        return False
 
     try:
         response = httpx.get(
             f"{base_url.rstrip('/')}/healthz", timeout=PROXY_HEALTH_TIMEOUT_SECONDS
         )
-    except httpx.HTTPError:
+    except Exception:
+        # Deliberately broad. `httpx.InvalidURL` is not an `HTTPError`, so a
+        # malformed base URL would otherwise crash the entrypoint rather than
+        # answer the question. Anything that prevents an answer means the proxy
+        # could not be confirmed alive, which is what the caller asked.
         return True
     return response.status_code >= 500
 
