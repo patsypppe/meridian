@@ -27,6 +27,8 @@
 |---|---|---|
 | suite pass^3 | 0.486 | 0.486 |
 
+**Sensitivity.** Not estimated: all 7 tasks moved by the same amount, so there is no spread to estimate sensitivity from. Treat the verdict as directional.
+
 `n=5` · `k=3` · status `complete` · harness errors 0.0% · cost 51c
 
-<sub>head run `run-1787356294-4b4069` · baseline run `run-1787356251-11c99a` · manifest `sha256:eecdd3318c8dfd31…` · reproduce with `meridian replay run-1787356294-4b4069`</sub>
+<sub>head run `run-1787380628-5c7a41` · baseline run `run-1787380473-108eb8` · manifest `sha256:f532fd6b9d662bc6…` · reproduce with `meridian replay run-1787380628-5c7a41`</sub>

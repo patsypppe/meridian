@@ -19,6 +19,7 @@ from meridian.stats.passk import pass_hat_k
 from meridian.stats.power import (
     DEFAULT_ALPHA,
     DEFAULT_POWER,
+    MIN_TASKS_FOR_POWER,
     minimum_detectable_effect,
     paired_differences,
     required_tasks,
@@ -100,17 +101,30 @@ def sensitivity_note(
     differences = paired_differences(baseline, head)
     mde = minimum_detectable_effect(differences)
     if mde is None:
-        return [
-            f"**Sensitivity.** Too few comparable tasks ({len(differences)}) to estimate "
-            f"what this run could detect. Treat the verdict as directional.",
-            "",
-        ]
+        # Two different reasons, and they need different sentences. Reporting
+        # "too few tasks" at a seven-task comparison — which happened — makes the
+        # reader distrust the one number in the comment they cannot check.
+        if len(differences) < MIN_TASKS_FOR_POWER:
+            why = (
+                f"only {len(differences)} comparable task(s), too few to estimate "
+                f"what this run could detect"
+            )
+        else:
+            why = (
+                f"all {len(differences)} tasks moved by the same amount, so there is "
+                f"no spread to estimate sensitivity from"
+            )
+        return [f"**Sensitivity.** Not estimated: {why}. Treat the verdict as directional.", ""]
 
+    # Phrased as what would be *missed*, never as what can be detected. A run
+    # that caught a 0.171 drop while quoting a 0.201 detection floor reads as a
+    # contradiction — it is not one, since an effect below the floor is still
+    # caught sometimes, but a reader will not stop to work that out and will
+    # discount the whole comment instead.
     note = (
-        f"**Sensitivity.** This run could reliably detect a suite-level drop of "
-        f"**{mde:.3f}** or larger ({DEFAULT_POWER:.0%} power, one-sided "
-        f"alpha={DEFAULT_ALPHA}). A real regression smaller than that would most "
-        f"likely have passed."
+        f"**Sensitivity.** Regressions smaller than about **{mde:.3f}** would more "
+        f"often than not have gone unnoticed by this comparison "
+        f"({DEFAULT_POWER:.0%} power, one-sided alpha={DEFAULT_ALPHA})."
     )
     if mde > target:
         spread = mde * math.sqrt(len(differences)) / _Z_SUM
@@ -215,9 +229,7 @@ def per_task_scores(run: RunResult) -> dict[str, float]:
     which statistic it is comparing is the worse failure.
     """
     return {
-        task.task_slug: pass_hat_k(task.n, task.c, run.k)
-        for task in run.tasks
-        if task.n >= run.k
+        task.task_slug: pass_hat_k(task.n, task.c, run.k) for task in run.tasks if task.n >= run.k
     }
 
 

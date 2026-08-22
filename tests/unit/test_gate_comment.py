@@ -177,7 +177,7 @@ def test_the_comment_says_what_the_run_could_not_have_detected() -> None:
     note = "\n".join(sensitivity_note(baseline, head, target=0.03))
 
     assert "Sensitivity" in note
-    assert "could reliably detect" in note
+    assert "gone unnoticed" in note
 
 
 def test_an_insensitive_run_says_how_many_tasks_it_would_take() -> None:
@@ -201,8 +201,8 @@ def test_a_sensitive_enough_run_does_not_nag_about_task_count() -> None:
 
 def test_too_few_tasks_says_so_rather_than_quoting_a_number() -> None:
     note = "\n".join(sensitivity_note({"a": 1.0}, {"a": 0.5}, target=0.03))
-    assert "Too few comparable tasks" in note
-    assert "could reliably detect" not in note
+    assert "too few to estimate" in note
+    assert "gone unnoticed" not in note
 
 
 # -- k is not silently lowered -----------------------------------------------

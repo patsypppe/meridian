@@ -29,6 +29,8 @@
 |---|---|---|
 | suite pass^3 | 0.486 | 0.314 |
 
+**Sensitivity.** Regressions smaller than about **0.201** would more often than not have gone unnoticed by this comparison (80% power, one-sided alpha=0.05). Resolving the configured tolerance of 0.030 would take about **315 comparable tasks**; this comparison has 7.
+
 `n=5` · `k=3` · status `complete` · harness errors 0.0% · cost 51c
 
-<sub>head run `run-1787355993-64d3a9` · baseline run `run-1787355957-cbdbc8` · manifest `sha256:3dad961d32847743…` · reproduce with `meridian replay run-1787355993-64d3a9`</sub>
+<sub>head run `run-1787380583-b5ef2e` · baseline run `run-1787380473-108eb8` · manifest `sha256:a33f58bd364886fc…` · reproduce with `meridian replay run-1787380583-b5ef2e`</sub>
