@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meridian — checkout-agent run-1787358386-a4b14b</title>
+<style>
+:root {
+  color-scheme: light dark;
+  --bg: #fbfbfa;
+  --surface: #ffffff;
+  --border: #e3e1dc;
+  --ink: #1b1a17;
+  --muted: #6f6b63;
+  --accent: #1c5d4a;
+  --warn: #8a5a12;
+  --bad: #a3302a;
+  --track: #eceae5;
+  --radius: 10px;
+  --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Helvetica, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #16151300; --surface: #1e1d1a; --border: #33312c; --ink: #f0eee9;
+    --muted: #a19c92; --accent: #5fc0a2; --warn: #d9a441; --bad: #e0736c;
+    --track: #2a2823;
+  }
+  body { background: #161513; }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 3rem 1.5rem 5rem;
+  background: var(--bg); color: var(--ink);
+  font-family: var(--sans); line-height: 1.55;
+  font-size: 15px;
+}
+main { max-width: 62rem; margin: 0 auto; }
+header { margin-bottom: 2.5rem; }
+h1 { font-size: 1.55rem; margin: 0 0 .3rem; letter-spacing: -.015em; }
+.sub { color: var(--muted); font-family: var(--mono); font-size: .82rem; }
+.headline {
+  display: flex; flex-wrap: wrap; gap: 1px;
+  background: var(--border); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden; margin: 2rem 0;
+}
+.headline > div { background: var(--surface); padding: 1rem 1.25rem; flex: 1 1 9rem; }
+.headline .k { color: var(--muted); font-size: .72rem; text-transform: uppercase;
+  letter-spacing: .07em; }
+.headline .v { font-size: 1.7rem; font-variant-numeric: tabular-nums;
+  font-family: var(--mono); margin-top: .2rem; }
+.wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 44rem; }
+th, td { padding: .6rem .9rem; text-align: left; border-bottom: 1px solid var(--border); }
+th { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em;
+  color: var(--muted); font-weight: 600; }
+tbody tr:last-child td { border-bottom: none; }
+td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+.bar { position: relative; height: .5rem; background: var(--track);
+  border-radius: 999px; min-width: 7rem; }
+.bar span { position: absolute; inset: 0 auto 0 0; border-radius: 999px; }
+.bar .at { background: color-mix(in oklab, var(--accent) 28%, transparent); }
+.bar .hat { background: var(--accent); }
+.gap { color: var(--muted); font-family: var(--mono); font-size: .78rem; }
+.tag { font-family: var(--mono); font-size: .72rem; padding: .1rem .45rem;
+  border-radius: 5px; border: 1px solid var(--border); color: var(--muted); }
+.tag.bad { color: var(--bad); border-color: color-mix(in oklab, var(--bad) 40%, var(--border)); }
+.tag.warn { color: var(--warn); border-color: color-mix(in oklab, var(--warn) 40%, var(--border)); }
+h2 { font-size: .95rem; margin: 2.5rem 0 .75rem; letter-spacing: -.01em; }
+.note { color: var(--muted); font-size: .85rem; margin: .5rem 0 0; }
+.detail { font-family: var(--mono); font-size: .78rem; color: var(--muted); }
+dl.pins { display: grid; grid-template-columns: max-content 1fr; gap: .3rem 1.25rem;
+  font-family: var(--mono); font-size: .78rem; margin: 0; }
+dl.pins dt { color: var(--muted); }
+dl.pins dd { margin: 0; overflow-wrap: anywhere; }
+</style></head>
+<body><main>
+<header>
+  <h1>checkout-agent </h1>
+  <p class="sub">run-1787358386-a4b14b · generated 2026-08-22 00:27 UTC</p>
+</header>
+
+<div class="headline">
+  <div><div class="k">suite pass^3</div><div class="v">0.49</div></div>
+  <div><div class="k">95% CI over tasks</div><div class="v">[0.40, 0.66]</div></div>
+  <div><div class="k">tasks scored</div><div class="v">7</div></div>
+  <div><div class="k">cost</div><div class="v">51c</div></div>
+</div>
+
+<h2>Per task</h2>
+<div class="wrap"><table>
+<thead><tr><th>task</th><th class="num">passed</th><th class="num">pass@3</th>
+<th class="num">pass^3</th><th>at k vs hat k</th><th>gap</th></tr></thead>
+<tbody><tr><td>expired-coupon <span class='tag warn'>unreliable</span></td><td class='num'>4/5</td><td class='num'>1.00</td><td class='num'>0.40</td><td><div class='bar'><span class='at' style='width:100.0%'></span><span class='hat' style='width:40.0%'></span></div></td><td class='gap'>&minus;0.60</td></tr><tr><td>expired-on-bulk-order <span class='tag warn'>unreliable</span></td><td class='num'>4/5</td><td class='num'>1.00</td><td class='num'>0.40</td><td><div class='bar'><span class='at' style='width:100.0%'></span><span class='hat' style='width:40.0%'></span></div></td><td class='gap'>&minus;0.60</td></tr><tr><td>expiry-boundary <span class='tag warn'>unreliable</span></td><td class='num'>4/5</td><td class='num'>1.00</td><td class='num'>0.40</td><td><div class='bar'><span class='at' style='width:100.0%'></span><span class='hat' style='width:40.0%'></span></div></td><td class='gap'>&minus;0.60</td></tr><tr><td>happy-path <span class='tag warn'>unreliable</span></td><td class='num'>4/5</td><td class='num'>1.00</td><td class='num'>0.40</td><td><div class='bar'><span class='at' style='width:100.0%'></span><span class='hat' style='width:40.0%'></span></div></td><td class='gap'>&minus;0.60</td></tr><tr><td>missing-field </td><td class='num'>5/5</td><td class='num'>1.00</td><td class='num'>1.00</td><td><div class='bar'><span class='at' style='width:100.0%'></span><span class='hat' style='width:100.0%'></span></div></td><td class='gap'>&minus;0.00</td></tr><tr><td>stale-coupon <span class='tag warn'>unreliable</span></td><td class='num'>4/5</td><td class='num'>1.00</td><td class='num'>0.40</td><td><div class='bar'><span class='at' style='width:100.0%'></span><span class='hat' style='width:40.0%'></span></div></td><td class='gap'>&minus;0.60</td></tr><tr><td>unknown-coupon <span class='tag warn'>unreliable</span></td><td class='num'>4/5</td><td class='num'>1.00</td><td class='num'>0.40</td><td><div class='bar'><span class='at' style='width:100.0%'></span><span class='hat' style='width:40.0%'></span></div></td><td class='gap'>&minus;0.60</td></tr></tbody></table></div>
+<p class="note">The pale bar is pass@3 — at least one of 3 attempts works.
+The solid bar is pass^3 — all 3 work. The gap is the part a mean score
+hides.</p>
+<p class='note'>Excluded from the aggregate: contamination-probe, contamination-writer — harness self-tests, which measure Meridian rather than the agent.</p>
+
+<h2>Failing trials</h2>
+<div class='wrap'><table><thead><tr><th>task</th><th>trial</th><th>outcome</th><th>why</th></tr></thead><tbody><tr><td>expired-coupon</td><td class='num'>4</td><td><span class='tag bad'>fail</span></td><td class='detail'>SELECT status FROM orders WHERE id = 1042 returned [[&#x27;pending&#x27;]], expected [[&#x27;invoiced&#x27;]]</td></tr><tr><td>expired-on-bulk-order</td><td class='num'>4</td><td><span class='tag bad'>fail</span></td><td class='detail'>SELECT status FROM orders WHERE id = 1045 returned [[&#x27;pending&#x27;]], expected [[&#x27;invoiced&#x27;]]</td></tr><tr><td>expiry-boundary</td><td class='num'>4</td><td><span class='tag bad'>fail</span></td><td class='detail'>SELECT status FROM orders WHERE id = 1046 returned [[&#x27;pending&#x27;]], expected [[&#x27;invoiced&#x27;]]</td></tr><tr><td>happy-path</td><td class='num'>4</td><td><span class='tag bad'>fail</span></td><td class='detail'>SELECT status FROM orders WHERE id = 1041 returned [[&#x27;pending&#x27;]], expected [[&#x27;invoiced&#x27;]]</td></tr><tr><td>stale-coupon</td><td class='num'>4</td><td><span class='tag bad'>fail</span></td><td class='detail'>SELECT status FROM orders WHERE id = 1044 returned [[&#x27;pending&#x27;]], expected [[&#x27;invoiced&#x27;]]</td></tr><tr><td>unknown-coupon</td><td class='num'>4</td><td><span class='tag bad'>fail</span></td><td class='detail'>SELECT status FROM orders WHERE id = 1047 returned [[&#x27;pending&#x27;]], expected [[&#x27;invoiced&#x27;]]</td></tr></tbody></table></div>
+
+<h2>What this run pinned</h2>
+<dl class="pins"><dt>run</dt><dd>run-1787358386-a4b14b</dd><dt>suite</dt><dd>checkout-agent v1</dd><dt>n / k</dt><dd>5 / 3</dd><dt>status</dt><dd>complete</dd><dt>harness errors</dt><dd>0.0%</dd><dt>cost</dt><dd>51c</dd><dt>wall clock</dt><dd>36.9s</dd><dt>manifest</dt><dd>sha256:1f9758ac5885238d19488725d51630a54c39e5f6c686ac17121ac5b02fe084a0</dd></dl>
+<p class="note">Reproduce with <code>meridian replay run-1787358386-a4b14b</code>.</p>
+</main></body></html>

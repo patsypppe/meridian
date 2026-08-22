@@ -176,6 +176,9 @@ def run(
         False, "--gate-mode", help="Apply gate-mode configuration rules."
     ),
     out: Path | None = typer.Option(None, "--out", help="Write the run result as JSON."),
+    html_out: Path | None = typer.Option(
+        None, "--html", help="Write a self-contained HTML report here."
+    ),
     live_provider: bool = typer.Option(
         False,
         "--live-provider",
@@ -256,6 +259,16 @@ def run(
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(outcome.result.model_dump_json(indent=2), encoding="utf-8")
         err(f"wrote {out}")
+
+    if html_out is not None:
+        from meridian.report import html as html_report
+
+        html_out.parent.mkdir(parents=True, exist_ok=True)
+        html_out.write_text(
+            html_report.render(outcome.result, manifest_hash=outcome.manifest.manifest_hash()),
+            encoding="utf-8",
+        )
+        err(f"wrote {html_out}")
 
 
 @app.command()
