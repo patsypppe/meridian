@@ -29,6 +29,16 @@ def test_seeds_are_deterministic() -> None:
     assert derive_seed("run", "task", 0) == derive_seed("run", "task", 0)
 
 
+SIGNED_64_BIT_MAX = 2**63 - 1
+
+
+def test_seeds_fit_a_signed_64_bit_column() -> None:
+    """A seed that cannot be persisted is a run that cannot be reproduced."""
+    for index in range(64):
+        seed = derive_seed("run", "task", index)
+        assert 0 <= seed <= SIGNED_64_BIT_MAX
+
+
 def test_seeds_differ_across_trials_and_tasks() -> None:
     seeds = {derive_seed("run", "task", i) for i in range(10)}
     assert len(seeds) == 10

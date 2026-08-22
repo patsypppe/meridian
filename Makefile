@@ -1,4 +1,4 @@
-.PHONY: help sync lint fmt typecheck unit integration e2e check clean sweep images
+.PHONY: help sync lint fmt typecheck unit integration e2e check clean sweep images db
 
 help:
 	@grep -E '^[a-z-]+:.*?##' $(MAKEFILE_LIST) | sed 's/:.*##/\t/'
@@ -32,6 +32,10 @@ images: ## (re)build the environment and proxy images and repin the suite
 	uv run meridian snapshot build ./envs/checkout --tag checkout:dev \
 		--write-ref --update-suite ./suites/checkout-agent
 	uv run meridian snapshot build ./envs/proxy --tag meridian-proxy:dev --context .
+
+db: ## start Postgres and bring the schema up to head
+	docker compose up -d postgres
+	uv run alembic upgrade head
 
 sweep: ## remove leaked trial containers
 	uv run meridian sweep

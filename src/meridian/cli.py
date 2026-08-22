@@ -245,6 +245,7 @@ def run(
 
     archived = run_store.save(outcome.manifest, outcome.result)
     err(f"archived {outcome.result.run_id} to {archived}")
+    _record_to_database(config, loaded, outcome)
 
     print(table.render(outcome.result))
     detail = table.failures(outcome.result)
@@ -269,6 +270,68 @@ def run(
             encoding="utf-8",
         )
         err(f"wrote {html_out}")
+
+
+def _record_to_database(config: object, suite: object, outcome: object) -> None:
+    """Persist the run if a database is configured, and shrug if it is not.
+
+    Meridian's correctness does not depend on Postgres being reachable. A harness
+    that refused to report a finished run because a database was down would be a
+    worse tool, so this failure is a note on stderr and nothing more.
+    """
+    from meridian.config import MeridianConfig
+    from meridian.store import repo
+
+    assert isinstance(config, MeridianConfig)
+    database_url = config.store.database_url
+    if not database_url:
+        return
+    try:
+        with repo.connect(database_url) as connection:
+            repo.record_run(
+                connection,
+                suite=suite,  # type: ignore[arg-type]
+                manifest=outcome.manifest,  # type: ignore[attr-defined]
+                result=outcome.result,  # type: ignore[attr-defined]
+            )
+    except Exception as exc:
+        err(f"note: the run was not persisted ({type(exc).__name__}: {exc})")
+    else:
+        err("recorded to the database")
+
+
+@app.command()
+def history(
+    suite_slug: str = typer.Argument(..., help="Suite slug, e.g. checkout-agent."),
+    limit: int = typer.Option(20, "--limit"),
+) -> None:
+    """Suite-level pass^k over time, newest first."""
+    from meridian.config import load_config
+    from meridian.store import repo
+
+    config = load_config("meridian.yaml")
+    if not config.store.database_url:
+        err("no database configured; set MERIDIAN_DATABASE_URL or store.database_url")
+        raise typer.Exit(exit_codes.HARNESS_ERROR)
+
+    try:
+        with repo.connect(config.store.database_url) as connection:
+            rows = repo.suite_history(connection, suite_slug, limit=limit)
+    except repo.StoreUnavailableError as exc:
+        err(str(exc))
+        raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
+
+    if not rows:
+        err(f"no recorded runs for suite {suite_slug!r}")
+        return
+
+    out(f"{'run':<28} {'when':<20} {'commit':<12} {'status':<14} suite pass^k")
+    for row in rows:
+        score = row["suite_pass_hat_k"]
+        when = str(row["started_at"])[:19]
+        commit = str(row["commit_sha"] or "-")[:12]
+        rendered = f"{score:.3f}" if score is not None else "—"
+        out(f"{row['run_id']:<28} {when:<20} {commit:<12} {row['status']!s:<14} {rendered}")
 
 
 @app.command()

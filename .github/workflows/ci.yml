@@ -58,6 +58,8 @@ jobs:
           uv run meridian snapshot build ./envs/checkout --tag checkout:dev \
             --write-ref --update-suite ./suites/checkout-agent
           uv run meridian snapshot build ./envs/proxy --tag meridian-proxy:dev --context .
+      - name: Apply migrations
+        run: uv run alembic upgrade head
       - name: integration tests
         run: uv run pytest -m integration
 
