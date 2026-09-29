@@ -21,6 +21,10 @@ COPY src/meridian/__init__.py            /opt/meridian/meridian/__init__.py
 COPY src/meridian/version.py             /opt/meridian/meridian/version.py
 COPY src/meridian/hashing.py             /opt/meridian/meridian/hashing.py
 COPY src/meridian/config.py              /opt/meridian/meridian/config.py
+# cassette.py validates tape names against the task schema's slug alphabet, so
+# the proxy needs that one model module (pydantic only, no further imports).
+COPY src/meridian/models/__init__.py     /opt/meridian/meridian/models/__init__.py
+COPY src/meridian/models/task.py         /opt/meridian/meridian/models/task.py
 COPY src/meridian/runtime/__init__.py    /opt/meridian/meridian/runtime/__init__.py
 COPY src/meridian/runtime/secrets.py     /opt/meridian/meridian/runtime/secrets.py
 COPY src/meridian/runtime/proxy/         /opt/meridian/meridian/runtime/proxy/
