@@ -1,0 +1,18 @@
+{
+  "adversaries": [
+    "null",
+    "empty-scaffold",
+    "plausible-garbage"
+  ],
+  "audited_tasks": [
+    "expired-coupon",
+    "expired-on-bulk-order",
+    "expiry-boundary",
+    "happy-path",
+    "missing-field",
+    "stale-coupon",
+    "unknown-coupon"
+  ],
+  "findings": [],
+  "weak_task_count": 0
+}

@@ -1,0 +1,5 @@
+audited 7 task(s) against 3 adversaries
+
+No task passed for an agent that did no work.
+
+This does not prove the assertions are right — only that they are not trivially satisfiable, which is the floor rather than the ceiling.

@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Meridian — agent evals for CI</title>
+  <meta name="description" content="Meridian gates pull requests on agent regressions: isolated trials, host-side grading, pass^k, a paired significance test, and a minimum detectable effect on every verdict. Every number on this page comes from a real run.">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f5f2ea" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#12130f" media="(prefers-color-scheme: dark)">
+  <meta property="og:title" content="Meridian — did this change make the agent better or worse?">
+  <meta property="og:description" content="An agent evaluation harness for CI that reports what it could not have seen.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/instrument.css">
+  <link rel="stylesheet" href="assets/css/sections.css">
+  <link rel="preload" href="data/showcase.json" as="fetch" crossorigin>
+  <script type="module" src="assets/js/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="masthead">
+    <div class="wrap topbar">
+      <a class="wordmark" href="./" aria-label="Meridian, home">Meridian</a>
+      <nav aria-label="Sections">
+        <ul>
+          <li><a href="#verdict">Verdict</a></li>
+          <li><a href="#sensitivity">Sensitivity</a></li>
+          <li><a href="#passk">pass^k</a></li>
+          <li><a href="#isolation">Isolation</a></li>
+          <li><a href="#self">Self-measurement</a></li>
+          <li><a href="#run">Run it</a></li>
+          <li><a href="https://github.com/patsypppe/meridian">GitHub</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="wrap hero">
+      <div>
+        <p class="label">Agent evaluation harness · CI gate · v<span data-bind="version">0.1.0</span></p>
+        <h1>Did this change make the agent <em>better or worse?</em></h1>
+        <p class="lede">And can you reproduce the answer tomorrow? Meridian runs every trial in its own container, grades the state left behind from outside the sandbox, scores <span class="mono">pass^k</span> instead of a mean, and blocks a pull request only when a drop clears both a tolerance and a paired significance test. Then it tells you how small a regression it could have seen.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#verdict">Inspect a real verdict <span aria-hidden="true">↓</span></a>
+          <a class="btn" href="https://github.com/patsypppe/meridian">Source on GitHub <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+
+      <figure class="specimen" aria-labelledby="specimen-cap">
+        <header>
+          <span>PR comment · meridian gate</span>
+          <span data-bind="specimen-run">run</span>
+        </header>
+        <div class="body">
+          <span class="stamp fail" data-bind="specimen-stamp">FAIL</span>
+          <p class="reason" data-bind="specimen-reason">Loading the recorded verdict…</p>
+          <p class="reason t-fail" data-bind="specimen-flipped"></p>
+          <p class="sens" data-bind="specimen-sens"></p>
+        </div>
+        <figcaption id="specimen-cap" class="visually-hidden">The gate comment Meridian wrote when one sentence was removed from the agent's planner prompt.</figcaption>
+      </figure>
+    </div>
+
+    <div class="wrap">
+      <dl class="readouts" aria-label="Meridian measured by Meridian">
+        <div class="readout">
+          <dt class="label">False regressions</dt>
+          <dd><div class="figure" data-bind="se-false">—</div>
+            <p>unchanged agent gated against a fixed baseline. The gate never cried wolf.</p></dd>
+        </div>
+        <div class="readout">
+          <dt class="label">Seeded regressions caught</dt>
+          <dd><div class="figure" data-bind="se-true">—</div>
+            <p>and the one it missed is <a href="#self">named below</a>, with the reason.</p></dd>
+        </div>
+        <div class="readout">
+          <dt class="label">Replay fidelity</dt>
+          <dd><div class="figure" data-bind="se-replay">—</div>
+            <p>archived runs re-materialized from their manifests reproduced exactly.</p></dd>
+        </div>
+        <div class="readout">
+          <dt class="label">Contamination probe</dt>
+          <dd><div class="figure"><span class="t-pass">pass</span><small> / </small><span class="t-fail">fail</span></div>
+            <p>passes with isolation on, fails without it. <a href="#probe">A probe that cannot fail proves nothing.</a></p></dd>
+        </div>
+      </dl>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="wrap">
+      <noscript><p class="load-error">The charts on this page are drawn from <a href="data/showcase.json">data/showcase.json</a> with JavaScript. The raw run output is in <a href="data/raw/">data/raw/</a>.</p></noscript>
+      <div data-bind="load-error"></div>
+
+      <!-- §01 verdict -->
+      <section class="section" id="verdict" aria-labelledby="verdict-h">
+        <div class="section-head">
+          <span class="no">§ 01</span>
+          <h2 id="verdict-h">Three real changes, gated</h2>
+          <p class="kicker">Each is a <code>meridian gate</code> run against one recorded baseline: <span data-bind="shape">7 tasks × 5 trials, k = 3</span>, tolerance <span class="num">0.030</span>. Same harness, same thresholds, three different answers.</p>
+        </div>
+
+        <div class="scenario-picker" role="tablist" aria-label="Choose a gated change" data-bind="picker"></div>
+
+        <div class="instrument reveal" id="instrument" role="tabpanel" aria-live="polite">
+          <div class="verdict-banner" data-bind="banner">
+            <span class="stamp" data-bind="banner-stamp">—</span>
+            <span class="reason" data-bind="banner-reason"></span>
+            <span class="blocks" data-bind="banner-blocks"></span>
+          </div>
+
+          <div class="panel">
+            <h3><span>Per-task pass^3 · baseline → head</span><span data-bind="flip-count"></span></h3>
+            <p class="change-line" data-bind="change"></p>
+            <div data-bind="dumbbell"></div>
+            <ul class="legend" aria-label="Legend">
+              <li><span class="swatch base"></span>baseline</li>
+              <li><span class="swatch down"></span>head, regressed</li>
+              <li><span class="swatch same"></span>head, unchanged</li>
+            </ul>
+          </div>
+
+          <div class="panel">
+            <h3><span>Decision trace</span><a href="https://github.com/patsypppe/meridian/blob/main/src/meridian/gate/decide.py" class="t-muted">gate/decide.py</a></h3>
+            <ol class="trace" data-bind="trace"></ol>
+            <p class="caption">Every guard before the comparison asks one question: <em>is this run evidence at all?</em> Only <code>FAIL</code> blocks a merge. <code>INCONCLUSIVE</code> and <code>PASS (with warning)</code> explain themselves instead.</p>
+          </div>
+
+          <div class="panel span">
+            <h3><span>Suite pass^3 on one ruler</span><span>tolerance · blind zone · the drop</span></h3>
+            <div data-bind="ruler"></div>
+            <ul class="legend" aria-label="Ruler legend">
+              <li><span class="swatch band"></span>within tolerance: passes without a test</li>
+              <li><span class="swatch blind"></span>blind zone: a drop ending here would more often than not be missed</li>
+            </ul>
+            <p class="caption" data-bind="ruler-caption"></p>
+          </div>
+
+          <div class="panel span">
+            <h3><span>Paired bootstrap · is the drop distinguishable from noise?</span><span data-bind="boot-meta"></span></h3>
+            <div data-bind="histogram"></div>
+            <p class="caption" data-bind="boot-caption"></p>
+          </div>
+
+          <details class="comment">
+            <summary>The PR comment this run wrote, verbatim</summary>
+            <pre data-bind="comment"></pre>
+          </details>
+        </div>
+      </section>
+
+      <!-- §02 sensitivity -->
+      <section class="section" id="sensitivity" aria-labelledby="sens-h">
+        <div class="section-head">
+          <span class="no">§ 02</span>
+          <h2 id="sens-h">What this run could not have seen</h2>
+          <p class="kicker">A <code>PASS</code> from a suite too small to resolve the regression you care about is not evidence that nothing broke. Meridian prints the minimum detectable effect on every verdict. This is the same arithmetic, live.</p>
+        </div>
+
+        <div class="explorer reveal">
+          <form class="controls" data-bind="controls" aria-label="Sensitivity inputs">
+            <div class="control">
+              <span class="control-label" id="spread-presets-label">Observed spread, from a real gate</span>
+              <div class="presets" role="group" aria-labelledby="spread-presets-label" data-bind="presets"></div>
+            </div>
+            <div class="control">
+              <label for="in-spread">Spread of per-task differences <output for="in-spread" data-bind="out-spread"></output></label>
+              <input id="in-spread" type="range" min="0.02" max="0.5" step="0.001">
+              <p class="hint">sample SD, Bessel-corrected, of head − baseline per task</p>
+            </div>
+            <div class="control">
+              <label for="in-tasks">Comparable tasks <output for="in-tasks" data-bind="out-tasks"></output></label>
+              <input id="in-tasks" type="range" min="0" max="37" step="1">
+              <p class="hint">log scale · 3 to 1,000 · this suite has <span data-bind="suite-tasks">7</span></p>
+            </div>
+            <div class="control">
+              <label for="in-target">Drop you need to catch <output for="in-target" data-bind="out-target"></output></label>
+              <input id="in-target" type="range" min="0.01" max="0.3" step="0.005">
+              <p class="hint">the gate uses its tolerance, 0.030</p>
+            </div>
+            <div class="control">
+              <label for="in-power">Power <output for="in-power" data-bind="out-power"></output></label>
+              <input id="in-power" type="range" min="0.5" max="0.99" step="0.01">
+            </div>
+            <div class="control">
+              <label for="in-alpha">One-sided alpha <output for="in-alpha" data-bind="out-alpha"></output></label>
+              <input id="in-alpha" type="range" min="0.01" max="0.2" step="0.01">
+            </div>
+          </form>
+
+          <div class="explorer-out">
+            <div class="big-readout" aria-live="polite">
+              <div>
+                <div class="label">Minimum detectable effect</div>
+                <div class="figure" data-bind="mde">—</div>
+                <p>smaller drops would more often than not go unnoticed</p>
+              </div>
+              <div>
+                <div class="label">Tasks to resolve the target</div>
+                <div class="figure" data-bind="needed">—</div>
+                <p data-bind="needed-note">at the same spread</p>
+              </div>
+            </div>
+            <div data-bind="curve"></div>
+            <ul class="legend" aria-label="Curve legend">
+              <li><span class="swatch" style="background:var(--accent)"></span>MDE as tasks grow</li>
+              <li><span class="swatch down"></span>real drop: prompt edit</li>
+              <li><span class="swatch" style="background:var(--warn-fill)"></span>real drop: rounding bug</li>
+              <li><span class="swatch up"></span>tolerance</li>
+            </ul>
+            <p class="verdict-sentence" data-bind="sentence"></p>
+            <p class="formula">MDE = (z<sub>1−α</sub> + z<sub>power</sub>) · s / √n &nbsp;·&nbsp; tasks = ⌈((z<sub>1−α</sub> + z<sub>power</sub>) · s / target)²⌉<br>
+              <span class="t-muted">ported from <a href="https://github.com/patsypppe/meridian/blob/main/src/meridian/stats/power.py">stats/power.py</a>; the inverse normal is AS241, as in Python's <code>NormalDist</code>. The spread is held fixed as tasks grow, the same assumption <code>required_tasks</code> makes. It describes sensitivity and never decides a verdict; the bootstrap does.</span></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- §03 pass^k -->
+      <section class="section" id="passk" aria-labelledby="passk-h">
+        <div class="section-head">
+          <span class="no">§ 03</span>
+          <h2 id="passk-h">Why pass^3, not a mean</h2>
+          <p class="kicker"><code>pass^k = C(c,k) / C(n,k)</code>: the chance that <em>k</em> independent attempts all succeed. Never <code>(c/n)^k</code>. Below is the reference suite, run offline from committed cassettes.</p>
+        </div>
+
+        <div class="passk reveal">
+          <div>
+            <table class="trial-grid" data-bind="grid">
+              <caption class="visually-hidden">Trials per task in the reference run, with pass@3 and pass^3</caption>
+            </table>
+            <p class="caption" data-bind="grid-caption"></p>
+          </div>
+          <div>
+            <div class="contrast">
+              <div class="pair">
+                <div>
+                  <div class="label">Mean trial pass rate</div>
+                  <div class="figure" data-bind="mean">—</div>
+                  <p>reads like a B</p>
+                </div>
+                <div>
+                  <div class="label">Suite pass^3</div>
+                  <div class="figure t-fail" data-bind="passhat">—</div>
+                  <p>95% CI over tasks <span class="num" data-bind="ci">—</span></p>
+                </div>
+              </div>
+            </div>
+            <p class="formula" data-bind="worked" aria-live="polite"></p>
+            <p class="caption">Hover or focus a row to see its arithmetic. Confidence intervals resample <strong>tasks, not trials</strong>: trials within a task share a prompt, an environment and a failure mode, and a trial-level interval is far too narrow.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- §04 isolation -->
+      <section class="section" id="isolation" aria-labelledby="iso-h">
+        <div class="section-head">
+          <span class="no">§ 04</span>
+          <h2 id="iso-h">The evaluator never trusts the container</h2>
+          <p class="kicker">Assertions run on state <em>extracted</em> from the trial, on the host, after the container is gone. Nothing inside the sandbox decides whether the trial passed.</p>
+        </div>
+
+        <figure class="reveal">
+          <div class="diagram-wrap">
+            <svg class="diagram" viewBox="0 0 1000 430" role="img" aria-labelledby="dia-title dia-desc">
+              <title id="dia-title">Trial lifecycle</title>
+              <desc id="dia-desc">The harness on the host creates a trial container with a fresh volume. The agent runs inside it and reaches the model only through a proxy container on an internal network. The final state of /work is extracted to the host, the container and volume are removed, and graders on the host assert against the extracted state.</desc>
+              <defs>
+                <marker id="arrowhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path class="arrowhead" d="M0,0 L10,5 L0,10 z"></path>
+                </marker>
+              </defs>
+
+              <!-- host -->
+              <rect class="zone-trusted" x="10" y="30" width="306" height="386" rx="6"></rect>
+              <text class="zone-label-t" x="26" y="54">HOST · TRUSTED</text>
+              <rect class="box" x="28" y="72" width="270" height="96" rx="3"></rect>
+              <text class="title" x="42" y="96">meridian harness</text>
+              <text class="small" x="42" y="118">pins image digests in a manifest</text>
+              <text class="small" x="42" y="136">never imports the agent under test</text>
+              <text class="small" x="42" y="154">one container + one volume per trial</text>
+              <rect class="box" x="28" y="262" width="270" height="138" rx="3"></rect>
+              <text class="title" x="42" y="286">graders, host-side</text>
+              <text class="small" x="42" y="308">json_path_equals · file_exists</text>
+              <text class="small" x="42" y="326">sqlite_query_equals · pytest</text>
+              <text class="small" x="42" y="348">outcome, not trajectory: tool</text>
+              <text class="small" x="42" y="366">calls are recorded, never graded</text>
+              <text class="small" x="42" y="388">grader crash = harness_error</text>
+
+              <!-- trial -->
+              <rect class="zone-untrusted" x="360" y="30" width="336" height="386" rx="6"></rect>
+              <text class="zone-label-u" x="376" y="54">TRIAL CONTAINER · UNTRUSTED</text>
+              <rect class="box" x="378" y="72" width="300" height="96" rx="3"></rect>
+              <text class="title" x="392" y="96">agent + adapter</text>
+              <text class="small" x="392" y="118">uid 10001 · read-only rootfs</text>
+              <text class="small" x="392" y="136">cap_drop ALL · no-new-privileges</text>
+              <text class="small" x="392" y="154">env: MERIDIAN_WORKDIR only, no keys</text>
+              <rect class="box" x="378" y="262" width="300" height="138" rx="3"></rect>
+              <text class="title" x="392" y="286">/work · one volume per trial</text>
+              <text class="small" x="392" y="308">the only writable mount</text>
+              <text class="small" x="392" y="326">out/invoice-1042.json</text>
+              <text class="small" x="392" y="344">store.db  (orders table)</text>
+              <text class="small" x="392" y="366">destroyed with the container,</text>
+              <text class="small" x="392" y="384">in a finally, after extraction</text>
+              <path class="arrow" d="M528 168 L528 258"></path>
+              <text class="small" x="537" y="218">writes</text>
+
+              <!-- proxy -->
+              <rect class="zone-proxy" x="742" y="30" width="248" height="222" rx="6"></rect>
+              <text class="zone-label-t" x="758" y="54" style="fill:var(--ink-2)">PROXY CONTAINER</text>
+              <text class="title" x="758" y="84">holds the only credential</text>
+              <text class="small" x="758" y="106">per-trial token + cost budget</text>
+              <text class="small" x="758" y="124">cassettes: ordered tapes per trial</text>
+              <text class="small" x="758" y="142">replay fails closed on a miss</text>
+              <text class="small" x="758" y="176">internal network, no route out:</text>
+              <text class="small" x="758" y="194">the agent cannot reach the</text>
+              <text class="small" x="758" y="212">internet; there is no path</text>
+              <path class="arrow" d="M680 112 L738 112"></path>
+              <path class="arrow" d="M738 132 L684 132"></path>
+              <text class="small" x="686" y="100" style="font-size:9.5px">base_url</text>
+
+              <!-- lifecycle arrows -->
+              <path class="arrow" d="M300 100 L374 100"></path>
+              <path class="arrow" d="M374 330 L302 330"></path>
+              <path class="arrow dashed" d="M163 170 L163 258"></path>
+
+              <circle class="step" cx="337" cy="84" r="11"></circle><text class="step-no" x="333" y="88">1</text>
+              <circle class="step" cx="660" cy="60" r="11"></circle><text class="step-no" x="656" y="64">2</text>
+              <circle class="step" cx="337" cy="314" r="11"></circle><text class="step-no" x="333" y="318">3</text>
+              <circle class="step" cx="660" cy="244" r="11"></circle><text class="step-no" x="656" y="248">4</text>
+              <circle class="step" cx="143" cy="214" r="11"></circle><text class="step-no" x="139" y="218">5</text>
+
+              <text class="small" x="742" y="290">1  create container + fresh volume</text>
+              <text class="small" x="742" y="310">2  agent runs; model calls via proxy</text>
+              <text class="small" x="742" y="330">3  get_archive(/work) → host</text>
+              <text class="small" x="742" y="350">4  container + volume removed</text>
+              <text class="small" x="742" y="370">5  assert on the extracted copy</text>
+              <text class="small" x="742" y="398" style="fill:var(--ink-3)">timeout? kill the container.</text>
+              <text class="small" x="742" y="414" style="fill:var(--ink-3)">auto_remove is off, on purpose.</text>
+            </svg>
+          </div>
+          <p class="diagram-scroll-hint">Scroll sideways to see the whole diagram →</p>
+          <figcaption class="caption">Every container security option lives in one file, <a href="https://github.com/patsypppe/meridian/blob/main/src/meridian/runtime/isolation.py"><code>runtime/isolation.py</code></a>, so the isolation claim is audited by reading one screen. The same line is held against Meridian's own inputs: a task file is untrusted, because in CI a pull request can edit <code>suites/</code>.</figcaption>
+        </figure>
+
+        <ul class="facts reveal" aria-label="Container options, from isolation.py">
+          <li><code>read_only=True</code>the agent cannot install, patch or leave anything outside its mounts</li>
+          <li><code>cap_drop=["ALL"]</code>an eval agent needs no capabilities, and each one kept is a way out</li>
+          <li><code>network_mode="none"</code>or an <code>internal</code> network whose only other member is the proxy</li>
+          <li><code>memswap_limit = mem_limit</code>no swap, so one task's memory ceiling cannot leak into its timeout</li>
+          <li><code>environment={MERIDIAN_WORKDIR}</code>no key can be exfiltrated from a container that never received one</li>
+          <li><code>auto_remove=False</code>removal happens in a <code>finally</code>, after extraction, or a timeout becomes an empty result</li>
+        </ul>
+      </section>
+
+      <!-- §05 probe -->
+      <section class="section" id="probe" aria-labelledby="probe-h">
+        <div class="section-head">
+          <span class="no">§ 05</span>
+          <h2 id="probe-h">An isolation claim that is allowed to fail</h2>
+          <p class="kicker">One task writes a marker into <code>/work</code>. The next asserts it cannot see it. The probe must pass with isolation on, and it must <strong>fail</strong> with <code>--unsafe-shared-env</code>, or it proves nothing.</p>
+        </div>
+
+        <div class="probe reveal" data-bind="probe"></div>
+
+        <div class="audit reveal">
+          <div>
+            <h3 class="label">And your assertions get the same treatment</h3>
+            <p class="caption" style="margin-top:0.6rem"><code>meridian suite audit</code> runs every scored task against agents known not to have done the work. A task that still passes is measuring something weaker than it claims.</p>
+            <p class="verdict-sentence" data-bind="audit-summary"></p>
+          </div>
+          <ul class="adversaries" data-bind="adversaries"></ul>
+        </div>
+      </section>
+
+      <!-- §06 self -->
+      <section class="section" id="self" aria-labelledby="self-h">
+        <div class="section-head">
+          <span class="no">§ 06</span>
+          <h2 id="self-h">Meridian, measured by Meridian</h2>
+          <p class="kicker">A harness that cannot measure itself has no standing to measure anything else. These numbers are <a href="https://github.com/patsypppe/meridian/blob/main/benchmarks/self-eval.json"><code>benchmarks/self-eval.json</code></a>, from 46 real gate runs.</p>
+        </div>
+
+        <div class="selfeval reveal" data-bind="selfeval"></div>
+
+        <div class="miss-note reveal">
+          <span class="label">The miss</span>
+          <p data-bind="miss"></p>
+        </div>
+      </section>
+
+      <!-- §07 run -->
+      <section class="section" id="run" aria-labelledby="run-h">
+        <div class="section-head">
+          <span class="no">§ 07</span>
+          <h2 id="run-h">Run it yourself</h2>
+          <p class="kicker">Python 3.12+, <a href="https://docs.astral.sh/uv/">uv</a> and Docker. No API key: every run on this page talked to a deterministic stand-in provider behind the proxy.</p>
+        </div>
+
+        <ol class="steps">
+          <li>
+            <div>
+              <div class="codeblock"><pre><code><span class="prompt">$ </span>uv sync
+<span class="prompt">$ </span>make db        <span class="prompt"># postgres + migrations</span>
+<span class="prompt">$ </span>make images    <span class="prompt"># build the environment snapshot, pin it by digest</span></code></pre></div>
+              <p>Set up once.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <div class="codeblock"><pre><code><span class="prompt">$ </span>uv run meridian run --suite ./suites/checkout-agent --n 5 --k 3 --proxy-mode replay</code></pre></div>
+              <p>The reference suite, offline, from committed cassettes. This is the run in §03.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <div class="codeblock"><pre><code><span class="prompt">$ </span>uv run meridian gate --suite ./suites/checkout-agent --baseline-ref main --n 5 --k 3</code></pre></div>
+              <p>Would this change block the merge? Exit <code>1</code> means the agent regressed; <code>2</code> means the harness broke. CI never confuses the two.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <div class="codeblock"><pre><code><span class="prompt">$ </span>uv run meridian replay &lt;run-id&gt;
+<span class="prompt">$ </span>uv run meridian suite audit --suite ./suites/checkout-agent</code></pre></div>
+              <p>Reproduce any archived run from its manifest; check whether a task can be passed without doing the work.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <div class="codeblock"><pre><code><span class="prompt">$ </span>make self-eval               <span class="prompt"># ~30 min: 46 real gate runs</span>
+<span class="prompt">$ </span>bash site/data/regenerate.sh  <span class="prompt"># every number on this page</span></code></pre></div>
+              <p>Measure the harness, then rebuild this page's data from fresh runs.</p>
+            </div>
+          </li>
+        </ol>
+      </section>
+    </div>
+  </main>
+
+  <footer class="wrap colophon">
+    <dl data-bind="colophon">
+      <dt>Data</dt><dd><a href="data/showcase.json">data/showcase.json</a> · raw output in <a href="https://github.com/patsypppe/meridian/tree/main/site/data/raw">site/data/raw/</a></dd>
+    </dl>
+    <p>Replayed and stand-in runs measure the scaffold (prompt assembly, tool routing, parsing, state mutation), not model capability. That is what most pull requests change. Recording against a live provider is what catches capability regressions.</p>
+    <p>Meridian · MIT licence · <a href="https://github.com/patsypppe/meridian">github.com/patsypppe/meridian</a></p>
+  </footer>
+
+  <div class="tooltip" role="status" aria-live="polite" data-bind="tooltip"></div>
+</body>
+</html>

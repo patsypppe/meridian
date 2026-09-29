@@ -1,0 +1,28 @@
+run run-1790713717-2c2e21 — suite checkout-agent v1
+status: complete  n=5  k=3
+
+task                      pass     n   pass@3   pass^3
+────────────────────────────────────────────────────────────
+expired-coupon               4     5     1.00     0.40
+expired-on-bulk-order        4     5     1.00     0.40
+expiry-boundary              4     5     1.00     0.40
+happy-path                   4     5     1.00     0.40
+missing-field                5     5     1.00     1.00
+stale-coupon                 4     5     1.00     0.40
+unknown-coupon               4     5     1.00     0.40
+────────────────────────────────────────────────────────────
+suite pass^3                                     0.49
+95% CI (over tasks)                      [0.40, 0.66]
+excluded from the aggregate: contamination-probe, contamination-writer
+harness error rate: 0.0%
+cost: 51c   wall clock: 25.9s
+
+failing trials:
+  expired-coupon[4] fail: SELECT status FROM orders WHERE id = 1042 returned [['pending']], expected [['invoiced']]
+  expired-on-bulk-order[4] fail: SELECT status FROM orders WHERE id = 1045 returned [['pending']], expected [['invoiced']]
+  expiry-boundary[4] fail: SELECT status FROM orders WHERE id = 1046 returned [['pending']], expected [['invoiced']]
+  happy-path[4] fail: SELECT status FROM orders WHERE id = 1041 returned [['pending']], expected [['invoiced']]
+  stale-coupon[4] fail: SELECT status FROM orders WHERE id = 1044 returned [['pending']], expected [['invoiced']]
+  unknown-coupon[4] fail: SELECT status FROM orders WHERE id = 1047 returned [['pending']], expected [['invoiced']]
+
+manifest: sha256:fd50ddedfcbd041fd926470438774da01b2628c45350ed9d6937f8aa1c5a959a

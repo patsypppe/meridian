@@ -1,0 +1,985 @@
+{
+  "generated_at": "2026-09-29T20:36:49Z",
+  "git_head": "1827eda98bd007fca898c8cb41794afa1ebeee3c",
+  "meridian_version": "0.1.0",
+  "stats": {
+    "alpha": 0.05,
+    "power": 0.8,
+    "z_sum": 2.486474860524386,
+    "min_tasks_for_power": 3,
+    "bootstrap_seed": 0,
+    "bootstrap_iterations": 10000
+  },
+  "run": {
+    "run_id": "run-1790713717-2c2e21",
+    "status": "complete",
+    "n": 5,
+    "k": 3,
+    "tasks": [
+      {
+        "task": "expired-coupon",
+        "n": 5,
+        "c": 4,
+        "trials": [
+          {
+            "index": 0,
+            "outcome": "pass",
+            "detail": "",
+            "tool_calls": 5,
+            "turns": 6,
+            "duration_ms": 2095
+          },
+          {
+            "index": 1,
+            "outcome": "pass",
+            "detail": "",
+            "tool_calls": 5,
+            "turns": 6,
+            "duration_ms": 2121
+          },
+          {
+            "index": 2,
+            "outcome": "pass",
+            "detail": "",
+            "tool_calls": 5,
+            "turns": 6,
+            "duration_ms": 1963
+          },
+          {
+            "index": 3,
+            "outcome": "pass",
+            "detail": "",
+            "tool_calls": 5,
+            "turns": 6,
+            "duration_ms": 2162
+          },
+          {
+            "index": 4,
+            "outcome": "fail",
+            "detail": "SELECT status FROM orders WHERE id = 1042 returned [['pending']], expected [['invoiced']]",
+            "tool_calls": 4,
+            "turns": 5,
+            "duration_ms": 1628
+          }
+        ],
+        "pass_at_k": 1.0,
+        "pass_hat_k": 0.4,
+        "mean": 0.8,
+        "failed_assertions": 1
+      },
+      {
+        "task": "expired-on-bulk-order",
+        "n": 5,
+        "c": 4,
+        "trials": [
+          {
+            "index": 0,
+            "outcome": "pass",
+            "detail": "",
+            "tool_calls": 5,
+            "turns": 6,
+            "duration_ms": 1825
+          },
+          {
+            "index": 1,
+            "outcome": "pass",
+            "detail": "",
+            "tool_calls": 5,
+            "turns": 6,
+            "duration_ms": 1939
+          },
+          {
+            "index": 2,
+            "outcome": "pass",
+            "detail": "",
+            "tool_calls": 5,
+            "turns": 6,
+            "duration_ms": 2005
+          },
+          {
+            "index": 3,
+            "outcome": "pass",
+            "detail": "",
+            "tool_calls": 5,
+            "turns": 6,
+            "duration_ms": 1965
+          },
+          {
+            "index": 4,
+            "outcome": "fail",
+            "detail": "SELECT status FROM orders WHERE id = 1045 returned [['pending']], expected [['invoiced']]",
+            "tool_calls": 4,
+            "turns": 5,
+            "duration_ms": 1646
+          }
+        ],
+        "pass_at_k": 1.0,
+        "pass_hat_k": 0.4,
+        "mean": 0.8,
+        "failed_assertions": 1
+      },
+      {
+        "task": "expiry-boundary",
+        "n": 5,
+        "c": 4,
+        "trials": [
+          {
+            "index": 0,
+            "outcome": "pass",
+            "detail": "",
+            "tool_calls": 5,
+            "turns": 6,
+            "duration_ms": 2104
+          },
+          {
+            "index": 1,
+            "outcome": "pass",
+            "detail": "",
+            "tool_calls": 5,
+            "turns": 6,
+            "duration_ms": 2172
+          },
+          {
+            "index": 2,
+            "outcome": "pass",
+            "detail": "",
+            "tool_calls": 5,
+            "turns": 6,
+            "duration_ms": 2138
+          },
+          {
+            "index": 3,
+            "outcome": "pass",
+            "detail": "",
+            "tool_calls": 5,
+            "turns": 6,
+            "duration_ms": 2043
+          },
+          {
+            "index": 4,
+            "outcome": "fail",
+            "detail": "SELECT status FROM orders WHERE id = 1046 returned [['pending']], expected [['invoiced']]",
+            "tool_calls": 4,
+            "turns": 5,
+            "duration_ms": 1639
+          }
+        ],
+        "pass_at_k": 1.0,
+        "pass_hat_k": 0.4,
+        "mean": 0.8,
+        "failed_assertions": 1
+      },
+      {
+        "task": "happy-path",
+        "n": 5,
+        "c": 4,
+        "trials": [
+          {
+            "index": 0,
+            "outcome": "pass",
+            "detail": "",
+            "tool_calls": 5,
+            "turns": 6,
+            "duration_ms": 1984
+          },
+          {
+            "index": 1,
+            "outcome": "pass",
+            "detail": "",
+            "tool_calls": 5,
+            "turns": 6,
+            "duration_ms": 1963
+          },
+          {
+            "index": 2,
+            "outcome": "pass",
+            "detail": "",
+            "tool_calls": 5,
+            "turns": 6,
+            "duration_ms": 1852
+          },
+          {
+            "index": 3,
+            "outcome": "pass",
+            "detail": "",
+            "tool_calls": 5,
+            "turns": 6,
+            "duration_ms": 2026
+          },
+          {
+            "index": 4,
+            "outcome": "fail",
+            "detail": "SELECT status FROM orders WHERE id = 1041 returned [['pending']], expected [['invoiced']]",
+            "tool_calls": 4,
+            "turns": 5,
+            "duration_ms": 1598
+          }
+        ],
+        "pass_at_k": 1.0,
+        "pass_hat_k": 0.4,
+        "mean": 0.8,
+        "failed_assertions": 1
+      },
+      {
+        "task": "missing-field",
+        "n": 5,
+        "c": 5,
+        "trials": [
+          {
+            "index": 0,
+            "outcome": "pass",
+            "detail": "",
+            "tool_calls": 2,
+            "turns": 3,
+            "duration_ms": 1918
+          },
+          {
+            "index": 1,
+            "outcome": "pass",
+            "detail": "",
+            "tool_calls": 2,
+            "turns": 3,
+            "duration_ms": 1967
+          },
+          {
+            "index": 2,
+            "outcome": "pass",
+            "detail": "",
+            "tool_calls": 2,
+            "turns": 3,
+            "duration_ms": 1867
+          },
+          {
+            "index": 3,
+            "outcome": "pass",
+            "detail": "",
+            "tool_calls": 2,
+            "turns": 3,
+            "duration_ms": 1718
+          },
+          {
+            "index": 4,
+            "outcome": "pass",
+            "detail": "",
+            "tool_calls": 2,
+            "turns": 3,
+            "duration_ms": 1634
+          }
+        ],
+        "pass_at_k": 1.0,
+        "pass_hat_k": 1.0,
+        "mean": 1.0,
+        "failed_assertions": 0
+      },
+      {
+        "task": "stale-coupon",
+        "n": 5,
+        "c": 4,
+        "trials": [
+          {
+            "index": 0,
+            "outcome": "pass",
+            "detail": "",
+            "tool_calls": 5,
+            "turns": 6,
+            "duration_ms": 1972
+          },
+          {
+            "index": 1,
+            "outcome": "pass",
+            "detail": "",
+            "tool_calls": 5,
+            "turns": 6,
+            "duration_ms": 1761
+          },
+          {
+            "index": 2,
+            "outcome": "pass",
+            "detail": "",
+            "tool_calls": 5,
+            "turns": 6,
+            "duration_ms": 1878
+          },
+          {
+            "index": 3,
+            "outcome": "pass",
+            "detail": "",
+            "tool_calls": 5,
+            "turns": 6,
+            "duration_ms": 1995
+          },
+          {
+            "index": 4,
+            "outcome": "fail",
+            "detail": "SELECT status FROM orders WHERE id = 1044 returned [['pending']], expected [['invoiced']]",
+            "tool_calls": 4,
+            "turns": 5,
+            "duration_ms": 1625
+          }
+        ],
+        "pass_at_k": 1.0,
+        "pass_hat_k": 0.4,
+        "mean": 0.8,
+        "failed_assertions": 1
+      },
+      {
+        "task": "unknown-coupon",
+        "n": 5,
+        "c": 4,
+        "trials": [
+          {
+            "index": 0,
+            "outcome": "pass",
+            "detail": "",
+            "tool_calls": 5,
+            "turns": 6,
+            "duration_ms": 1910
+          },
+          {
+            "index": 1,
+            "outcome": "pass",
+            "detail": "",
+            "tool_calls": 5,
+            "turns": 6,
+            "duration_ms": 1941
+          },
+          {
+            "index": 2,
+            "outcome": "pass",
+            "detail": "",
+            "tool_calls": 5,
+            "turns": 6,
+            "duration_ms": 1827
+          },
+          {
+            "index": 3,
+            "outcome": "pass",
+            "detail": "",
+            "tool_calls": 5,
+            "turns": 6,
+            "duration_ms": 1802
+          },
+          {
+            "index": 4,
+            "outcome": "fail",
+            "detail": "SELECT status FROM orders WHERE id = 1047 returned [['pending']], expected [['invoiced']]",
+            "tool_calls": 4,
+            "turns": 5,
+            "duration_ms": 1723
+          }
+        ],
+        "pass_at_k": 1.0,
+        "pass_hat_k": 0.4,
+        "mean": 0.8,
+        "failed_assertions": 1
+      }
+    ],
+    "suite_pass_hat_k": 0.485714,
+    "suite_mean": 0.828571,
+    "ci95": [
+      0.4,
+      0.657143
+    ],
+    "harness_error_rate": 0.0,
+    "duration_ms": 25865,
+    "cost_cents": 51,
+    "manifest": "sha256:fd50ddedfcbd041fd926470438774da01b2628c45350ed9d6937f8aa1c5a959a",
+    "excluded": [
+      "contamination-probe",
+      "contamination-writer"
+    ],
+    "table_text": "run run-1790713717-2c2e21 — suite checkout-agent v1\nstatus: complete  n=5  k=3\n\ntask                      pass     n   pass@3   pass^3\n────────────────────────────────────────────────────────────\nexpired-coupon               4     5     1.00     0.40\nexpired-on-bulk-order        4     5     1.00     0.40\nexpiry-boundary              4     5     1.00     0.40\nhappy-path                   4     5     1.00     0.40\nmissing-field                5     5     1.00     1.00\nstale-coupon                 4     5     1.00     0.40\nunknown-coupon               4     5     1.00     0.40\n────────────────────────────────────────────────────────────\nsuite pass^3                                     0.49\n95% CI (over tasks)                      [0.40, 0.66]\nexcluded from the aggregate: contamination-probe, contamination-writer\nharness error rate: 0.0%\ncost: 51c   wall clock: 25.9s"
+  },
+  "gates": [
+    {
+      "name": "degraded-prompt",
+      "title": "Planner prompt loses one sentence",
+      "change": "fixtures/checkout_agent/prompts/planner.md replaced by planner.degraded.md — the sentence telling the agent to check coupon expiry is removed (PR #12).",
+      "verdict": "fail",
+      "blocks_merge": true,
+      "reason": "suite pass^k dropped 0.171 (0.486 → 0.314), p=0.019",
+      "baseline_run": "run-1790713766-3cc6f2",
+      "head_run": "run-1790713794-9c222c",
+      "manifest_prefix": "sha256:bcf6300a2d9ffcea…",
+      "tasks": [
+        {
+          "task": "expired-coupon",
+          "baseline": 0.4,
+          "head": 0.0,
+          "baseline_c": 4,
+          "head_c": 0,
+          "n": 5
+        },
+        {
+          "task": "expired-on-bulk-order",
+          "baseline": 0.4,
+          "head": 0.0,
+          "baseline_c": 4,
+          "head_c": 0,
+          "n": 5
+        },
+        {
+          "task": "expiry-boundary",
+          "baseline": 0.4,
+          "head": 0.4,
+          "baseline_c": 4,
+          "head_c": 4,
+          "n": 5
+        },
+        {
+          "task": "happy-path",
+          "baseline": 0.4,
+          "head": 0.4,
+          "baseline_c": 4,
+          "head_c": 4,
+          "n": 5
+        },
+        {
+          "task": "missing-field",
+          "baseline": 1.0,
+          "head": 1.0,
+          "baseline_c": 5,
+          "head_c": 5,
+          "n": 5
+        },
+        {
+          "task": "stale-coupon",
+          "baseline": 0.4,
+          "head": 0.0,
+          "baseline_c": 4,
+          "head_c": 0,
+          "n": 5
+        },
+        {
+          "task": "unknown-coupon",
+          "baseline": 0.4,
+          "head": 0.4,
+          "baseline_c": 4,
+          "head_c": 4,
+          "n": 5
+        }
+      ],
+      "baseline_suite": 0.485714,
+      "head_suite": 0.314286,
+      "drop": 0.171429,
+      "tolerance": 0.03,
+      "significance_level": 0.05,
+      "p_value": 0.0188,
+      "differences": [
+        -0.4,
+        -0.4,
+        0.0,
+        0.0,
+        0.0,
+        -0.4,
+        0.0
+      ],
+      "spread": 0.213809,
+      "mde": 0.200938,
+      "required_tasks_for_tolerance": 315,
+      "comparable_tasks": 7,
+      "flipped": {
+        "broken": [],
+        "now_always_fails": [
+          "expired-coupon",
+          "expired-on-bulk-order",
+          "stale-coupon"
+        ],
+        "fixed": []
+      },
+      "bootstrap": {
+        "iterations": 10000,
+        "seed": 0,
+        "values": [
+          {
+            "value": -0.4,
+            "count": 17,
+            "at_or_above_zero": false
+          },
+          {
+            "value": -0.342857143,
+            "count": 248,
+            "at_or_above_zero": false
+          },
+          {
+            "value": -0.285714286,
+            "count": 986,
+            "at_or_above_zero": false
+          },
+          {
+            "value": -0.228571429,
+            "count": 2175,
+            "at_or_above_zero": false
+          },
+          {
+            "value": -0.171428571,
+            "count": 3037,
+            "at_or_above_zero": false
+          },
+          {
+            "value": -0.114285714,
+            "count": 2283,
+            "at_or_above_zero": false
+          },
+          {
+            "value": -0.057142857,
+            "count": 1066,
+            "at_or_above_zero": false
+          },
+          {
+            "value": 0.0,
+            "count": 188,
+            "at_or_above_zero": true
+          }
+        ],
+        "share_at_or_above_zero": 0.0188,
+        "observed_mean": -0.17142857142857146
+      },
+      "sensitivity_text": "Sensitivity. Regressions smaller than about 0.201 would more often than not have gone unnoticed by this comparison (80% power, one-sided alpha=0.05). Resolving the configured tolerance of 0.030 would take about 315 comparable tasks; this comparison has 7.",
+      "failures": [
+        {
+          "task": "expired-coupon",
+          "detail": "/work/out/invoice-1042.json $.total_cents is 3999, expected 4999"
+        },
+        {
+          "task": "expired-on-bulk-order",
+          "detail": "/work/out/invoice-1045.json $.total_cents is 24000, expected 30000"
+        },
+        {
+          "task": "expiry-boundary",
+          "detail": "SELECT status FROM orders WHERE id = 1046 returned [['pending']], expected [['invoiced']]"
+        },
+        {
+          "task": "happy-path",
+          "detail": "SELECT status FROM orders WHERE id = 1041 returned [['pending']], expected [['invoiced']]"
+        },
+        {
+          "task": "stale-coupon",
+          "detail": "/work/out/invoice-1044.json $.total_cents is 10200, expected 12000"
+        },
+        {
+          "task": "unknown-coupon",
+          "detail": "SELECT status FROM orders WHERE id = 1047 returned [['pending']], expected [['invoiced']]"
+        }
+      ],
+      "head_cost_cents": 51,
+      "head_duration_ms": 27946,
+      "harness_error_rate": 0.0,
+      "max_harness_error_rate": 0.05,
+      "stale_cassette_rate": 0.0,
+      "max_stale_cassette_rate": 0.1,
+      "run_status": "complete",
+      "comment_markdown": "## Meridian gate\n\n❌ **FAIL** — suite pass^k dropped 0.171 (0.486 → 0.314), p=0.019\n\n**Now fails every trial:** `expired-coupon`, `expired-on-bulk-order`, `stale-coupon`\n\n<details><summary>Failing trials in this run</summary>\n\n- `expired-coupon` — /work/out/invoice-1042.json $.total_cents is 3999, expected 4999\n- `expired-on-bulk-order` — /work/out/invoice-1045.json $.total_cents is 24000, expected 30000\n- `expiry-boundary` — SELECT status FROM orders WHERE id = 1046 returned [['pending']], expected [['invoiced']]\n- `happy-path` — SELECT status FROM orders WHERE id = 1041 returned [['pending']], expected [['invoiced']]\n- `stale-coupon` — /work/out/invoice-1044.json $.total_cents is 10200, expected 12000\n- `unknown-coupon` — SELECT status FROM orders WHERE id = 1047 returned [['pending']], expected [['invoiced']]\n\n</details>\n\n| task | baseline pass^3 | head pass^3 | |\n|---|---|---|---|\n| `expired-coupon` | 0.400 | 0.000 | 🔻 regressed |\n| `expired-on-bulk-order` | 0.400 | 0.000 | 🔻 regressed |\n| `expiry-boundary` | 0.400 | 0.400 |  |\n| `happy-path` | 0.400 | 0.400 |  |\n| `missing-field` | 1.000 | 1.000 |  |\n| `stale-coupon` | 0.400 | 0.000 | 🔻 regressed |\n| `unknown-coupon` | 0.400 | 0.400 |  |\n\n| | baseline | head |\n|---|---|---|\n| suite pass^3 | 0.486 | 0.314 |\n\n**Sensitivity.** Regressions smaller than about **0.201** would more often than not have gone unnoticed by this comparison (80% power, one-sided alpha=0.05). Resolving the configured tolerance of 0.030 would take about **315 comparable tasks**; this comparison has 7.\n\n`n=5` · `k=3` · status `complete` · harness errors 0.0% · cost 51c\n\n<sub>head run `run-1790713794-9c222c` · baseline run `run-1790713766-3cc6f2` · manifest `sha256:bcf6300a2d9ffcea…` · reproduce with `meridian replay run-1790713794-9c222c`</sub>\n"
+    },
+    {
+      "name": "invoice-rounding",
+      "title": "Invoice total rounded down to a dollar",
+      "change": "write_invoice in fixtures/checkout_agent/tools.py writes (total_cents // 100) * 100 — the same seeded bug the self-eval misses.",
+      "verdict": "pass_with_warning",
+      "blocks_merge": false,
+      "reason": "suite pass^k dropped 0.114 but p=0.091 > 0.050; the drop is not distinguishable from noise across this task set",
+      "baseline_run": "run-1790713766-3cc6f2",
+      "head_run": "run-1790713822-53c681",
+      "manifest_prefix": "sha256:51c0aca8d267ca4f…",
+      "tasks": [
+        {
+          "task": "expired-coupon",
+          "baseline": 0.4,
+          "head": 0.0,
+          "baseline_c": 4,
+          "head_c": 0,
+          "n": 5
+        },
+        {
+          "task": "expired-on-bulk-order",
+          "baseline": 0.4,
+          "head": 0.4,
+          "baseline_c": 4,
+          "head_c": 4,
+          "n": 5
+        },
+        {
+          "task": "expiry-boundary",
+          "baseline": 0.4,
+          "head": 0.0,
+          "baseline_c": 4,
+          "head_c": 0,
+          "n": 5
+        },
+        {
+          "task": "happy-path",
+          "baseline": 0.4,
+          "head": 0.4,
+          "baseline_c": 4,
+          "head_c": 4,
+          "n": 5
+        },
+        {
+          "task": "missing-field",
+          "baseline": 1.0,
+          "head": 1.0,
+          "baseline_c": 5,
+          "head_c": 5,
+          "n": 5
+        },
+        {
+          "task": "stale-coupon",
+          "baseline": 0.4,
+          "head": 0.4,
+          "baseline_c": 4,
+          "head_c": 4,
+          "n": 5
+        },
+        {
+          "task": "unknown-coupon",
+          "baseline": 0.4,
+          "head": 0.4,
+          "baseline_c": 4,
+          "head_c": 4,
+          "n": 5
+        }
+      ],
+      "baseline_suite": 0.485714,
+      "head_suite": 0.371429,
+      "drop": 0.114286,
+      "tolerance": 0.03,
+      "significance_level": 0.05,
+      "p_value": 0.0913,
+      "differences": [
+        -0.4,
+        0.0,
+        -0.4,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "spread": 0.19518,
+      "mde": 0.18343,
+      "required_tasks_for_tolerance": 262,
+      "comparable_tasks": 7,
+      "flipped": {
+        "broken": [],
+        "now_always_fails": [
+          "expired-coupon",
+          "expiry-boundary"
+        ],
+        "fixed": []
+      },
+      "bootstrap": {
+        "iterations": 10000,
+        "seed": 0,
+        "values": [
+          {
+            "value": -0.4,
+            "count": 2,
+            "at_or_above_zero": false
+          },
+          {
+            "value": -0.342857143,
+            "count": 22,
+            "at_or_above_zero": false
+          },
+          {
+            "value": -0.285714286,
+            "count": 219,
+            "at_or_above_zero": false
+          },
+          {
+            "value": -0.228571429,
+            "count": 868,
+            "at_or_above_zero": false
+          },
+          {
+            "value": -0.171428571,
+            "count": 2105,
+            "at_or_above_zero": false
+          },
+          {
+            "value": -0.114285714,
+            "count": 3219,
+            "at_or_above_zero": false
+          },
+          {
+            "value": -0.057142857,
+            "count": 2652,
+            "at_or_above_zero": false
+          },
+          {
+            "value": 0.0,
+            "count": 913,
+            "at_or_above_zero": true
+          }
+        ],
+        "share_at_or_above_zero": 0.0913,
+        "observed_mean": -0.1142857142857143
+      },
+      "sensitivity_text": "Sensitivity. Regressions smaller than about 0.183 would more often than not have gone unnoticed by this comparison (80% power, one-sided alpha=0.05). Resolving the configured tolerance of 0.030 would take about 262 comparable tasks; this comparison has 7.",
+      "failures": [
+        {
+          "task": "expired-coupon",
+          "detail": "/work/out/invoice-1042.json $.total_cents is 4900, expected 4999"
+        },
+        {
+          "task": "expired-on-bulk-order",
+          "detail": "SELECT status FROM orders WHERE id = 1045 returned [['pending']], expected [['invoiced']]"
+        },
+        {
+          "task": "expiry-boundary",
+          "detail": "/work/out/invoice-1046.json $.total_cents is 7400, expected 7440"
+        },
+        {
+          "task": "happy-path",
+          "detail": "SELECT status FROM orders WHERE id = 1041 returned [['pending']], expected [['invoiced']]"
+        },
+        {
+          "task": "stale-coupon",
+          "detail": "SELECT status FROM orders WHERE id = 1044 returned [['pending']], expected [['invoiced']]"
+        },
+        {
+          "task": "unknown-coupon",
+          "detail": "SELECT status FROM orders WHERE id = 1047 returned [['pending']], expected [['invoiced']]"
+        }
+      ],
+      "head_cost_cents": 51,
+      "head_duration_ms": 26532,
+      "harness_error_rate": 0.0,
+      "max_harness_error_rate": 0.05,
+      "stale_cassette_rate": 0.0,
+      "max_stale_cassette_rate": 0.1,
+      "run_status": "complete",
+      "comment_markdown": "## Meridian gate\n\n⚠️ **PASS (with warning)** — suite pass^k dropped 0.114 but p=0.091 > 0.050; the drop is not distinguishable from noise across this task set\n\n**Now fails every trial:** `expired-coupon`, `expiry-boundary`\n\n<details><summary>Failing trials in this run</summary>\n\n- `expired-coupon` — /work/out/invoice-1042.json $.total_cents is 4900, expected 4999\n- `expired-on-bulk-order` — SELECT status FROM orders WHERE id = 1045 returned [['pending']], expected [['invoiced']]\n- `expiry-boundary` — /work/out/invoice-1046.json $.total_cents is 7400, expected 7440\n- `happy-path` — SELECT status FROM orders WHERE id = 1041 returned [['pending']], expected [['invoiced']]\n- `stale-coupon` — SELECT status FROM orders WHERE id = 1044 returned [['pending']], expected [['invoiced']]\n- `unknown-coupon` — SELECT status FROM orders WHERE id = 1047 returned [['pending']], expected [['invoiced']]\n\n</details>\n\n| task | baseline pass^3 | head pass^3 | |\n|---|---|---|---|\n| `expired-coupon` | 0.400 | 0.000 | 🔻 regressed |\n| `expired-on-bulk-order` | 0.400 | 0.400 |  |\n| `expiry-boundary` | 0.400 | 0.000 | 🔻 regressed |\n| `happy-path` | 0.400 | 0.400 |  |\n| `missing-field` | 1.000 | 1.000 |  |\n| `stale-coupon` | 0.400 | 0.400 |  |\n| `unknown-coupon` | 0.400 | 0.400 |  |\n\n| | baseline | head |\n|---|---|---|\n| suite pass^3 | 0.486 | 0.371 |\n\n**Sensitivity.** Regressions smaller than about **0.183** would more often than not have gone unnoticed by this comparison (80% power, one-sided alpha=0.05). Resolving the configured tolerance of 0.030 would take about **262 comparable tasks**; this comparison has 7.\n\n`n=5` · `k=3` · status `complete` · harness errors 0.0% · cost 51c\n\n<sub>head run `run-1790713822-53c681` · baseline run `run-1790713766-3cc6f2` · manifest `sha256:51c0aca8d267ca4f…` · reproduce with `meridian replay run-1790713822-53c681`</sub>\n"
+    },
+    {
+      "name": "unchanged",
+      "title": "No change at all",
+      "change": "The agent exactly as committed, gated against its own baseline.",
+      "verdict": "pass",
+      "blocks_merge": false,
+      "reason": "suite pass^k moved -0.000 (0.486 → 0.486), within the 0.030 tolerance",
+      "baseline_run": "run-1790713766-3cc6f2",
+      "head_run": "run-1790713849-c7cede",
+      "manifest_prefix": "sha256:a0a39de90e8f7f53…",
+      "tasks": [
+        {
+          "task": "expired-coupon",
+          "baseline": 0.4,
+          "head": 0.4,
+          "baseline_c": 4,
+          "head_c": 4,
+          "n": 5
+        },
+        {
+          "task": "expired-on-bulk-order",
+          "baseline": 0.4,
+          "head": 0.4,
+          "baseline_c": 4,
+          "head_c": 4,
+          "n": 5
+        },
+        {
+          "task": "expiry-boundary",
+          "baseline": 0.4,
+          "head": 0.4,
+          "baseline_c": 4,
+          "head_c": 4,
+          "n": 5
+        },
+        {
+          "task": "happy-path",
+          "baseline": 0.4,
+          "head": 0.4,
+          "baseline_c": 4,
+          "head_c": 4,
+          "n": 5
+        },
+        {
+          "task": "missing-field",
+          "baseline": 1.0,
+          "head": 1.0,
+          "baseline_c": 5,
+          "head_c": 5,
+          "n": 5
+        },
+        {
+          "task": "stale-coupon",
+          "baseline": 0.4,
+          "head": 0.4,
+          "baseline_c": 4,
+          "head_c": 4,
+          "n": 5
+        },
+        {
+          "task": "unknown-coupon",
+          "baseline": 0.4,
+          "head": 0.4,
+          "baseline_c": 4,
+          "head_c": 4,
+          "n": 5
+        }
+      ],
+      "baseline_suite": 0.485714,
+      "head_suite": 0.485714,
+      "drop": 0.0,
+      "tolerance": 0.03,
+      "significance_level": 0.05,
+      "p_value": null,
+      "differences": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "spread": null,
+      "mde": null,
+      "required_tasks_for_tolerance": null,
+      "comparable_tasks": 7,
+      "flipped": {
+        "broken": [],
+        "now_always_fails": [],
+        "fixed": []
+      },
+      "bootstrap": null,
+      "sensitivity_text": "Sensitivity. Not estimated: all 7 tasks moved by the same amount, so there is no spread to estimate sensitivity from. Treat the verdict as directional.",
+      "failures": [
+        {
+          "task": "expired-coupon",
+          "detail": "SELECT status FROM orders WHERE id = 1042 returned [['pending']], expected [['invoiced']]"
+        },
+        {
+          "task": "expired-on-bulk-order",
+          "detail": "SELECT status FROM orders WHERE id = 1045 returned [['pending']], expected [['invoiced']]"
+        },
+        {
+          "task": "expiry-boundary",
+          "detail": "SELECT status FROM orders WHERE id = 1046 returned [['pending']], expected [['invoiced']]"
+        },
+        {
+          "task": "happy-path",
+          "detail": "SELECT status FROM orders WHERE id = 1041 returned [['pending']], expected [['invoiced']]"
+        },
+        {
+          "task": "stale-coupon",
+          "detail": "SELECT status FROM orders WHERE id = 1044 returned [['pending']], expected [['invoiced']]"
+        },
+        {
+          "task": "unknown-coupon",
+          "detail": "SELECT status FROM orders WHERE id = 1047 returned [['pending']], expected [['invoiced']]"
+        }
+      ],
+      "head_cost_cents": 51,
+      "head_duration_ms": 26690,
+      "harness_error_rate": 0.0,
+      "max_harness_error_rate": 0.05,
+      "stale_cassette_rate": 0.0,
+      "max_stale_cassette_rate": 0.1,
+      "run_status": "complete",
+      "comment_markdown": "## Meridian gate\n\n✅ **PASS** — suite pass^k moved -0.000 (0.486 → 0.486), within the 0.030 tolerance\n\n<details><summary>Failing trials in this run</summary>\n\n- `expired-coupon` — SELECT status FROM orders WHERE id = 1042 returned [['pending']], expected [['invoiced']]\n- `expired-on-bulk-order` — SELECT status FROM orders WHERE id = 1045 returned [['pending']], expected [['invoiced']]\n- `expiry-boundary` — SELECT status FROM orders WHERE id = 1046 returned [['pending']], expected [['invoiced']]\n- `happy-path` — SELECT status FROM orders WHERE id = 1041 returned [['pending']], expected [['invoiced']]\n- `stale-coupon` — SELECT status FROM orders WHERE id = 1044 returned [['pending']], expected [['invoiced']]\n- `unknown-coupon` — SELECT status FROM orders WHERE id = 1047 returned [['pending']], expected [['invoiced']]\n\n</details>\n\n| task | baseline pass^3 | head pass^3 | |\n|---|---|---|---|\n| `expired-coupon` | 0.400 | 0.400 |  |\n| `expired-on-bulk-order` | 0.400 | 0.400 |  |\n| `expiry-boundary` | 0.400 | 0.400 |  |\n| `happy-path` | 0.400 | 0.400 |  |\n| `missing-field` | 1.000 | 1.000 |  |\n| `stale-coupon` | 0.400 | 0.400 |  |\n| `unknown-coupon` | 0.400 | 0.400 |  |\n\n| | baseline | head |\n|---|---|---|\n| suite pass^3 | 0.486 | 0.486 |\n\n**Sensitivity.** Not estimated: all 7 tasks moved by the same amount, so there is no spread to estimate sensitivity from. Treat the verdict as directional.\n\n`n=5` · `k=3` · status `complete` · harness errors 0.0% · cost 51c\n\n<sub>head run `run-1790713849-c7cede` · baseline run `run-1790713766-3cc6f2` · manifest `sha256:a0a39de90e8f7f53…` · reproduce with `meridian replay run-1790713849-c7cede`</sub>\n"
+    }
+  ],
+  "probe": {
+    "isolated": {
+      "label": "isolated",
+      "volume_is_per_trial": true,
+      "trials": [
+        {
+          "task": "contamination-writer",
+          "outcome": "pass",
+          "detail": "",
+          "container_removed": true
+        },
+        {
+          "task": "contamination-probe",
+          "outcome": "pass",
+          "detail": "",
+          "container_removed": true
+        }
+      ]
+    },
+    "shared": {
+      "label": "shared",
+      "volume_is_per_trial": false,
+      "trials": [
+        {
+          "task": "contamination-writer",
+          "outcome": "pass",
+          "detail": "",
+          "container_removed": true
+        },
+        {
+          "task": "contamination-probe",
+          "outcome": "fail",
+          "detail": "/work/marker.txt exists but should not — 18 bytes of state that should not be reachable",
+          "container_removed": true
+        }
+      ]
+    }
+  },
+  "audit": {
+    "adversaries": [
+      "null",
+      "empty-scaffold",
+      "plausible-garbage"
+    ],
+    "audited_tasks": [
+      "expired-coupon",
+      "expired-on-bulk-order",
+      "expiry-boundary",
+      "happy-path",
+      "missing-field",
+      "stale-coupon",
+      "unknown-coupon"
+    ],
+    "findings": [],
+    "weak_task_count": 0
+  },
+  "self_eval": {
+    "source": "benchmarks/self-eval.json",
+    "baseline_suite_pass_hat_k": 0.4857,
+    "config": {
+      "k": 3,
+      "n": 5,
+      "tolerance": 0.03
+    },
+    "contamination_probe": {
+      "with_isolation": "pass",
+      "without_isolation": "fail"
+    },
+    "false_regression_rate": {
+      "false_fails": 0,
+      "rate": 0.0,
+      "runs": 30
+    },
+    "generated_at": "2026-08-22T02:37:14Z",
+    "meridian_version": "0.1.0",
+    "replay_fidelity": {
+      "diffs": [],
+      "exact": 5,
+      "manifests": 5,
+      "rate": 1.0
+    },
+    "run_cost_cents": {
+      "mean": 51
+    },
+    "run_duration_ms": {
+      "mean": 32388,
+      "p95": 33759
+    },
+    "total_duration_s": 1477,
+    "true_positive_rate": {
+      "detected": 4,
+      "missed": [
+        {
+          "name": "break-the-invoice-rounding",
+          "reason": "suite pass^k dropped 0.114 but p=0.091 > 0.050; the drop is not distinguishable from noise across this task set",
+          "verdict": "pass_with_warning"
+        }
+      ],
+      "rate": 0.8,
+      "seeded_regressions": 5
+    }
+  }
+}

@@ -1,0 +1,320 @@
+/* §01 verdict instrument and the shared chart marks. Tokens live in main.css. */
+
+/* ---------- verdict instrument ---------- */
+
+.scenario-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  border: 1px solid var(--rule-strong);
+  width: fit-content;
+  max-width: 100%;
+  margin-bottom: 1.75rem;
+}
+
+.scenario-picker button {
+  appearance: none;
+  border: 0;
+  border-right: 1px solid var(--rule-strong);
+  background: transparent;
+  color: var(--ink-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background var(--duration-fast) ease, color var(--duration-fast) ease;
+}
+
+.scenario-picker button:last-child {
+  border-right: 0;
+}
+
+.scenario-picker button:hover {
+  background: var(--paper-2);
+  color: var(--ink);
+}
+
+.scenario-picker button[aria-selected="true"] {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.scenario-picker .dot {
+  display: inline-block;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  margin-right: 0.45rem;
+  vertical-align: 0.05em;
+  background: currentColor;
+}
+
+.scenario-picker [data-verdict="fail"] .dot { color: var(--fail-fill); }
+.scenario-picker [data-verdict="pass"] .dot { color: var(--pass-fill); }
+.scenario-picker [data-verdict="pass_with_warning"] .dot { color: var(--warn-fill); }
+
+.instrument {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 0;
+  border: 1px solid var(--rule-strong);
+  background: var(--paper);
+}
+
+.panel {
+  padding: clamp(1rem, 2vw, 1.6rem);
+  min-width: 0;
+}
+
+.panel + .panel {
+  border-left: 1px solid var(--rule);
+}
+
+.panel.span {
+  grid-column: 1 / -1;
+  border-left: 0;
+  border-top: 1px solid var(--rule);
+}
+
+.panel h3 {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 500;
+  margin-bottom: 0.9rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+}
+
+.change-line {
+  overflow-wrap: anywhere;
+  font-size: var(--text-sm);
+  color: var(--ink-2);
+  margin-bottom: 1rem;
+}
+
+.verdict-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 1rem;
+  padding: 1rem clamp(1rem, 2vw, 1.6rem);
+  border-bottom: 1px solid var(--rule);
+  grid-column: 1 / -1;
+}
+
+.verdict-banner[data-verdict="fail"] { background: var(--fail-wash); }
+.verdict-banner[data-verdict="pass"] { background: var(--pass-wash); }
+.verdict-banner[data-verdict="pass_with_warning"] { background: var(--warn-wash); }
+
+.verdict-banner .reason {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--ink);
+  flex: 1 1 24rem;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.verdict-banner .blocks {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* decision trace: the order of checks in gate/decide.py */
+.trace {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: step;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+.trace li {
+  display: grid;
+  grid-template-columns: 1.6rem minmax(0, 1fr) auto;
+  gap: 0.6rem;
+  align-items: baseline;
+  padding: 0.55rem 0;
+  border-bottom: 1px dotted var(--rule);
+  color: var(--ink-3);
+}
+
+.trace li::before {
+  counter-increment: step;
+  content: counter(step, decimal-leading-zero);
+  font-size: var(--text-xs);
+}
+
+.trace li[data-state="ok"] { color: var(--ink-2); }
+.trace li[data-state="decided"] { color: var(--ink); font-weight: 600; }
+.trace li[data-state="skipped"] { opacity: 0.55; }
+
+.trace .val {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.trace .mark {
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.chart {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  font-family: var(--font-mono);
+}
+
+.chart text {
+  fill: var(--ink-2);
+  font-size: 11px;
+  /* a paper-coloured halo keeps labels legible where they cross a mark */
+  paint-order: stroke;
+  stroke: var(--paper);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+
+.chart .axis-line { stroke: var(--rule-strong); stroke-width: 1; }
+.chart .grid { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 2 3; }
+.chart .base-dot { fill: var(--paper); stroke: var(--base); stroke-width: 2; }
+.chart .head-dot { stroke: var(--paper); stroke-width: 1.5; }
+.chart .head-dot.down { fill: var(--fail-fill); }
+.chart .head-dot.up { fill: var(--pass-fill); }
+.chart .head-dot.same { fill: var(--ink-2); }
+.chart .link.down { stroke: var(--fail-fill); }
+.chart .link.up { stroke: var(--pass-fill); }
+.chart .link { stroke-width: 3; stroke-linecap: round; opacity: 0.55; }
+.chart .row-hit { fill: transparent; }
+.chart .row:hover .row-hit,
+.chart .row:focus .row-hit { fill: var(--paper-2); }
+.chart .row:focus { outline: none; }
+.chart .row:focus-visible .row-hit { stroke: var(--focus); stroke-width: 2; }
+.chart .task-label { fill: var(--ink); font-size: 11.5px; }
+.chart .tag-fail { fill: var(--fail); font-size: 10px; letter-spacing: 0.04em; }
+.chart .tol-band { fill: var(--pass-fill); opacity: var(--band-opacity, 0.16); }
+.chart .blind { fill: url(#hatch); }
+.chart .blind-edge { stroke: var(--warn-fill); stroke-width: 1.5; stroke-dasharray: 4 3; }
+.chart .hatch-line { stroke: var(--warn-fill); stroke-width: 1.2; opacity: 0.55; }
+.chart .marker-base { stroke: var(--base); stroke-width: 2; }
+.chart .marker-head { stroke-width: 2.5; }
+.chart .strong { fill: var(--ink); font-weight: 600; }
+.chart .bar-neg { fill: var(--fail-fill); opacity: 0.8; }
+.chart .bar-pos { fill: var(--ink-3); opacity: 0.55; }
+.chart .zero-line { stroke: var(--ink); stroke-width: 1.5; }
+.chart .curve { fill: none; stroke: var(--accent); stroke-width: 2.5; }
+.chart .curve-area { fill: var(--warn-fill); opacity: 0.1; }
+.chart .ref-line { stroke-width: 1.5; stroke-dasharray: 5 4; }
+.chart .ref-fail { stroke: var(--fail-fill); }
+.chart .ref-warn { stroke: var(--warn-fill); }
+.chart .ref-tol { stroke: var(--pass-fill); }
+.chart .cursor { stroke: var(--ink); stroke-width: 1; }
+.chart .cursor-dot { fill: var(--accent); stroke: var(--paper); stroke-width: 2; }
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.1rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--ink-2);
+  margin-top: 0.75rem;
+  padding: 0;
+  list-style: none;
+}
+
+.legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.swatch {
+  width: 0.8rem;
+  height: 0.8rem;
+  display: inline-block;
+  border-radius: 50%;
+}
+
+.swatch.base { border: 2px solid var(--base); }
+.swatch.down { background: var(--fail-fill); }
+.swatch.up { background: var(--pass-fill); }
+.swatch.same { background: var(--ink-2); }
+.swatch.band { border-radius: 0; background: var(--pass-fill); opacity: 0.35; }
+.swatch.blind {
+  border-radius: 0;
+  background: repeating-linear-gradient(45deg, var(--warn-fill) 0 2px, transparent 2px 5px);
+}
+
+.caption {
+  font-size: var(--text-sm);
+  color: var(--ink-2);
+  margin-top: 0.9rem;
+  max-width: 68ch;
+}
+
+.caption strong {
+  color: var(--ink);
+}
+
+.tooltip {
+  position: fixed;
+  pointer-events: none;
+  z-index: 20;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 1.45;
+  padding: 0.55rem 0.7rem;
+  border-radius: var(--radius-s);
+  max-width: min(22rem, calc(100vw - 2rem));
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity var(--duration-fast) ease, transform var(--duration-fast) ease;
+}
+
+.tooltip[data-open="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+details.comment {
+  border-top: 1px solid var(--rule);
+  grid-column: 1 / -1;
+}
+
+details.comment summary {
+  cursor: pointer;
+  padding: 0.85rem clamp(1rem, 2vw, 1.6rem);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--ink-2);
+}
+
+details.comment summary:hover {
+  color: var(--ink);
+  background: var(--paper-2);
+}
+
+details.comment pre {
+  margin: 0;
+  padding: 1rem clamp(1rem, 2vw, 1.6rem) 1.25rem;
+  background: var(--paper-2);
+  overflow-x: auto;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

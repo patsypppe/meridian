@@ -1,0 +1,38 @@
+{
+  "isolated": {
+    "label": "isolated",
+    "volume_is_per_trial": true,
+    "trials": [
+      {
+        "task": "contamination-writer",
+        "outcome": "pass",
+        "detail": "",
+        "container_removed": true
+      },
+      {
+        "task": "contamination-probe",
+        "outcome": "pass",
+        "detail": "",
+        "container_removed": true
+      }
+    ]
+  },
+  "shared": {
+    "label": "shared",
+    "volume_is_per_trial": false,
+    "trials": [
+      {
+        "task": "contamination-writer",
+        "outcome": "pass",
+        "detail": "",
+        "container_removed": true
+      },
+      {
+        "task": "contamination-probe",
+        "outcome": "fail",
+        "detail": "/work/marker.txt exists but should not \u2014 18 bytes of state that should not be reachable",
+        "container_removed": true
+      }
+    ]
+  }
+}
