@@ -5,6 +5,9 @@ on:
     branches: [main]
   pull_request:
 
+permissions:
+  contents: read
+
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
@@ -12,6 +15,7 @@ concurrency:
 jobs:
   static:
     name: lint + types + unit
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -30,6 +34,7 @@ jobs:
 
   integration:
     name: integration (docker)
+    timeout-minutes: 30
     runs-on: ubuntu-latest
     needs: static
     services:
@@ -65,6 +70,7 @@ jobs:
 
   e2e:
     name: e2e (run, replay, gate)
+    timeout-minutes: 30
     runs-on: ubuntu-latest
     needs: integration
     if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
