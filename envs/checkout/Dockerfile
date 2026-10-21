@@ -18,7 +18,7 @@ RUN pip install --no-cache-dir \
         "langchain-core==0.3.34" \
         "httpx==0.28.1" \
         "pydantic==2.10.6" \
-    && find / -name '__pycache__' -type d -prune -exec rm -rf {} + 2>/dev/null || true
+    && { find / -name '__pycache__' -type d -prune -exec rm -rf {} + 2>/dev/null || true; }
 
 # The seed is baked in and copied into the workdir at trial start, so every
 # trial gets a byte-identical starting state from a read-only layer.
