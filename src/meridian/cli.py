@@ -13,6 +13,7 @@ import typer
 
 from meridian import exit_codes
 from meridian.docker_client import DockerUnavailableError, get_client
+from meridian.models.run import RunResult, RunStatus
 from meridian.snapshots.build import (
     SnapshotBuildError,
     build_snapshot,
@@ -371,6 +372,7 @@ def run(
         include_probes=include_probes,
         use_stub_provider=not live_provider,
         progress=err,
+        history=_prior_runs(loaded.slug),
     )
 
     try:
@@ -408,6 +410,28 @@ def run(
             encoding="utf-8",
         )
         err(f"wrote {html_out}")
+
+
+def _prior_runs(suite_slug: str, limit: int = 2) -> list[RunResult]:
+    """The last few archived results of this suite, oldest first.
+
+    Quarantine needs three observations and the run in hand is one of them. An
+    unreadable archive entry is skipped: history is advisory, and a corrupt file
+    must not stop a run.
+    """
+    from meridian.manifest import store as run_store
+
+    found: list[RunResult] = []
+    for run_id in reversed(run_store.list_runs()):
+        try:
+            result = run_store.load_result(run_id)
+        except (run_store.RunNotFoundError, ValueError):
+            continue
+        if result.suite_slug == suite_slug and result.status is RunStatus.COMPLETE:
+            found.append(result)
+        if len(found) == limit:
+            break
+    return list(reversed(found))
 
 
 def _record_to_database(config: object, suite: object, outcome: object) -> None:

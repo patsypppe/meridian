@@ -149,7 +149,7 @@ def _failures(run: RunResult, limit: int = 12) -> str:
 
 def render(run: RunResult, *, manifest_hash: str | None = None) -> str:
     """A complete, self-contained HTML document."""
-    scored = [t for t in run.tasks if t.n > 0]
+    scored = [t for t in run.tasks if t.n > 0 and t.task_slug not in run.quarantined_task_slugs]
     suite_hat = (
         sum(pass_hat_k(t.n, t.c, min(run.k, t.n)) for t in scored) / len(scored) if scored else 0.0
     )
@@ -187,6 +187,14 @@ def render(run: RunResult, *, manifest_hash: str | None = None) -> str:
         else ""
     )
 
+    quarantined = (
+        f"<p class='note'>Quarantined, and left out of the aggregate: "
+        f"{_e(', '.join(run.quarantined_task_slugs))} — pass rate varied too much across "
+        f"recent runs to carry signal. Still listed in the table above.</p>"
+        if run.quarantined_task_slugs
+        else ""
+    )
+
     return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -214,6 +222,7 @@ def render(run: RunResult, *, manifest_hash: str | None = None) -> str:
 The solid bar is pass^{run.k} — all {run.k} work. The gap is the part a mean score
 hides.</p>
 {excluded}
+{quarantined}
 
 <h2>Failing trials</h2>
 {_failures(run)}

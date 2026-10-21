@@ -215,6 +215,18 @@ def record_run(
             ),
         )
 
+    # Quarantine is a judgement across runs, so it is written back to the task row
+    # rather than inferred later. `withdrawn` is a human decision and is left alone.
+    connection.execute(
+        "UPDATE task SET state = CASE WHEN slug = ANY(%s) THEN 'quarantined' ELSE 'active' END "
+        "WHERE suite_version_id = %s AND state <> 'withdrawn' AND slug = ANY(%s)",
+        (
+            list(result.quarantined_task_slugs),
+            suite_version_id,
+            [task.task_slug for task in result.tasks],
+        ),
+    )
+
     connection.commit()
     return result.run_id
 

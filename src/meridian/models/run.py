@@ -141,6 +141,7 @@ class RunResult(BaseModel):
     n_requested: int
     tasks: tuple[TaskResult, ...]
     excluded_task_slugs: tuple[str, ...] = ()
+    quarantined_task_slugs: tuple[str, ...] = ()
     detail: str = ""
     started_unix_ms: int = 0
     duration_ms: int = 0

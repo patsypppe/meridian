@@ -35,6 +35,7 @@ from meridian.runtime.proxy.session import ProxyHandle, start_proxy, stop_proxy
 from meridian.runtime.pytest_runner import ContainerPytestRunner
 from meridian.runtime.scheduler import run_tasks
 from meridian.runtime.trial_runner import TrialRunner, sweep_orphans
+from meridian.suites.quarantine import quarantined_slugs
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
     from docker import DockerClient
@@ -68,6 +69,9 @@ class RunRequest:
     stub_slip_every: int | None = None
     repo_root: Path | None = None
     progress: Progress | None = None
+    # Earlier results of this suite, oldest first. Quarantine is judged across runs,
+    # and a single run cannot see its own history, so the caller supplies it.
+    history: Sequence[RunResult] = ()
 
     def tasks(self) -> list[TaskDefinition]:
         if self.include_probes:
@@ -204,6 +208,10 @@ async def execute(client: DockerClient, request: RunRequest) -> RunOutcome:
         duration_ms=int((time.time() - started) * 1000),
         cost_cents=cost_cents,
     )
+    if request.history:
+        result = result.model_copy(
+            update={"quarantined_task_slugs": quarantined_slugs(request.history, [result])}
+        )
 
     manifest = build_manifest(
         suite=request.suite,
