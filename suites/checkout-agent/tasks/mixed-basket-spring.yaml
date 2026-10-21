@@ -1,0 +1,49 @@
+slug: mixed-basket-spring
+description: >
+  A valid 10% coupon on a mixed basket of two SKUs. The discount lands on a half-cent boundary region and the invoice total ends in non-zero cents.
+
+provenance:
+  synthetic_reason: >
+    authored to give the paired test power over rounding regressions: mixed-basket order where discount arithmetic must be done on the subtotal, not per line.
+    The original seven tasks mostly invoice whole-dollar totals, which a
+    rounding regression leaves unchanged.
+
+environment:
+  snapshot: "sha256:9167c10ab93fe8c4c1b338e9bc063a83b66edab38c74cdb0d2b74b04a6777f34"
+  workdir: /work
+  network: proxy-only
+  resources:
+    cpus: 2.0
+    memory_mb: 2048
+    pids: 256
+
+input:
+  prompt_file: prompts/order-1049.txt
+  files:
+    - src: seed/order-1049.json
+      dest: /work/orders/order-1049.json
+
+limits:
+  timeout_seconds: 300
+  max_tokens: 60000
+  budget_cents: 25
+
+outcome_assertions:
+  - kind: json_path_equals
+    path: /work/out/invoice-1049.json
+    json_path: "$.total_cents"
+    expected: 3824
+  - kind: json_path_equals
+    path: /work/out/invoice-1049.json
+    json_path: "$.coupon.applied"
+    expected: true
+  - kind: sqlite_query_equals
+    database: /work/store.db
+    query: "SELECT status FROM orders WHERE id = 1049"
+    expected: [["invoiced"]]
+
+efficiency_expectations:
+  max_tool_calls: 12
+  max_turns: 8
+
+tags: [pricing, coupons, rounding]

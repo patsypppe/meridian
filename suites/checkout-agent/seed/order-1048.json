@@ -1,0 +1,13 @@
+{
+  "order_id": 1048,
+  "as_of": "2026-08-14",
+  "customer": "Margaret Hamilton",
+  "items": [
+    {
+      "sku": "MRD-008",
+      "qty": 3,
+      "unit_cents": 1333
+    }
+  ],
+  "coupon_code": "AUTUMN12"
+}

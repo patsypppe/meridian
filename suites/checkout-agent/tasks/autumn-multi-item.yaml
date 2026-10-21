@@ -1,0 +1,49 @@
+slug: autumn-multi-item
+description: >
+  A valid 12% coupon on three identical items. The subtotal is not a whole number of dollars, so the discount rounds to a non-round total.
+
+provenance:
+  synthetic_reason: >
+    authored to give the paired test power over rounding regressions: multi-item order with a non-round-dollar subtotal; rounding of the discount is the thing under test.
+    The original seven tasks mostly invoice whole-dollar totals, which a
+    rounding regression leaves unchanged.
+
+environment:
+  snapshot: "sha256:9167c10ab93fe8c4c1b338e9bc063a83b66edab38c74cdb0d2b74b04a6777f34"
+  workdir: /work
+  network: proxy-only
+  resources:
+    cpus: 2.0
+    memory_mb: 2048
+    pids: 256
+
+input:
+  prompt_file: prompts/order-1048.txt
+  files:
+    - src: seed/order-1048.json
+      dest: /work/orders/order-1048.json
+
+limits:
+  timeout_seconds: 300
+  max_tokens: 60000
+  budget_cents: 25
+
+outcome_assertions:
+  - kind: json_path_equals
+    path: /work/out/invoice-1048.json
+    json_path: "$.total_cents"
+    expected: 3519
+  - kind: json_path_equals
+    path: /work/out/invoice-1048.json
+    json_path: "$.coupon.applied"
+    expected: true
+  - kind: sqlite_query_equals
+    database: /work/store.db
+    query: "SELECT status FROM orders WHERE id = 1048"
+    expected: [["invoiced"]]
+
+efficiency_expectations:
+  max_tool_calls: 12
+  max_turns: 8
+
+tags: [pricing, coupons, rounding]

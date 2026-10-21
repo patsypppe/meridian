@@ -433,3 +433,44 @@ Fix the assertion, not the adversary:
 
 Re-run the audit after the fix. A clean audit does not prove the assertions are
 *right* — only that they are not trivially satisfiable, which is the floor.
+
+---
+
+## 21. A task was quarantined, or "a task I care about vanished from the aggregate"
+
+```
+flaky-task                   3     5     0.90     0.10   QUARANTINED
+suite pass^3                                     0.52
+quarantined (variance > 0.25 across 3 runs): flaky-task
+```
+
+The task's pass rate swung too far across its last three archived runs
+(sample variance of the per-run pass rate above `0.25`; `0.0 / 1.0 / 0.0` is
+`0.33`, `0.8 / 0.8 / 0.6` is `0.01`). A task that flips between runs says more
+about the suite than about the agent, so it is left out of the **table's
+suite-level aggregate** and its confidence interval. It is never hidden: the row
+stays, the flag is on it, and the line beneath names every quarantined task.
+
+What Meridian already did: nothing was deleted or retried, and the task still ran.
+With a database configured the task row is marked `quarantined`.
+
+What it does **not** do: the `meridian gate` verdict is unaffected. Quarantine
+changes the printed aggregate, never the comparison, because letting the same
+mechanism that flags noise also soften a regression verdict would be a way to
+make a failing gate pass by making the failing task flaky.
+
+**Fewer than three runs never quarantines.** A task is not condemned on thin
+evidence, and a run in which the task had no gradeable trial (all harness errors)
+contributes no observation at all rather than a pass rate of zero.
+
+What is left for you:
+
+1. Read the failing trials (`failing trials:` beneath the table). If the failures
+   are the agent's, the task is doing its job and the *agent* is flaky: fix the
+   agent, and the task leaves quarantine by itself after three steady runs.
+2. If the failures are the task's, such as a race in the environment, a grader that
+   depends on ordering, or a prompt with two valid readings, fix the task. That
+   changes its definition and therefore the manifest, so re-baseline.
+3. To lift quarantine by hand, archive three steady runs, or delete the unwanted
+   entries under `runs/`. History is read from there. There is no flag to switch
+   quarantine off, on purpose.

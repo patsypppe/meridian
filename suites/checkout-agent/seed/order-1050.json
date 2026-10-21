@@ -1,0 +1,13 @@
+{
+  "order_id": 1050,
+  "as_of": "2026-08-14",
+  "customer": "Dorothy Vaughan",
+  "items": [
+    {
+      "sku": "MRD-011",
+      "qty": 2,
+      "unit_cents": 1737
+    }
+  ],
+  "coupon_code": "HALFOFF50"
+}

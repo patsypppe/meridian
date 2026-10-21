@@ -12,7 +12,7 @@ from pathlib import Path
 
 TARGET = Path(__file__).parent / "store.db"
 
-ORDERS = [(order_id, "pending", None) for order_id in range(1041, 1048)]
+ORDERS = [(order_id, "pending", None) for order_id in range(1041, 1053)]
 
 COUPONS = [
     ("SPRING10", 10, "2026-12-31"),
@@ -20,6 +20,8 @@ COUPONS = [
     ("LAUNCH15", 15, "2026-02-01"),  # expired by months
     ("BOUNDARY7", 7, "2026-08-14"),  # expires exactly on as_of, so it is still valid
     ("WELCOME5", 5, "2027-06-30"),
+    ("AUTUMN12", 12, "2026-12-31"),
+    ("HALFOFF50", 50, "2026-01-15"),  # expired by months, and large enough to notice
 ]
 
 

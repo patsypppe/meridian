@@ -280,3 +280,43 @@ def test_an_unreachable_database_is_not_fatal_to_a_run() -> None:
         repo.connect("postgresql://nobody@127.0.0.1:1/none"),
     ):
         pass
+
+
+def test_quarantine_is_written_back_to_the_task_and_can_be_lifted(scratch_database: str) -> None:
+    from meridian.config import load_config
+
+    run_migrations(scratch_database)
+    suite = load_suite(CHECKOUT_SUITE)
+    config = load_config(overrides={"execution": {"n_trials": 5, "k": 3}})
+
+    def record(run_id: str, quarantined: tuple[str, ...]) -> None:
+        manifest = build_manifest(
+            suite=suite,
+            config=config,
+            run_id=run_id,
+            created_unix_ms=1_756_000_000_000,
+            repo_root=Path(REPO_ROOT),
+        )
+        result = make_result(run_id).model_copy(update={"quarantined_task_slugs": quarantined})
+        with repo.connect(scratch_database) as connection:
+            repo.record_run(connection, suite=suite, manifest=manifest, result=result)
+
+    def state() -> str:
+        with repo.connect(scratch_database) as connection:
+            row = connection.execute("SELECT state FROM task WHERE slug = 'happy-path'").fetchone()
+            assert row is not None
+            return str(row[0])
+
+    record("run-q1", ("happy-path",))
+    assert state() == "quarantined"
+
+    # A later run in which the task steadied lifts it again.
+    record("run-q2", ())
+    assert state() == "active"
+
+    # `withdrawn` is a human decision; no run overrides it.
+    with repo.connect(scratch_database) as connection:
+        connection.execute("UPDATE task SET state = 'withdrawn' WHERE slug = 'happy-path'")
+        connection.commit()
+    record("run-q3", ("happy-path",))
+    assert state() == "withdrawn"

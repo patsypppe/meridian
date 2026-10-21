@@ -1,0 +1,18 @@
+{
+  "order_id": 1049,
+  "as_of": "2026-08-14",
+  "customer": "Katherine Johnson",
+  "items": [
+    {
+      "sku": "MRD-009",
+      "qty": 1,
+      "unit_cents": 2499
+    },
+    {
+      "sku": "MRD-010",
+      "qty": 2,
+      "unit_cents": 875
+    }
+  ],
+  "coupon_code": "SPRING10"
+}
