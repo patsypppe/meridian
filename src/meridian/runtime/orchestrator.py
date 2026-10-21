@@ -15,6 +15,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
+from meridian import tracing
 from meridian.config import MeridianConfig, ProxyMode, RunMode
 from meridian.grading.pipeline import grade_task
 from meridian.manifest.build import build_manifest
@@ -81,6 +82,18 @@ class RunRequest:
 
 async def execute(client: DockerClient, request: RunRequest) -> RunOutcome:
     """Run a suite and return its result. Never raises for an agent failure."""
+    tracing.configure(request.config.observability)
+    with tracing.span("meridian.run", run_id=request.run_id, suite=request.suite.slug) as run_span:
+        outcome = await _execute(client, request)
+        run_span.set(
+            status=str(outcome.result.status),
+            tasks=len(outcome.result.tasks),
+            trials=outcome.result.total_trials,
+        )
+    return outcome
+
+
+async def _execute(client: DockerClient, request: RunRequest) -> RunOutcome:
     config = request.config
     config.validate_for(request.mode)
 

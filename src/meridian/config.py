@@ -113,6 +113,16 @@ class StoreConfig(BaseModel):
     database_url: str | None = None
 
 
+class ObservabilityConfig(BaseModel):
+    """OpenTelemetry export. Off unless enabled, and never part of a manifest."""
+
+    model_config = _FROZEN
+
+    enabled: bool = False
+    endpoint: str = ""
+    service_name: str = "meridian"
+
+
 class MeridianConfig(BaseModel):
     model_config = _FROZEN
 
@@ -121,9 +131,12 @@ class MeridianConfig(BaseModel):
     gate: GateConfig = GateConfig()
     stats: StatsConfig = StatsConfig()
     store: StoreConfig = StoreConfig()
+    observability: ObservabilityConfig = ObservabilityConfig()
 
     def config_hash(self) -> str:
-        return content_hash(self.model_dump(mode="json"))
+        # Observability is how a run is watched, not what it measured. Hashing it
+        # would make turning on tracing look like a different experiment (Rule 4).
+        return content_hash(self.model_dump(mode="json", exclude={"observability"}))
 
     def validate_for(self, mode: RunMode) -> None:
         """Reject configurations whose numbers must never be acted on.

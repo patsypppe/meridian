@@ -12,6 +12,7 @@ import asyncio
 import hashlib
 from collections.abc import Awaitable, Callable, Sequence
 
+from meridian import tracing
 from meridian.models.run import TaskResult, TrialResult, TrialSpec
 from meridian.models.suite import Suite
 from meridian.models.task import TaskDefinition
@@ -75,7 +76,14 @@ async def run_task(
 
     async def one(spec: TrialSpec) -> TrialResult:
         async with semaphore:
-            result = await dispatch(task, spec)
+            with tracing.span(
+                "meridian.trial",
+                task_slug=task.slug,
+                trial_index=spec.trial_index,
+                run_id=spec.run_id,
+            ) as trial_span:
+                result = await dispatch(task, spec)
+                trial_span.set(outcome=str(result.outcome), attempts=result.attempts)
             if progress is not None:
                 progress(f"{task.slug} trial {spec.trial_index}: {result.outcome}")
             return result
