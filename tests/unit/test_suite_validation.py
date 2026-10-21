@@ -100,6 +100,11 @@ def test_reference_suite_loads_and_separates_probes() -> None:
         "expiry-boundary",
         "unknown-coupon",
         "missing-field",
+        "autumn-multi-item",
+        "mixed-basket-spring",
+        "half-off-expired",
+        "boundary-bulk",
+        "welcome-large-item",
     }
     # The contamination pair measures Meridian, not the agent, and must never
     # contribute to a reported score.
