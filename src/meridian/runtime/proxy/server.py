@@ -105,7 +105,12 @@ async def _call_upstream(
         headers[credential.header_name] = credential.header_value
     base = state.config.upstream_base_url.rstrip("/")
     url = f"{base}/chat/completions" if openai else f"{base}/v1/messages"
-    payload = to_openai_request(body, model=state.config.upstream_model) if openai else body
+    if openai:
+        payload = to_openai_request(body, model=state.config.upstream_model)
+    elif state.config.upstream_model:
+        payload = {**body, "model": state.config.upstream_model}
+    else:
+        payload = body
     async with httpx.AsyncClient(timeout=UPSTREAM_TIMEOUT_SECONDS) as client:
         response = await client.post(url, json=payload, headers=headers)
     response.raise_for_status()

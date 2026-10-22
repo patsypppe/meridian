@@ -192,3 +192,49 @@ async def test_proxy_translates_on_the_wire(
     assert seen["auth"] == "Bearer gsk_test_key_value"
     assert seen["body"]["model"] == "llama-3.3-70b-versatile"  # type: ignore[index]
     assert seen["body"]["messages"] == [{"role": "user", "content": "x"}]  # type: ignore[index]
+
+
+async def test_anthropic_upstream_model_override(
+    tmp_path: pytest.TempPathFactory, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    seen: dict[str, object] = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen["url"] = str(request.url)
+        seen["body"] = json.loads(request.content)
+        return httpx.Response(
+            200,
+            json={
+                "type": "message",
+                "content": [],
+                "usage": {"input_tokens": 1, "output_tokens": 1},
+            },
+        )
+
+    real_client = httpx.AsyncClient
+    monkeypatch.setattr(
+        server_module.httpx,
+        "AsyncClient",
+        lambda **kw: real_client(**{"transport": httpx.MockTransport(handler), **kw}),
+    )
+    from meridian.runtime.secrets import ProviderCredential
+
+    app = create_app(
+        ProxyConfig(
+            mode=ProxyMode.RECORD,
+            cassette_dir=tmp_path,  # type: ignore[arg-type]
+            limits={},
+            upstream_model="claude-haiku-4-5-20251001",
+            credential=ProviderCredential(env_var="ANTHROPIC_API_KEY", value="sk-ant-test-value"),
+        )
+    )
+    async with httpx.AsyncClient(
+        transport=httpx.ASGITransport(app=app), base_url="http://proxy"
+    ) as client:
+        await client.post(
+            "/v1/messages",
+            json={"model": "agent-chose-this", "max_tokens": 8, "messages": []},
+            headers={"x-meridian-task": "happy-path", "x-meridian-trial": "0"},
+        )
+    assert seen["url"] == "https://api.anthropic.com/v1/messages"
+    assert seen["body"]["model"] == "claude-haiku-4-5-20251001"  # type: ignore[index]
