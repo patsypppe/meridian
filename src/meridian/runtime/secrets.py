@@ -14,10 +14,10 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass
 
-PROVIDER_ENV_VARS = ("ANTHROPIC_API_KEY", "OPENAI_API_KEY")
+PROVIDER_ENV_VARS = ("ANTHROPIC_API_KEY", "OPENAI_API_KEY", "GROQ_API_KEY")
 
 # Anything matching one of these prefixes is redacted before it can be printed.
-SECRET_PREFIXES = ("sk-ant-", "sk-", "gho_", "ghp_")
+SECRET_PREFIXES = ("sk-ant-", "sk-", "gsk_", "gho_", "ghp_")
 
 REDACTION = "«redacted»"
 

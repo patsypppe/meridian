@@ -8,6 +8,7 @@ that fails.
 
 from __future__ import annotations
 
+import os
 import time
 import uuid
 from collections.abc import Callable, Sequence
@@ -104,6 +105,11 @@ async def execute(client: DockerClient, request: RunRequest) -> RunOutcome:
             run_budget_cents=config.execution.budget_cents,
             use_stub_provider=request.use_stub_provider,
             stub_slip_every=request.stub_slip_every,
+            # A live run reaches its provider only through the proxy. Set
+            # MERIDIAN_UPSTREAM_API=openai and MERIDIAN_UPSTREAM_BASE_URL to use an
+            # OpenAI-compatible provider (e.g. https://api.groq.com/openai/v1).
+            upstream_base_url=os.environ.get("MERIDIAN_UPSTREAM_BASE_URL") or None,
+            upstream_api=os.environ.get("MERIDIAN_UPSTREAM_API") or None,
         )
         progress(f"proxy up in {config.execution.proxy_mode} mode on {handle.network_name}")
 

@@ -23,6 +23,7 @@ from starlette.routing import Route
 from meridian.config import ProxyMode
 from meridian.runtime.proxy.budget import BudgetExceeded, BudgetLedger, TrialLimits
 from meridian.runtime.proxy.cassette import CassetteMiss, CassetteStore, request_key
+from meridian.runtime.proxy.openai_compat import from_openai_response, to_openai_request
 from meridian.runtime.secrets import ProviderCredential, load_credential
 
 TASK_HEADER = "x-meridian-task"
@@ -33,6 +34,12 @@ ANTHROPIC_VERSION = "2023-06-01"
 
 UPSTREAM_TIMEOUT_SECONDS = 120.0
 
+# Which wire format the upstream speaks. The agent always speaks Anthropic
+# messages to the proxy; "openai" makes the proxy translate to chat completions
+# (Groq, OpenAI, vLLM, Ollama, ...) so the key and the cassette format stay put.
+UPSTREAM_API_ANTHROPIC = "anthropic"
+UPSTREAM_API_OPENAI = "openai"
+
 
 @dataclass
 class ProxyConfig:
@@ -41,6 +48,7 @@ class ProxyConfig:
     limits: dict[str, TrialLimits]
     run_budget_cents: int | None = None
     upstream_base_url: str = ANTHROPIC_BASE_URL
+    upstream_api: str = UPSTREAM_API_ANTHROPIC
     credential: ProviderCredential | None = None
     # Whether the upstream needs authenticating at all. A real provider does; the
     # deterministic stand-in provider used to record cassettes offline does not,
@@ -77,8 +85,8 @@ async def _call_upstream(
     task_slug: str = "",
     trial_index: int = 0,
 ) -> dict[str, Any]:
+    openai = state.config.upstream_api == UPSTREAM_API_OPENAI
     headers = {
-        "anthropic-version": ANTHROPIC_VERSION,
         "content-type": "application/json",
         # Forwarded so a stand-in provider can vary its behaviour per trial. A
         # real provider ignores them; without them every trial of a task would
@@ -86,16 +94,19 @@ async def _call_upstream(
         TASK_HEADER: task_slug,
         TRIAL_HEADER: str(trial_index),
     }
+    if not openai:
+        headers["anthropic-version"] = ANTHROPIC_VERSION
     if state.config.requires_credential:
         credential = state.config.credential or load_credential()
         headers[credential.header_name] = credential.header_value
+    base = state.config.upstream_base_url.rstrip("/")
+    url = f"{base}/chat/completions" if openai else f"{base}/v1/messages"
+    payload = to_openai_request(body) if openai else body
     async with httpx.AsyncClient(timeout=UPSTREAM_TIMEOUT_SECONDS) as client:
-        response = await client.post(
-            f"{state.config.upstream_base_url}/v1/messages", json=body, headers=headers
-        )
+        response = await client.post(url, json=payload, headers=headers)
     response.raise_for_status()
     parsed: dict[str, Any] = response.json()
-    return parsed
+    return from_openai_response(parsed) if openai else parsed
 
 
 async def messages(request: Request) -> Response:
@@ -266,15 +277,18 @@ def config_from_env(env: dict[str, str] | None = None) -> ProxyConfig:
     }
     run_budget = environment.get("MERIDIAN_RUN_BUDGET_CENTS")
     upstream = environment.get("MERIDIAN_UPSTREAM_BASE_URL", ANTHROPIC_BASE_URL)
+    upstream_api = environment.get("MERIDIAN_UPSTREAM_API", UPSTREAM_API_ANTHROPIC)
     return ProxyConfig(
         mode=ProxyMode(environment.get("MERIDIAN_PROXY_MODE", "replay")),
         cassette_dir=Path(environment.get("MERIDIAN_CASSETTE_DIR", "/cassettes")),
         limits=limits,
         run_budget_cents=int(run_budget) if run_budget else None,
         upstream_base_url=upstream,
-        # Only the real provider is authenticated. Pointing upstream elsewhere is
-        # an explicit act, and it is how the offline recording path works.
-        requires_credential=upstream == ANTHROPIC_BASE_URL,
+        upstream_api=upstream_api,
+        # Only a real provider is authenticated. Pointing upstream elsewhere is
+        # an explicit act, and it is how the offline recording path works; an
+        # OpenAI-compatible upstream is always a real provider.
+        requires_credential=upstream == ANTHROPIC_BASE_URL or upstream_api == UPSTREAM_API_OPENAI,
     )
 
 
