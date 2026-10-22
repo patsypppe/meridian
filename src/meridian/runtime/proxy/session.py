@@ -167,6 +167,7 @@ def start_proxy(
     use_stub_provider: bool = False,
     stub_slip_every: int | None = None,
     upstream_api: str | None = None,
+    upstream_model: str | None = None,
 ) -> ProxyHandle:
     """Start the proxy and the internal trial network for one run."""
     network_name = f"meridian-trial-{run_id}"
@@ -189,6 +190,8 @@ def start_proxy(
         environment["MERIDIAN_UPSTREAM_BASE_URL"] = upstream_base_url
     if upstream_api and not use_stub_provider:
         environment["MERIDIAN_UPSTREAM_API"] = upstream_api
+    if upstream_model and not use_stub_provider:
+        environment["MERIDIAN_UPSTREAM_MODEL"] = upstream_model
 
     if mode is not ProxyMode.REPLAY and not use_stub_provider:
         # The credential exists here and in no other container. Replay never

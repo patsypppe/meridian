@@ -110,6 +110,7 @@ async def execute(client: DockerClient, request: RunRequest) -> RunOutcome:
             # OpenAI-compatible provider (e.g. https://api.groq.com/openai/v1).
             upstream_base_url=os.environ.get("MERIDIAN_UPSTREAM_BASE_URL") or None,
             upstream_api=os.environ.get("MERIDIAN_UPSTREAM_API") or None,
+            upstream_model=os.environ.get("MERIDIAN_UPSTREAM_MODEL") or None,
         )
         progress(f"proxy up in {config.execution.proxy_mode} mode on {handle.network_name}")
 

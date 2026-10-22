@@ -174,6 +174,7 @@ async def test_proxy_translates_on_the_wire(
             limits={},
             upstream_base_url="https://api.groq.com/openai/v1",
             upstream_api=UPSTREAM_API_OPENAI,
+            upstream_model="llama-3.3-70b-versatile",
             credential=ProviderCredential(env_var="GROQ_API_KEY", value="gsk_test_key_value"),
         )
     )
@@ -189,4 +190,5 @@ async def test_proxy_translates_on_the_wire(
     assert response.json()["content"] == [{"type": "text", "text": "hi"}]
     assert seen["url"] == "https://api.groq.com/openai/v1/chat/completions"
     assert seen["auth"] == "Bearer gsk_test_key_value"
+    assert seen["body"]["model"] == "llama-3.3-70b-versatile"  # type: ignore[index]
     assert seen["body"]["messages"] == [{"role": "user", "content": "x"}]  # type: ignore[index]

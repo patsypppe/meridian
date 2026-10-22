@@ -1,0 +1,78 @@
+name: real-model-benchmark
+
+# Records and scores the checkout-agent suite against a REAL model, through the
+# Meridian proxy, and publishes pass^k, the minimum detectable effect and the
+# verdicts as an artifact. Unlike self-eval, this one spends money: it needs the
+# GROQ_API_KEY repository secret and is manual-only, with a hard budget cap
+# enforced by the proxy.
+
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: Model id at the provider
+        default: llama-3.3-70b-versatile
+      trials:
+        description: Trials per task (n)
+        default: "10"
+      k:
+        description: The k in pass^k
+        default: "3"
+      budget_cents:
+        description: Hard run budget in cents (the proxy stops spending at this)
+        default: "200"
+
+permissions:
+  contents: read
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      MERIDIAN_UPSTREAM_API: openai
+      MERIDIAN_UPSTREAM_BASE_URL: https://api.groq.com/openai/v1
+      MERIDIAN_UPSTREAM_MODEL: ${{ inputs.model }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - run: uv sync --frozen
+      - name: Check the secret exists
+        run: test -n "$GROQ_API_KEY" || { echo "GROQ_API_KEY secret is not set"; exit 1; }
+      - name: Build images and repin the suite
+        run: |
+          uv run meridian snapshot build ./envs/checkout --tag checkout:dev \
+            --write-ref --update-suite ./suites/checkout-agent
+          uv run meridian snapshot build ./envs/proxy --tag meridian-proxy:dev --context .
+      - name: Record and score against the real model
+        run: |
+          mkdir -p out cassettes
+          uv run meridian run \
+            --suite ./suites/checkout-agent \
+            --n "${{ inputs.trials }}" --k "${{ inputs.k }}" \
+            --proxy-mode record --live-provider \
+            --cassettes ./cassettes --budget "${{ inputs.budget_cents }}" \
+            --out out/result.json --html out/report.html
+      - name: Summarise
+        if: always()
+        run: |
+          {
+            echo "## Real-model benchmark (${{ inputs.model }})"
+            echo
+            echo "n=${{ inputs.trials }} k=${{ inputs.k }} budget=${{ inputs.budget_cents }}c"
+            echo
+            if [ -f out/result.json ]; then echo '```json'; cat out/result.json; echo '```'; fi
+          } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: real-model-benchmark
+          path: |
+            out/
+            cassettes/
+      - name: Sweep
+        if: always()
+        run: uv run meridian sweep

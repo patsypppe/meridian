@@ -49,6 +49,10 @@ class ProxyConfig:
     run_budget_cents: int | None = None
     upstream_base_url: str = ANTHROPIC_BASE_URL
     upstream_api: str = UPSTREAM_API_ANTHROPIC
+    # Harness-chosen model, applied by the proxy. The agent's own model name is
+    # ignored upstream, so a run measures the model the operator picked and the
+    # thing under test cannot swap it.
+    upstream_model: str | None = None
     credential: ProviderCredential | None = None
     # Whether the upstream needs authenticating at all. A real provider does; the
     # deterministic stand-in provider used to record cassettes offline does not,
@@ -101,7 +105,7 @@ async def _call_upstream(
         headers[credential.header_name] = credential.header_value
     base = state.config.upstream_base_url.rstrip("/")
     url = f"{base}/chat/completions" if openai else f"{base}/v1/messages"
-    payload = to_openai_request(body) if openai else body
+    payload = to_openai_request(body, model=state.config.upstream_model) if openai else body
     async with httpx.AsyncClient(timeout=UPSTREAM_TIMEOUT_SECONDS) as client:
         response = await client.post(url, json=payload, headers=headers)
     response.raise_for_status()
@@ -278,6 +282,7 @@ def config_from_env(env: dict[str, str] | None = None) -> ProxyConfig:
     run_budget = environment.get("MERIDIAN_RUN_BUDGET_CENTS")
     upstream = environment.get("MERIDIAN_UPSTREAM_BASE_URL", ANTHROPIC_BASE_URL)
     upstream_api = environment.get("MERIDIAN_UPSTREAM_API", UPSTREAM_API_ANTHROPIC)
+    upstream_model = environment.get("MERIDIAN_UPSTREAM_MODEL") or None
     return ProxyConfig(
         mode=ProxyMode(environment.get("MERIDIAN_PROXY_MODE", "replay")),
         cassette_dir=Path(environment.get("MERIDIAN_CASSETTE_DIR", "/cassettes")),
@@ -285,6 +290,7 @@ def config_from_env(env: dict[str, str] | None = None) -> ProxyConfig:
         run_budget_cents=int(run_budget) if run_budget else None,
         upstream_base_url=upstream,
         upstream_api=upstream_api,
+        upstream_model=upstream_model,
         # Only a real provider is authenticated. Pointing upstream elsewhere is
         # an explicit act, and it is how the offline recording path works; an
         # OpenAI-compatible upstream is always a real provider.
