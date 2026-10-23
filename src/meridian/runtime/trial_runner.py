@@ -20,7 +20,7 @@ import socket
 import tempfile
 import time
 import uuid
-from collections.abc import Callable, Sequence
+from collections.abc import Awaitable, Callable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -31,6 +31,7 @@ from meridian.models.run import (
     AssertionOutcome,
     AssertionResult,
     Efficiency,
+    ErrorCause,
     Outcome,
     TrialResult,
     TrialSpec,
@@ -58,6 +59,56 @@ STOP_GRACE_SECONDS = 2
 PAYLOAD_POLL_SECONDS = 0.05
 
 
+@dataclass(frozen=True)
+class UpstreamState:
+    """A trial's cumulative upstream-call record, as the proxy reports it."""
+
+    failures: int = 0
+    last_failed: bool = False
+    kind: str | None = None
+
+
+UpstreamProbe = Callable[[str, int], Awaitable[UpstreamState]]
+
+
+def attribute_provider_fault(
+    result: TrialResult, before: UpstreamState | None, after: UpstreamState
+) -> TrialResult:
+    """Reclassify a failed trial as a provider fault when the provider is to blame.
+
+    A trial that did not pass and whose *last* upstream call failed (after the
+    proxy's own retries) never got a fair attempt: scoring it `fail` would blame
+    the agent for a rate limit. It becomes a `harness_error`, which is excluded
+    from the denominator and retried once like any other.
+
+    Deliberately narrow, because the opposite mistake -- hiding real agent
+    failures as infrastructure noise -- is the one this product exists to
+    prevent:
+
+    - only `fail` and `timeout` are considered; a pass stands;
+    - the failure must have happened during this attempt (the counter rose);
+    - the last call must have failed, so an agent that recovered and then failed
+      on its merits keeps its `fail`;
+    - requests the provider rejected as invalid are not provider faults.
+    """
+    if result.outcome not in (Outcome.FAIL, Outcome.TIMEOUT) or before is None:
+        return result
+    if after.failures <= before.failures or not after.last_failed:
+        return result
+    cause = ErrorCause.MODEL_PROVIDER if after.kind == "provider" else ErrorCause.INTERNAL
+    return result.model_copy(
+        update={
+            "outcome": Outcome.HARNESS_ERROR,
+            "error_cause": cause,
+            "detail": (
+                f"{cause.value}: {after.failures - before.failures} upstream call(s) failed "
+                f"and the last one never recovered; original verdict {result.outcome.value}: "
+                f"{result.detail}"
+            )[:4000],
+        }
+    )
+
+
 class HarnessFault(RuntimeError):
     """Meridian could not run the trial. Retried once, then reported as such.
 
@@ -66,9 +117,16 @@ class HarnessFault(RuntimeError):
     conflates them reports numbers better than reality.
     """
 
-    def __init__(self, message: str, *, container_removed: bool = True) -> None:
+    def __init__(
+        self,
+        message: str,
+        *,
+        container_removed: bool = True,
+        cause: ErrorCause = ErrorCause.SANDBOX,
+    ) -> None:
         super().__init__(message)
         self.container_removed = container_removed
+        self.cause = cause
 
 
 @dataclass(frozen=True)
@@ -119,7 +177,9 @@ class TrialRunner:
         grader: Grader | None = None,
         policy: IsolationPolicy = ISOLATED,
         network_name: str | None = None,
+        upstream: UpstreamProbe | None = None,
     ) -> None:
+        self._upstream = upstream
         self._client = client
         self._suite_root = suite_root
         self._sut_root = sut_root
@@ -149,19 +209,30 @@ class TrialRunner:
     async def _attempt(self, task: TaskDefinition, spec: TrialSpec, attempt: int) -> TrialResult:
         started = _now_ms()
         state_dir = Path(tempfile.mkdtemp(prefix=f"meridian-{spec.task_slug}-"))
+        # Counters are cumulative per (task, trial), so a retry of the same trial
+        # is judged on what happened during *this* attempt only.
+        before = await self._upstream(spec.task_slug, spec.trial_index) if self._upstream else None
         try:
             try:
                 phase = await self._run_container(task, spec, state_dir)
             except AdapterSpecError as exc:
-                return self._harness_error(spec, started, attempt, f"adapter spec: {exc}")
+                return self._harness_error(
+                    spec, started, attempt, f"adapter spec: {exc}", ErrorCause.ADAPTER_CONFIG
+                )
             except HarnessFault as exc:
                 return self._harness_error(
-                    spec, started, attempt, str(exc), removed=exc.container_removed
+                    spec, started, attempt, str(exc), exc.cause, removed=exc.container_removed
                 )
             except Exception as exc:
-                return self._harness_error(spec, started, attempt, f"{type(exc).__name__}: {exc}")
+                return self._harness_error(
+                    spec, started, attempt, f"{type(exc).__name__}: {exc}", ErrorCause.INTERNAL
+                )
 
-            return self._verdict(task, spec, phase, state_dir, started, attempt)
+            result = self._verdict(task, spec, phase, state_dir, started, attempt)
+            if self._upstream is None or result.outcome not in (Outcome.FAIL, Outcome.TIMEOUT):
+                return result
+            after = await self._upstream(spec.task_slug, spec.trial_index)
+            return attribute_provider_fault(result, before, after)
         finally:
             shutil.rmtree(state_dir, ignore_errors=True)
 
@@ -197,7 +268,7 @@ class TrialRunner:
                 container = None
             await self._destroy_volume(volume)
             volume = None
-            raise HarnessFault(str(fault), container_removed=removed) from fault
+            raise HarnessFault(str(fault), container_removed=removed, cause=fault.cause) from fault
         finally:
             if container is not None:
                 removed = await self._destroy(container)
@@ -226,7 +297,12 @@ class TrialRunner:
         except HarnessFault as exc:
             if not (phase.timed_out or phase.oom_killed):
                 return self._harness_error(
-                    spec, started, attempt, str(exc), removed=phase.container_removed
+                    spec,
+                    started,
+                    attempt,
+                    str(exc),
+                    exc.cause,
+                    removed=phase.container_removed,
                 )
             # A killed container is SIGKILLed mid-write, so a half-written
             # result.json is the *expected* outcome of a timeout or an OOM rather
@@ -282,6 +358,7 @@ class TrialRunner:
                 started,
                 attempt,
                 self._entrypoint_failure_detail(state_dir),
+                ErrorCause.ENTRYPOINT,
                 removed=phase.container_removed,
             )
 
@@ -290,7 +367,7 @@ class TrialRunner:
             outcome, detail = self._classify(assertions, adapter_result)
         except HarnessFault as exc:
             return self._harness_error(
-                spec, started, attempt, str(exc), removed=phase.container_removed
+                spec, started, attempt, str(exc), exc.cause, removed=phase.container_removed
             )
         except Exception as exc:
             # A grader that raises means *the assertion* is broken, not the
@@ -301,6 +378,7 @@ class TrialRunner:
                 started,
                 attempt,
                 f"grader raised {type(exc).__name__}: {exc}",
+                ErrorCause.GRADER,
                 removed=phase.container_removed,
             )
 
@@ -480,7 +558,9 @@ class TrialRunner:
         try:
             result = AdapterResult.model_validate_json(path.read_text(encoding="utf-8"))
         except Exception as exc:
-            raise HarnessFault(f"unreadable result.json: {exc}") from exc
+            raise HarnessFault(
+                f"unreadable result.json: {exc}", cause=ErrorCause.ENTRYPOINT
+            ) from exc
         if result.exit_code is None and exit_code is not None:
             result = result.model_copy(update={"exit_code": exit_code})
         return result
@@ -499,7 +579,7 @@ class TrialRunner:
     ) -> tuple[Outcome, str]:
         errored = [a for a in assertions if a.outcome is AssertionOutcome.ERROR]
         if errored:
-            raise HarnessFault(f"assertion error: {errored[0].detail}")
+            raise HarnessFault(f"assertion error: {errored[0].detail}", cause=ErrorCause.GRADER)
 
         failed = [a for a in assertions if a.outcome is AssertionOutcome.FAIL]
         if failed:
@@ -529,6 +609,7 @@ class TrialRunner:
         started: int,
         attempt: int,
         detail: str,
+        cause: ErrorCause,
         *,
         removed: bool = True,
     ) -> TrialResult:
@@ -542,6 +623,7 @@ class TrialRunner:
             attempts=attempt,
             container_removed=removed,
             started_unix_ms=started,
+            error_cause=cause,
         )
 
 

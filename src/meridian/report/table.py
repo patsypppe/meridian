@@ -57,7 +57,7 @@ def render(run: RunResult) -> str:
             lines.append(f"{'95% CI (over tasks)':<24} {f'[{_fmt(lo)}, {_fmt(hi)}]':>28}")
     if run.excluded_task_slugs:
         lines.append(f"excluded from the aggregate: {', '.join(run.excluded_task_slugs)}")
-    lines.append(f"harness error rate: {run.harness_error_rate:.1%}")
+    lines.append(f"harness error rate: {run.harness_error_summary}")
     lines.append(f"cost: {run.cost_cents}c   wall clock: {run.duration_ms / 1000:.1f}s")
     return "\n".join(lines)
 

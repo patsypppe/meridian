@@ -209,10 +209,14 @@ async def messages(request: Request) -> Response:
             state, body, task_slug=task_slug, trial_index=trial_index
         )
     except Exception as exc:
+        kind = retry.classify_upstream_failure(exc)
+        if kind is not None:
+            state.ledger.record_upstream_failure(task_slug, trial_index, kind)
         return JSONResponse(
             {"type": "error", "error": {"type": "upstream_error", "message": str(exc)}},
             status_code=502,
         )
+    state.ledger.record_upstream_success(task_slug, trial_index)
 
     input_tokens, output_tokens = _usage_from(response_body)
     state.ledger.charge(

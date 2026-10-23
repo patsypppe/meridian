@@ -87,3 +87,24 @@ def backoff_seconds(
 
 def retry_after_from(headers: Mapping[str, str]) -> float | None:
     return parse_retry_after(headers.get("retry-after"))
+
+
+# A request the provider rejected as malformed is about what was sent, so it is not
+# evidence the provider is down. Everything else that surfaces after the retries
+# (rate limit, 5xx, auth, unknown model, resets) is a fault of the provider or of
+# how it was configured, not of the agent.
+REQUEST_REJECTED_STATUSES = frozenset({400, 413, 422})
+
+KIND_PROVIDER = "provider"
+KIND_PROXY = "proxy"
+
+
+def classify_upstream_failure(exc: BaseException) -> str | None:
+    """`provider`, `proxy`, or None when the agent's own request was at fault."""
+    if isinstance(exc, httpx.HTTPStatusError):
+        if exc.response.status_code in REQUEST_REJECTED_STATUSES:
+            return None
+        return KIND_PROVIDER
+    if isinstance(exc, httpx.TransportError):
+        return KIND_PROVIDER
+    return KIND_PROXY

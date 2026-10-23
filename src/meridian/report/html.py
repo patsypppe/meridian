@@ -171,7 +171,7 @@ def render(run: RunResult, *, manifest_hash: str | None = None) -> str:
         "suite": f"{run.suite_slug} v{run.suite_version}",
         "n / k": f"{run.n_requested} / {run.k}",
         "status": run.status.value,
-        "harness errors": f"{run.harness_error_rate:.1%}",
+        "harness errors": run.harness_error_summary,
         "cost": f"{run.cost_cents}c",
         "wall clock": f"{run.duration_ms / 1000:.1f}s",
     }

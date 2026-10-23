@@ -8,6 +8,7 @@ that fails.
 
 from __future__ import annotations
 
+import asyncio
 import os
 import time
 import uuid
@@ -35,7 +36,7 @@ from meridian.runtime.proxy.cassette import CassetteStore
 from meridian.runtime.proxy.session import ProxyHandle, start_proxy, stop_proxy
 from meridian.runtime.pytest_runner import ContainerPytestRunner
 from meridian.runtime.scheduler import run_tasks
-from meridian.runtime.trial_runner import TrialRunner, sweep_orphans
+from meridian.runtime.trial_runner import TrialRunner, UpstreamState, sweep_orphans
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
     from docker import DockerClient
@@ -139,6 +140,25 @@ async def execute(client: DockerClient, request: RunRequest) -> RunOutcome:
                 ),
             )
 
+        proxy_handle = handle
+
+        async def upstream_probe(task_slug: str, trial_index: int) -> UpstreamState:
+            """The proxy's record of this trial's upstream calls.
+
+            Unreadable means unknown, and unknown never reclassifies a trial: the
+            safe direction is to leave an agent verdict as the agent's.
+            """
+            try:
+                payload = await asyncio.to_thread(proxy_handle.usage)
+                entry = payload.get("trials", {}).get(f"{task_slug}:{trial_index}", {})
+                return UpstreamState(
+                    failures=int(entry.get("upstream_failures", 0)),
+                    last_failed=bool(entry.get("last_upstream_failed", False)),
+                    kind=entry.get("last_upstream_kind"),
+                )
+            except Exception:
+                return UpstreamState()
+
         runner = TrialRunner(
             client,
             suite_root=request.suite.root,
@@ -146,6 +166,9 @@ async def execute(client: DockerClient, request: RunRequest) -> RunOutcome:
             grader=grader,
             policy=policy,
             network_name=handle.network_name,
+            upstream=upstream_probe
+            if config.execution.proxy_mode is not ProxyMode.REPLAY
+            else None,
         )
 
         async def dispatch(task: TaskDefinition, spec: TrialSpec) -> TrialResult:

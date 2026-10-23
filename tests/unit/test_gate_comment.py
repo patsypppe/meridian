@@ -13,7 +13,14 @@ from meridian.gate.comment import (
     suite_score,
 )
 from meridian.gate.decide import Verdict, flipped_tasks
-from meridian.models.run import Outcome, RunResult, RunStatus, TaskResult, TrialResult
+from meridian.models.run import (
+    ErrorCause,
+    Outcome,
+    RunResult,
+    RunStatus,
+    TaskResult,
+    TrialResult,
+)
 
 pytestmark = pytest.mark.unit
 
@@ -227,6 +234,7 @@ def _task_with(slug: str, *, passes: int, harness_errors: int) -> TaskResult:
             trial_index=100 + i,
             seed=0,
             outcome=Outcome.HARNESS_ERROR,
+            error_cause=ErrorCause.INTERNAL,
         )
         for i in range(harness_errors)
     ]

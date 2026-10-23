@@ -4,7 +4,14 @@ from __future__ import annotations
 
 import pytest
 
-from meridian.models.run import Outcome, RunResult, RunStatus, TaskResult, TrialResult
+from meridian.models.run import (
+    ErrorCause,
+    Outcome,
+    RunResult,
+    RunStatus,
+    TaskResult,
+    TrialResult,
+)
 from meridian.report import html as html_report
 from meridian.report import table
 
@@ -69,6 +76,7 @@ def test_a_task_with_no_gradeable_trials_says_so_rather_than_scoring_zero() -> N
                         trial_index=0,
                         seed=0,
                         outcome=Outcome.HARNESS_ERROR,
+                        error_cause=ErrorCause.INTERNAL,
                         detail="docker went away",
                     ),
                 ),

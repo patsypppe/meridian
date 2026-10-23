@@ -203,7 +203,7 @@ def render(
     lines += sensitivity_note(baseline_scores, head_scores, target=tolerance)
     lines += [
         f"`n={head.n_requested}` · `k={k}` · status `{head.status}` · "
-        f"harness errors {head.harness_error_rate:.1%} · cost {head.cost_cents}c",
+        f"harness errors {head.harness_error_summary} · cost {head.cost_cents}c",
         "",
     ]
 

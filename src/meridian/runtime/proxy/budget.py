@@ -86,12 +86,27 @@ class TrialUsage:
 
 
 @dataclass
+class UpstreamHealth:
+    """How a trial's calls to the real provider went, after the proxy's retries.
+
+    Lets the harness tell "the agent failed" from "the provider failed under the
+    agent": a trial whose last upstream call failed did not get a fair attempt.
+    """
+
+    failures: int = 0
+    last_failed: bool = False
+    # "provider" (rate limit, 5xx, transport) or "proxy" (a bug on our side).
+    last_kind: str | None = None
+
+
+@dataclass
 class BudgetLedger:
     """Usage for a whole run, keyed by trial."""
 
     limits: dict[str, TrialLimits] = field(default_factory=dict)
     run_budget_cents: int | None = None
     usage: dict[str, TrialUsage] = field(default_factory=dict)
+    upstream: dict[str, UpstreamHealth] = field(default_factory=dict)
     # Which models were actually called. Recorded because the manifest must pin
     # the model, and the harness never chooses it -- the agent does.
     models: set[str] = field(default_factory=set)
@@ -101,6 +116,16 @@ class BudgetLedger:
 
     def usage_for(self, task_slug: str, trial_index: int) -> TrialUsage:
         return self.usage.setdefault(self._key(task_slug, trial_index), TrialUsage())
+
+    def record_upstream_failure(self, task_slug: str, trial_index: int, kind: str) -> None:
+        health = self.upstream.setdefault(self._key(task_slug, trial_index), UpstreamHealth())
+        health.failures += 1
+        health.last_failed = True
+        health.last_kind = kind
+
+    def record_upstream_success(self, task_slug: str, trial_index: int) -> None:
+        health = self.upstream.setdefault(self._key(task_slug, trial_index), UpstreamHealth())
+        health.last_failed = False
 
     @property
     def run_microcents(self) -> int:
@@ -174,6 +199,9 @@ class BudgetLedger:
                     "input_tokens": entry.input_tokens,
                     "output_tokens": entry.output_tokens,
                     "microcents": entry.microcents,
+                    "upstream_failures": self.upstream.get(key, UpstreamHealth()).failures,
+                    "last_upstream_failed": self.upstream.get(key, UpstreamHealth()).last_failed,
+                    "last_upstream_kind": self.upstream.get(key, UpstreamHealth()).last_kind,
                 }
                 for key, entry in sorted(self.usage.items())
             },

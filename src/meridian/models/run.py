@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from enum import StrEnum
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 _FROZEN = ConfigDict(frozen=True, extra="forbid")
 
@@ -37,6 +37,22 @@ class Outcome(StrEnum):
     @property
     def counts_as_success(self) -> bool:
         return self is Outcome.PASS
+
+
+class ErrorCause(StrEnum):
+    """Why a trial was a `harness_error`: which part of the system failed.
+
+    One undifferentiated bucket hides the difference between "the provider is
+    rate limiting us" and "the grader is broken", which demand different fixes.
+    Only meaningful when the outcome is `HARNESS_ERROR`.
+    """
+
+    SANDBOX = "sandbox"  # container, volume or archive operations failed
+    ADAPTER_CONFIG = "adapter_config"  # the adapter spec was invalid
+    ENTRYPOINT = "entrypoint"  # the in-container runtime produced no usable result
+    GRADER = "grader"  # an assertion or grader raised: the check is broken
+    MODEL_PROVIDER = "model_provider"  # the provider failed after the proxy's retries
+    INTERNAL = "internal"  # anything else; a Meridian bug until shown otherwise
 
 
 class AssertionOutcome(StrEnum):
@@ -89,6 +105,17 @@ class TrialResult(BaseModel):
     container_removed: bool = True
     cassette_hash: str | None = None
     started_unix_ms: int = 0
+    # Set exactly when `outcome` is HARNESS_ERROR.
+    error_cause: ErrorCause | None = None
+
+    @model_validator(mode="after")
+    def _cause_matches_outcome(self) -> TrialResult:
+        if (self.outcome is Outcome.HARNESS_ERROR) != (self.error_cause is not None):
+            raise ValueError(
+                "error_cause is required for a harness_error and forbidden otherwise: "
+                f"outcome={self.outcome}, error_cause={self.error_cause}"
+            )
+        return self
 
     @property
     def passed(self) -> bool:
@@ -158,6 +185,24 @@ class RunResult(BaseModel):
         if total == 0:
             return 0.0
         return sum(t.harness_errors for t in self.tasks) / total
+
+    @property
+    def harness_errors_by_cause(self) -> dict[str, int]:
+        """Harness errors counted per cause, most frequent first, for reports."""
+        counts: dict[str, int] = {}
+        for task in self.tasks:
+            for trial in task.trials:
+                if trial.error_cause is not None:
+                    key = str(trial.error_cause)
+                    counts[key] = counts.get(key, 0) + 1
+        return dict(sorted(counts.items(), key=lambda item: (-item[1], item[0])))
+
+    @property
+    def harness_error_summary(self) -> str:
+        """`4.3% (model_provider: 3)` -- the rate, and what the errors were."""
+        rate = f"{self.harness_error_rate:.1%}"
+        causes = ", ".join(f"{cause}: {n}" for cause, n in self.harness_errors_by_cause.items())
+        return f"{rate} ({causes})" if causes else rate
 
     def task(self, slug: str) -> TaskResult:
         for candidate in self.tasks:
