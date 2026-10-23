@@ -15,6 +15,7 @@ import contextlib
 import io
 import socket
 import tarfile
+from collections.abc import Mapping
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -28,14 +29,23 @@ GRADING_TIMEOUT_SECONDS = 120
 PYTEST_INTERNAL_ERROR = 3
 
 
-def _archive(state_dir: Path) -> bytes:
+def _archive(state_dir: Path, grader_files: Mapping[str, bytes] | None = None) -> bytes:
+    """Tar the extracted state, then overlay the task's grader-only files.
+
+    A grader file wins over an agent-written file at the same path: tests the
+    agent could edit would not be tests.
+    """
+    files: dict[str, bytes] = {
+        path.relative_to(state_dir).as_posix(): path.read_bytes()
+        for path in sorted(state_dir.rglob("*"))
+        if path.is_file()
+    }
+    files.update(grader_files or {})
     buffer = io.BytesIO()
     with tarfile.open(fileobj=buffer, mode="w") as tar:
-        for path in sorted(state_dir.rglob("*")):
-            if not path.is_file():
-                continue
-            data = path.read_bytes()
-            info = tarfile.TarInfo(name=path.relative_to(state_dir).as_posix())
+        for name in sorted(files):
+            data = files[name]
+            info = tarfile.TarInfo(name=name)
             info.size = len(data)
             info.mode = 0o644
             info.mtime = 0
@@ -54,7 +64,9 @@ class ContainerPytestRunner:
         image: str,
         run_id: str,
         workdir: str = "/work",
+        grader_files: Mapping[str, bytes] | None = None,
     ) -> None:
+        self._grader_files = dict(grader_files or {})
         self._client = client
         self._image = image
         self._run_id = run_id
@@ -97,7 +109,7 @@ class ContainerPytestRunner:
                 auto_remove=False,
             )
             container.start()
-            self._send(container, _archive(state_dir))
+            self._send(container, _archive(state_dir, self._grader_files))
             status = container.wait(timeout=GRADING_TIMEOUT_SECONDS)
             output = container.logs().decode("utf-8", errors="replace")
             return PytestOutcome(exit_code=int(status.get("StatusCode", 1)), output=output)

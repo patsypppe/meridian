@@ -76,6 +76,15 @@ class RunRequest:
         return list(self.suite.scored_tasks)
 
 
+def _grader_files(suite_root: Path, task: TaskDefinition) -> dict[str, bytes]:
+    """Grading-time files keyed by workdir-relative path (see `TaskDefinition`)."""
+    workdir = task.environment.workdir.rstrip("/")
+    return {
+        item.dest[len(workdir) :].lstrip("/"): (suite_root / item.src).read_bytes()
+        for item in task.grader_files
+    }
+
+
 async def execute(client: DockerClient, request: RunRequest) -> RunOutcome:
     """Run a suite and return its result. Never raises for an agent failure."""
     config = request.config
@@ -126,6 +135,7 @@ async def execute(client: DockerClient, request: RunRequest) -> RunOutcome:
                     image=task.environment.snapshot,
                     run_id=request.run_id,
                     workdir=task.environment.workdir,
+                    grader_files=_grader_files(request.suite.root, task),
                 ),
             )
 

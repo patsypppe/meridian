@@ -230,6 +230,11 @@ class TaskDefinition(BaseModel):
     provenance: Provenance
     environment: Environment
     input: TaskInput
+    # Files that exist only at grading time, overlaid on the extracted state after
+    # the agent has finished. The agent never sees them, and they replace any file
+    # the agent wrote at the same path, so a hidden test suite (as in
+    # Terminal-Bench) cannot be read in advance or tampered with.
+    grader_files: tuple[InputFile, ...] = ()
     limits: Limits = Limits()
     outcome_assertions: tuple[OutcomeAssertion, ...] = Field(min_length=1)
     efficiency_expectations: EfficiencyExpectations = EfficiencyExpectations()
@@ -264,7 +269,7 @@ class TaskDefinition(BaseModel):
         runtime failure into an obvious authoring mistake.
         """
         workdir = self.environment.workdir.rstrip("/")
-        for seed in self.input.files:
+        for seed in (*self.input.files, *self.grader_files):
             if not (seed.dest == workdir or seed.dest.startswith(f"{workdir}/")):
                 raise ValueError(
                     f"input_outside_workdir: {seed.dest!r} is not under the workdir "
@@ -274,13 +279,22 @@ class TaskDefinition(BaseModel):
 
     def referenced_files(self) -> tuple[str, ...]:
         """Every suite-relative path this task depends on, for existence checks."""
-        return (self.input.prompt_file, *(f.src for f in self.input.files))
+        return (
+            self.input.prompt_file,
+            *(f.src for f in self.input.files),
+            *(f.src for f in self.grader_files),
+        )
 
     def definition_hash(self) -> str:
         """Content hash of the task, used in the manifest to pin exactly this task."""
         from meridian.hashing import content_hash
 
-        return content_hash(self.model_dump(mode="json"))
+        data = self.model_dump(mode="json")
+        # Absent when unused, so tasks written before this field existed keep the
+        # hash their manifests already pin.
+        if not self.grader_files:
+            data.pop("grader_files")
+        return content_hash(data)
 
 
 def is_pinned_digest(reference: str) -> bool:
