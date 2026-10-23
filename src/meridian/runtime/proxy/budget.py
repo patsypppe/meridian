@@ -22,6 +22,9 @@ PRICE_TABLE_MICROCENTS_PER_MTOK: dict[str, tuple[int, int]] = {
     "claude-sonnet-5": (300_000_000, 1_500_000_000),
     "claude-opus-5": (1_500_000_000, 7_500_000_000),
     "claude-haiku-4-5-20251001": (100_000_000, 500_000_000),
+    # Approximate Groq list prices, $/Mtok converted to micro-cents.
+    "openai/gpt-oss-120b": (15_000_000, 60_000_000),
+    "openai/gpt-oss-20b": (7_500_000, 30_000_000),
 }
 DEFAULT_PRICE_MICROCENTS_PER_MTOK = (300_000_000, 1_500_000_000)
 

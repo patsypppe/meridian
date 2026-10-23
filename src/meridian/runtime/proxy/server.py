@@ -140,7 +140,8 @@ async def messages(request: Request) -> Response:
 
     key = request_key(body)
     cassette = state.cassettes.get(task_slug)
-    model = str(body.get("model", "unknown"))
+    # Priced as the model that actually runs, not the name the agent asked for.
+    model = state.config.upstream_model or str(body.get("model", "unknown"))
 
     if state.config.mode is ProxyMode.REPLAY:
         try:
