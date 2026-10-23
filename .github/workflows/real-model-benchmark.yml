@@ -75,11 +75,10 @@ jobs:
       - name: Digest the run
         if: always()
         run: |
-          jq -c '.tasks[] | {t:.task_slug, trials:[.trials[]|{o:.outcome,turns:.efficiency.turns,tc:.efficiency.tool_calls,in:.efficiency.input_tokens,out:.efficiency.output_tokens,d:(.detail[0:140])}]}' out/result.json > out/digest.txt || true
-          for slug in happy-path expired-coupon; do
-            f="cassettes/$slug.json"
-            [ -f "$f" ] && jq -c '.trials["0"][]? | {stop:.response.stop_reason, content:.response.content, in:.input_tokens, out:.output_tokens}' "$f" | head -c 4000 >> out/digest.txt
-          done
+          {
+            jq -r '[.tasks[].trials[]] | "TOTAL trials=\(length) pass=\(map(select(.outcome=="pass"))|length) provider_error_fails=\(map(select(.detail|test("upstream_error|429")))|length) harness_error=\(map(select(.outcome=="harness_error"))|length)"' out/result.json
+            jq -r '.tasks[] | "\(.task_slug) turns_mean=\(([.trials[].efficiency.turns]|add)/(.trials|length)) in_tok_mean=\(([.trials[].efficiency.input_tokens]|add)/(.trials|length)) out_tok_mean=\(([.trials[].efficiency.output_tokens]|add)/(.trials|length)) ms_mean=\(([.trials[].efficiency.duration_ms]|add)/(.trials|length)) pass=\([.trials[]|select(.outcome=="pass")]|length)/\(.trials|length) provider_err=\([.trials[]|select(.detail|test("upstream_error|429"))]|length)"' out/result.json
+          } > out/digest.txt 2>&1 || true
       - name: Annotate results
         if: always()
         run: |

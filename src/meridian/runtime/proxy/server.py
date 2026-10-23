@@ -39,8 +39,8 @@ UPSTREAM_TIMEOUT_SECONDS = 120.0
 # agent failure: the agent never sees the rate limit and its request is unchanged.
 # Without it, a provider's rate limit is scored as the agent failing.
 RETRYABLE_STATUSES = frozenset({429, 500, 502, 503, 504})
-UPSTREAM_MAX_ATTEMPTS = 6
-UPSTREAM_MAX_BACKOFF_SECONDS = 30.0
+UPSTREAM_MAX_ATTEMPTS = 8
+UPSTREAM_MAX_BACKOFF_SECONDS = 90.0
 
 
 def retry_delay(headers: httpx.Headers | dict[str, str], attempt: int) -> float:

@@ -243,7 +243,7 @@ async def test_anthropic_upstream_model_override(
 def test_retry_delay_honours_retry_after_and_caps() -> None:
     assert server_module.retry_delay({"retry-after": "3"}, 0) == 3.0
     assert server_module.retry_delay({}, 2) == 4.0
-    assert server_module.retry_delay({"retry-after": "999"}, 0) == 30.0
+    assert server_module.retry_delay({"retry-after": "999"}, 0) == 90.0
     assert server_module.retry_delay({"retry-after": "soon"}, 1) == 2.0
 
 
