@@ -69,10 +69,18 @@ jobs:
             --out out/result.json --html out/report.html 2>&1 | tee out/run.txt
       # Annotations are readable through the API; job logs and artifacts need a
       # browser session. Emitted so results can be pulled without one.
+      - name: Digest the run
+        if: always()
+        run: |
+          jq -c '.tasks[] | {t:.task_slug, trials:[.trials[]|{o:.outcome,turns:.efficiency.turns,tc:.efficiency.tool_calls,in:.efficiency.input_tokens,out:.efficiency.output_tokens,d:(.detail[0:140])}]}' out/result.json > out/digest.txt || true
+          for slug in happy-path expired-coupon; do
+            f="cassettes/$slug.json"
+            [ -f "$f" ] && jq -c '.trials["0"][]? | {stop:.response.stop_reason, content:.response.content, in:.input_tokens, out:.output_tokens}' "$f" | head -c 4000 >> out/digest.txt
+          done
       - name: Annotate results
         if: always()
         run: |
-          for f in out-probe.txt out/run.txt; do
+          for f in out-probe.txt out/run.txt out/digest.txt; do
             [ -f "$f" ] || continue
             body=$(head -c 30000 "$f" | sed -e ':a' -e 'N' -e '$!ba' -e 's/%/%25/g' -e 's/\r/%0D/g' -e 's/\n/%0A/g')
             echo "::notice title=$f::$body"
