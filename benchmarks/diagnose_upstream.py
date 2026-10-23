@@ -50,6 +50,13 @@ def main() -> int:
     print(redact(response.text[:800]))
     if response.status_code == 200 and api == "openai":
         print("translated:", json.dumps(from_openai_response(response.json()))[:400])
+    if response.status_code != 200 and api == "openai":
+        listing = httpx.get(f"{base}/models", headers=headers, timeout=30)
+        if listing.status_code == 200:
+            ids = sorted(m.get("id", "") for m in listing.json().get("data", []))
+            print("models available to this key:", ", ".join(ids))
+        else:
+            print(f"GET {base}/models -> {listing.status_code}")
     return 0 if response.status_code == 200 else 1
 
 
