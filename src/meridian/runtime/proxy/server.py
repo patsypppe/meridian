@@ -8,6 +8,7 @@ reason to reach anything else.
 
 from __future__ import annotations
 
+import asyncio
 import json
 import os
 from dataclasses import dataclass
@@ -33,6 +34,24 @@ ANTHROPIC_BASE_URL = "https://api.anthropic.com"
 ANTHROPIC_VERSION = "2023-06-01"
 
 UPSTREAM_TIMEOUT_SECONDS = 120.0
+
+# Transient provider errors are retried inside the proxy. This is not retrying an
+# agent failure: the agent never sees the rate limit and its request is unchanged.
+# Without it, a provider's rate limit is scored as the agent failing.
+RETRYABLE_STATUSES = frozenset({429, 500, 502, 503, 504})
+UPSTREAM_MAX_ATTEMPTS = 6
+UPSTREAM_MAX_BACKOFF_SECONDS = 30.0
+
+
+def retry_delay(headers: httpx.Headers | dict[str, str], attempt: int) -> float:
+    """Seconds to wait before the next attempt: Retry-After if sent, else 2**attempt."""
+    raw = headers.get("retry-after")
+    try:
+        wait = float(raw) if raw is not None else float(2**attempt)
+    except ValueError:
+        wait = float(2**attempt)
+    return min(max(wait, 0.0), UPSTREAM_MAX_BACKOFF_SECONDS)
+
 
 # Which wire format the upstream speaks. The agent always speaks Anthropic
 # messages to the proxy; "openai" makes the proxy translate to chat completions
@@ -112,7 +131,12 @@ async def _call_upstream(
     else:
         payload = body
     async with httpx.AsyncClient(timeout=UPSTREAM_TIMEOUT_SECONDS) as client:
-        response = await client.post(url, json=payload, headers=headers)
+        for attempt in range(UPSTREAM_MAX_ATTEMPTS):
+            response = await client.post(url, json=payload, headers=headers)
+            if response.status_code not in RETRYABLE_STATUSES:
+                break
+            if attempt < UPSTREAM_MAX_ATTEMPTS - 1:
+                await asyncio.sleep(retry_delay(response.headers, attempt))
     response.raise_for_status()
     parsed: dict[str, Any] = response.json()
     return from_openai_response(parsed) if openai else parsed

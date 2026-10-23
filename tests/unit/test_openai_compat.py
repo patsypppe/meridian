@@ -238,3 +238,61 @@ async def test_anthropic_upstream_model_override(
         )
     assert seen["url"] == "https://api.anthropic.com/v1/messages"
     assert seen["body"]["model"] == "claude-haiku-4-5-20251001"  # type: ignore[index]
+
+
+def test_retry_delay_honours_retry_after_and_caps() -> None:
+    assert server_module.retry_delay({"retry-after": "3"}, 0) == 3.0
+    assert server_module.retry_delay({}, 2) == 4.0
+    assert server_module.retry_delay({"retry-after": "999"}, 0) == 30.0
+    assert server_module.retry_delay({"retry-after": "soon"}, 1) == 2.0
+
+
+async def test_transient_provider_errors_are_retried_not_scored(
+    tmp_path: pytest.TempPathFactory, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    calls = {"n": 0}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        calls["n"] += 1
+        if calls["n"] < 3:
+            return httpx.Response(429, headers={"retry-after": "0"}, json={"error": "rate"})
+        return httpx.Response(
+            200,
+            json={
+                "choices": [{"message": {"content": "ok"}, "finish_reason": "stop"}],
+                "usage": {"prompt_tokens": 1, "completion_tokens": 1},
+            },
+        )
+
+    async def no_sleep(_: float) -> None:
+        return None
+
+    real_client = httpx.AsyncClient
+    monkeypatch.setattr(server_module.asyncio, "sleep", no_sleep)
+    monkeypatch.setattr(
+        server_module.httpx,
+        "AsyncClient",
+        lambda **kw: real_client(**{"transport": httpx.MockTransport(handler), **kw}),
+    )
+    from meridian.runtime.secrets import ProviderCredential
+
+    app = create_app(
+        ProxyConfig(
+            mode=ProxyMode.RECORD,
+            cassette_dir=tmp_path,  # type: ignore[arg-type]
+            limits={},
+            upstream_base_url="https://api.groq.com/openai/v1",
+            upstream_api=UPSTREAM_API_OPENAI,
+            credential=ProviderCredential(env_var="GROQ_API_KEY", value="gsk_test_key_value"),
+        )
+    )
+    async with httpx.AsyncClient(
+        transport=httpx.ASGITransport(app=app), base_url="http://proxy"
+    ) as client:
+        response = await client.post(
+            "/v1/messages",
+            json={"model": "m", "max_tokens": 8, "messages": [{"role": "user", "content": "x"}]},
+            headers={"x-meridian-task": "happy-path", "x-meridian-trial": "0"},
+        )
+    assert response.status_code == 200
+    assert calls["n"] == 3

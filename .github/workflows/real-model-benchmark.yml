@@ -23,6 +23,9 @@ on:
       k:
         description: The k in pass^k
         default: "3"
+      concurrency:
+        description: Concurrent trials (lower it if the provider rate-limits you)
+        default: "2"
       budget_cents:
         description: Hard run budget in cents (the proxy stops spending at this)
         default: "200"
@@ -65,7 +68,7 @@ jobs:
             --suite ./suites/checkout-agent \
             --n "${{ inputs.trials }}" --k "${{ inputs.k }}" \
             --proxy-mode record --live-provider \
-            --cassettes ./cassettes --budget "${{ inputs.budget_cents }}" \
+            --cassettes ./cassettes --concurrency "${{ inputs.concurrency }}" --budget "${{ inputs.budget_cents }}" \
             --out out/result.json --html out/report.html 2>&1 | tee out/run.txt
       # Annotations are readable through the API; job logs and artifacts need a
       # browser session. Emitted so results can be pulled without one.
