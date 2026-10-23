@@ -51,6 +51,8 @@ jobs:
       - run: uv sync --frozen
       - name: Check the secret exists
         run: test -n "$GROQ_API_KEY$ANTHROPIC_API_KEY" || { echo "no API key secret for provider ${{ inputs.provider }}"; exit 1; }
+      - name: Probe the upstream
+        run: uv run python -m benchmarks.diagnose_upstream 2>&1 | tee out-probe.txt
       - name: Build images and repin the suite
         run: |
           uv run meridian snapshot build ./envs/checkout --tag checkout:dev \
@@ -70,7 +72,7 @@ jobs:
       - name: Annotate results
         if: always()
         run: |
-          for f in out/run.txt out/result.json; do
+          for f in out-probe.txt out/run.txt; do
             [ -f "$f" ] || continue
             body=$(head -c 30000 "$f" | sed -e ':a' -e 'N' -e '$!ba' -e 's/%/%25/g' -e 's/\r/%0D/g' -e 's/\n/%0A/g')
             echo "::notice title=$f::$body"
