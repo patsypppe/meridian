@@ -64,7 +64,17 @@ jobs:
             --n "${{ inputs.trials }}" --k "${{ inputs.k }}" \
             --proxy-mode record --live-provider \
             --cassettes ./cassettes --budget "${{ inputs.budget_cents }}" \
-            --out out/result.json --html out/report.html
+            --out out/result.json --html out/report.html 2>&1 | tee out/run.txt
+      # Annotations are readable through the API; job logs and artifacts need a
+      # browser session. Emitted so results can be pulled without one.
+      - name: Annotate results
+        if: always()
+        run: |
+          for f in out/run.txt out/result.json; do
+            [ -f "$f" ] || continue
+            body=$(head -c 30000 "$f" | sed -e ':a' -e 'N' -e '$!ba' -e 's/%/%25/g' -e 's/\r/%0D/g' -e 's/\n/%0A/g')
+            echo "::notice title=$f::$body"
+          done
       - name: Summarise
         if: always()
         run: |
