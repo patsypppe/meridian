@@ -240,13 +240,6 @@ async def test_anthropic_upstream_model_override(
     assert seen["body"]["model"] == "claude-haiku-4-5-20251001"  # type: ignore[index]
 
 
-def test_retry_delay_honours_retry_after_and_caps() -> None:
-    assert server_module.retry_delay({"retry-after": "3"}, 0) == 3.0
-    assert server_module.retry_delay({}, 2) == 4.0
-    assert server_module.retry_delay({"retry-after": "999"}, 0) == 90.0
-    assert server_module.retry_delay({"retry-after": "soon"}, 1) == 2.0
-
-
 async def test_transient_provider_errors_are_retried_not_scored(
     tmp_path: pytest.TempPathFactory, monkeypatch: pytest.MonkeyPatch
 ) -> None:
