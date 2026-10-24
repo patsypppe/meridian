@@ -16,6 +16,7 @@ from typing import Annotated, Any, Literal
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 SLUG_PATTERN = r"^[a-z0-9-]{3,48}$"
+GRADER_TESTS_DIR = "/tests"
 DIGEST_PATTERN = r"^sha256:[0-9a-f]{64}$"
 
 MIN_TIMEOUT_SECONDS = 10
@@ -199,6 +200,19 @@ class PytestAssertion(_Assertion):
     selector: str | None = None
 
 
+class VerifierScript(_Assertion):
+    """Verify by running a benchmark-supplied script that writes a reward.
+
+    The script ships as a grader file, so the agent never sees it. It passes only
+    when the reward file holds exactly 1; a verifier that wrote nothing or wrote
+    garbage is a broken check (a harness error), never a failed agent.
+    """
+
+    kind: Literal["verifier_script"]
+    path: str
+    reward_path: str = "/logs/verifier/reward.txt"
+
+
 OutcomeAssertion = Annotated[
     FileExists
     | FileMatches
@@ -206,7 +220,8 @@ OutcomeAssertion = Annotated[
     | JsonPathMatches
     | SqliteQueryEquals
     | ExitCode
-    | PytestAssertion,
+    | PytestAssertion
+    | VerifierScript,
     Field(discriminator="kind"),
 ]
 
@@ -269,11 +284,22 @@ class TaskDefinition(BaseModel):
         runtime failure into an obvious authoring mistake.
         """
         workdir = self.environment.workdir.rstrip("/")
-        for seed in (*self.input.files, *self.grader_files):
+        for seed in self.input.files:
             if not (seed.dest == workdir or seed.dest.startswith(f"{workdir}/")):
                 raise ValueError(
                     f"input_outside_workdir: {seed.dest!r} is not under the workdir "
                     f"{workdir!r}; the rest of the filesystem is read-only"
+                )
+        # Grader files may also land in /tests, where benchmark ecosystems expect
+        # their hidden tests. The grading container mounts it as fresh tmpfs.
+        for seed in self.grader_files:
+            if not any(
+                seed.dest == root or seed.dest.startswith(f"{root}/")
+                for root in (workdir, GRADER_TESTS_DIR)
+            ):
+                raise ValueError(
+                    f"grader_file_outside_allowed_dirs: {seed.dest!r} must be under the "
+                    f"workdir {workdir!r} or {GRADER_TESTS_DIR}"
                 )
         return self
 

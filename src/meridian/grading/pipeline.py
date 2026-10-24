@@ -20,6 +20,7 @@ from meridian.grading.graders.filesystem import grade_file_exists, grade_file_ma
 from meridian.grading.graders.json_state import grade_json_path_equals, grade_json_path_matches
 from meridian.grading.graders.process import grade_exit_code
 from meridian.grading.graders.pytest_grader import PytestRunner, grade_pytest
+from meridian.grading.graders.script_grader import ScriptRunner, grade_verifier_script
 from meridian.grading.graders.sqlite import grade_sqlite_query_equals
 from meridian.models.adapter import AdapterResult
 from meridian.models.run import AssertionResult
@@ -34,6 +35,7 @@ KNOWN_KINDS = frozenset(
         "sqlite_query_equals",
         "exit_code",
         "pytest",
+        "verifier_script",
     }
 )
 
@@ -44,6 +46,7 @@ def grade_assertion(
     workdir: str,
     result: AdapterResult,
     pytest_runner: PytestRunner | None,
+    script_runner: ScriptRunner | None = None,
 ) -> AssertionResult:
     """Dispatch one assertion to its grader."""
     kind = getattr(assertion, "kind", "")
@@ -62,6 +65,8 @@ def grade_assertion(
             return grade_exit_code(assertion, result)  # type: ignore[arg-type]
         case "pytest":
             return grade_pytest(assertion, state_dir, workdir, pytest_runner)  # type: ignore[arg-type]
+        case "verifier_script":
+            return grade_verifier_script(assertion, state_dir, script_runner)  # type: ignore[arg-type]
         case _:
             raise GraderError(f"no grader registered for assertion kind {kind!r}")
 
@@ -71,13 +76,16 @@ def grade_task(
     state_dir: Path,
     result: AdapterResult,
     pytest_runner: PytestRunner | None = None,
+    script_runner: ScriptRunner | None = None,
 ) -> Sequence[AssertionResult]:
     """Evaluate every assertion. Never raises; a broken grader becomes ERROR."""
     workdir = task.environment.workdir
     outcomes: list[AssertionResult] = []
     for assertion in task.outcome_assertions:
         try:
-            outcomes.append(grade_assertion(assertion, state_dir, workdir, result, pytest_runner))
+            outcomes.append(
+                grade_assertion(assertion, state_dir, workdir, result, pytest_runner, script_runner)
+            )
         except GraderError as exc:
             outcomes.append(errored(str(getattr(assertion, "kind", "unknown")), str(exc)))
         except Exception as exc:

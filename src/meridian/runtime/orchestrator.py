@@ -34,7 +34,7 @@ from meridian.models.task import TaskDefinition
 from meridian.runtime.isolation import IsolationPolicy
 from meridian.runtime.proxy.cassette import CassetteStore
 from meridian.runtime.proxy.session import ProxyHandle, start_proxy, stop_proxy
-from meridian.runtime.pytest_runner import ContainerPytestRunner
+from meridian.runtime.pytest_runner import ContainerPytestRunner, ContainerScriptRunner
 from meridian.runtime.scheduler import run_tasks
 from meridian.runtime.trial_runner import TrialRunner, UpstreamState, sweep_orphans
 
@@ -78,12 +78,8 @@ class RunRequest:
 
 
 def _grader_files(suite_root: Path, task: TaskDefinition) -> dict[str, bytes]:
-    """Grading-time files keyed by workdir-relative path (see `TaskDefinition`)."""
-    workdir = task.environment.workdir.rstrip("/")
-    return {
-        item.dest[len(workdir) :].lstrip("/"): (suite_root / item.src).read_bytes()
-        for item in task.grader_files
-    }
+    """Grading-time files keyed by absolute destination (see `TaskDefinition`)."""
+    return {item.dest: (suite_root / item.src).read_bytes() for item in task.grader_files}
 
 
 async def execute(client: DockerClient, request: RunRequest) -> RunOutcome:
@@ -132,6 +128,13 @@ async def execute(client: DockerClient, request: RunRequest) -> RunOutcome:
                 state_dir,
                 result,
                 pytest_runner=ContainerPytestRunner(
+                    client,
+                    image=task.environment.snapshot,
+                    run_id=request.run_id,
+                    workdir=task.environment.workdir,
+                    grader_files=_grader_files(request.suite.root, task),
+                ),
+                script_runner=ContainerScriptRunner(
                     client,
                     image=task.environment.snapshot,
                     run_id=request.run_id,

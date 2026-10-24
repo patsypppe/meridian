@@ -1,18 +1,20 @@
-"""Running pytest against extracted state, in a throwaway container.
+"""Running verifiers against extracted state, in a throwaway container.
 
-The test files come from a directory the agent controlled. Running them on the
-host would give an evaluated agent code execution on the machine doing the
+The files being run come from a directory the agent controlled. Running them on
+the host would give an evaluated agent code execution on the machine doing the
 evaluating, which is the one thing an eval harness must never do.
 
-So grading-by-pytest gets its own container: the task's own snapshot, the same
-isolation options as a trial, and the extracted state streamed in on stdin. It
-is destroyed afterwards like any other.
+So grading gets its own container: the task's own snapshot, the same isolation
+options as a trial, and the extracted state streamed in on stdin. It is destroyed
+afterwards like any other. Two verifier styles share that sandbox: pytest, and a
+benchmark-supplied script that writes a reward.
 """
 
 from __future__ import annotations
 
 import contextlib
 import io
+import secrets
 import socket
 import tarfile
 from collections.abc import Mapping
@@ -20,6 +22,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from meridian.grading.graders.pytest_grader import PytestOutcome
+from meridian.grading.graders.script_grader import ScriptOutcome
 from meridian.runtime.isolation import RUN_LABEL, TRIAL_GID, TRIAL_LABEL, TRIAL_UID
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
@@ -28,19 +31,41 @@ if TYPE_CHECKING:  # pragma: no cover - typing only
 GRADING_TIMEOUT_SECONDS = 120
 PYTEST_INTERNAL_ERROR = 3
 
+# Writable, empty-at-start mounts a verifier may use. /tests is where benchmark
+# ecosystems put their hidden test files; /logs is where they write a reward. The
+# rootfs stays read-only, so these are the only places a verifier can write besides
+# the workdir and /tmp -- and, being fresh tmpfs, an agent cannot pre-populate them.
+GRADING_TMPFS = {
+    "/tmp": "size=64m,mode=1777",
+    "/tests": "size=64m,mode=1777",
+    "/logs": "size=16m,mode=1777",
+}
 
-def _archive(state_dir: Path, grader_files: Mapping[str, bytes] | None = None) -> bytes:
-    """Tar the extracted state, then overlay the task's grader-only files.
+
+class GradingContainerError(RuntimeError):
+    """The grading container itself failed (not the verifier inside it)."""
+
+
+def _archive(
+    state_dir: Path, grader_files: Mapping[str, bytes] | None = None, *, workdir: str
+) -> bytes:
+    """Tar the extracted state under `workdir`, then overlay the grader-only files.
+
+    Member names are absolute destinations without the leading slash, so the
+    stream extracts with `-C /` and lands the state in the workdir and the grader
+    files wherever the task put them (the workdir or /tests).
 
     A grader file wins over an agent-written file at the same path: tests the
     agent could edit would not be tests.
     """
+    prefix = workdir.strip("/")
     files: dict[str, bytes] = {
-        path.relative_to(state_dir).as_posix(): path.read_bytes()
+        f"{prefix}/{path.relative_to(state_dir).as_posix()}".lstrip("/"): path.read_bytes()
         for path in sorted(state_dir.rglob("*"))
         if path.is_file()
     }
-    files.update(grader_files or {})
+    for destination, data in (grader_files or {}).items():
+        files[destination.lstrip("/")] = data
     buffer = io.BytesIO()
     with tarfile.open(fileobj=buffer, mode="w") as tar:
         for name in sorted(files):
@@ -54,8 +79,8 @@ def _archive(state_dir: Path, grader_files: Mapping[str, bytes] | None = None) -
     return buffer.getvalue()
 
 
-class ContainerPytestRunner:
-    """A `PytestRunner` backed by a throwaway container."""
+class _GradingSandbox:
+    """Runs one shell command in a fresh, locked-down container with state loaded."""
 
     def __init__(
         self,
@@ -63,25 +88,18 @@ class ContainerPytestRunner:
         *,
         image: str,
         run_id: str,
-        workdir: str = "/work",
-        grader_files: Mapping[str, bytes] | None = None,
+        workdir: str,
+        grader_files: Mapping[str, bytes] | None,
     ) -> None:
-        self._grader_files = dict(grader_files or {})
         self._client = client
         self._image = image
         self._run_id = run_id
         self._workdir = workdir
+        self._grader_files = dict(grader_files or {})
 
-    def __call__(self, state_dir: Path, target: str, selector: str | None) -> PytestOutcome:
-        relative = target.removeprefix(self._workdir).lstrip("/") or "."
-        argument = f"{relative}::{selector}" if selector else relative
-        command = (
-            f'tar -xf - -C "{self._workdir}" && cd "{self._workdir}" '
-            f'&& python3 -m pytest -q "{argument}"'
-        )
-
+    def run(self, state_dir: Path, command: str, tag: str) -> tuple[int, str]:
         volume = self._client.volumes.create(
-            name=f"meridian-grade-{self._run_id}-{abs(hash(target)) % 10**8}",
+            name=f"meridian-grade-{self._run_id}-{abs(hash(tag)) % 10**8}",
             labels={RUN_LABEL: self._run_id},
         )
         container = None
@@ -94,12 +112,12 @@ class ContainerPytestRunner:
                 read_only=True,
                 cap_drop=["ALL"],
                 security_opt=["no-new-privileges:true"],
-                # Grading runs agent-authored code, so it gets no network at all
-                # — not even the proxy. A grader has nothing to say to a model.
+                # Grading runs agent-influenced code, so it gets no network at
+                # all -- not even the proxy. A grader has nothing to say to a model.
                 network_mode="none",
                 pids_limit=128,
                 mem_limit="1024m",
-                tmpfs={"/tmp": "size=64m,mode=1777"},
+                tmpfs=GRADING_TMPFS,
                 volumes={volume.name: {"bind": self._workdir, "mode": "rw"}},
                 working_dir=self._workdir,
                 environment={},
@@ -109,15 +127,12 @@ class ContainerPytestRunner:
                 auto_remove=False,
             )
             container.start()
-            self._send(container, _archive(state_dir, self._grader_files))
+            self._send(container, _archive(state_dir, self._grader_files, workdir=self._workdir))
             status = container.wait(timeout=GRADING_TIMEOUT_SECONDS)
             output = container.logs().decode("utf-8", errors="replace")
-            return PytestOutcome(exit_code=int(status.get("StatusCode", 1)), output=output)
+            return int(status.get("StatusCode", 1)), output
         except Exception as exc:
-            return PytestOutcome(
-                exit_code=PYTEST_INTERNAL_ERROR,
-                output=f"the grading container failed: {type(exc).__name__}: {exc}",
-            )
+            raise GradingContainerError(f"{type(exc).__name__}: {exc}") from exc
         finally:
             if container is not None:
                 with contextlib.suppress(Exception):
@@ -138,3 +153,90 @@ class ContainerPytestRunner:
                 if closeable is not None:
                     with contextlib.suppress(Exception):
                         closeable.close()
+
+
+class ContainerPytestRunner:
+    """A `PytestRunner` backed by a throwaway container."""
+
+    def __init__(
+        self,
+        client: DockerClient,
+        *,
+        image: str,
+        run_id: str,
+        workdir: str = "/work",
+        grader_files: Mapping[str, bytes] | None = None,
+    ) -> None:
+        self._workdir = workdir
+        self._sandbox = _GradingSandbox(
+            client, image=image, run_id=run_id, workdir=workdir, grader_files=grader_files
+        )
+
+    def __call__(self, state_dir: Path, target: str, selector: str | None) -> PytestOutcome:
+        relative = target.removeprefix(self._workdir).lstrip("/") or "."
+        argument = f"{relative}::{selector}" if selector else relative
+        command = f'tar -xf - -C / && cd "{self._workdir}" && python3 -m pytest -q "{argument}"'
+        try:
+            exit_code, output = self._sandbox.run(state_dir, command, target)
+        except GradingContainerError as exc:
+            return PytestOutcome(
+                exit_code=PYTEST_INTERNAL_ERROR,
+                output=f"the grading container failed: {exc}",
+            )
+        return PytestOutcome(exit_code=exit_code, output=output)
+
+
+class ContainerScriptRunner:
+    """A `ScriptRunner` backed by a throwaway container.
+
+    Runs a benchmark-supplied verifier script and reads back the reward it wrote.
+    The reward is returned between two unguessable markers, so nothing the agent
+    manages to print can be mistaken for it.
+    """
+
+    def __init__(
+        self,
+        client: DockerClient,
+        *,
+        image: str,
+        run_id: str,
+        workdir: str = "/work",
+        grader_files: Mapping[str, bytes] | None = None,
+    ) -> None:
+        self._workdir = workdir
+        self._sandbox = _GradingSandbox(
+            client, image=image, run_id=run_id, workdir=workdir, grader_files=grader_files
+        )
+
+    def __call__(self, state_dir: Path, script_path: str, reward_path: str) -> ScriptOutcome:
+        marker = secrets.token_hex(16)
+        command = (
+            f'tar -xf - -C / && cd "{self._workdir}" '
+            f'&& {{ if command -v bash >/dev/null 2>&1; then bash "{script_path}"; '
+            f'else sh "{script_path}"; fi; }}; code=$?; '
+            f'printf "\\n{marker}:%s:{marker}\\n" "$(cat "{reward_path}" 2>/dev/null)"; exit $code'
+        )
+        try:
+            exit_code, output = self._sandbox.run(state_dir, command, script_path)
+        except GradingContainerError as exc:
+            return ScriptOutcome(exit_code=1, output="", reward_text=None, infra_error=str(exc))
+        return ScriptOutcome(
+            exit_code=exit_code,
+            output=_strip_reward(output, marker),
+            reward_text=_extract_reward(output, marker),
+        )
+
+
+def _extract_reward(output: str, marker: str) -> str | None:
+    """The reward between this run's markers, or None if they are absent."""
+    start = output.rfind(f"{marker}:")
+    if start == -1:
+        return None
+    start += len(marker) + 1
+    end = output.find(f":{marker}", start)
+    return output[start:end] if end != -1 else None
+
+
+def _strip_reward(output: str, marker: str) -> str:
+    start = output.rfind(f"\n{marker}:")
+    return output[:start] if start != -1 else output
