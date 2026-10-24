@@ -101,6 +101,56 @@ def suite_publish(
         out(f"excluded:       {len(excluded)} ({names})")
 
 
+@app.command("import-harbor")
+def import_harbor(
+    path: Path = typer.Argument(..., help="A Harbor task directory, or a directory of them."),
+    out_dir: Path = typer.Option(..., "--out", help="Suite directory to write into."),
+    suite_slug: str = typer.Option("harbor-import", "--suite-slug", help="Slug for a new suite."),
+    limit: int | None = typer.Option(None, "--limit", help="Convert at most this many tasks."),
+    rewrite_boilerplate: bool = typer.Option(
+        False,
+        "--rewrite-uv-boilerplate",
+        help="Rewrite the standard `install uv; uvx pytest` verifier preamble to use the "
+        "pytest already in the image (the grading container has no network).",
+    ),
+) -> None:
+    """Convert Harbor-format tasks into a Meridian suite.
+
+    Tasks that need something Meridian cannot honour (multi-step runs, GPUs, MCP
+    servers, a verifier that needs the network, ...) are skipped with the reason,
+    never converted into something that runs under different rules. Images are not
+    built here; the converted tasks carry a placeholder snapshot until they are.
+    """
+    from meridian.importers import harbor
+
+    try:
+        task_dirs = harbor.find_task_dirs(path)
+        if limit is not None:
+            task_dirs = task_dirs[:limit]
+        tasks, unreadable = harbor.load_all(task_dirs, rewrite_boilerplate=rewrite_boilerplate)
+    except harbor.HarborImportError as exc:
+        err(f"import failed: {exc}")
+        raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
+
+    converted, skipped = harbor.write_suite(tasks, out_dir, suite_slug=suite_slug)
+    skipped = [*skipped, *unreadable]
+
+    out(
+        f"read {len(tasks) + len(unreadable)} task(s): "
+        f"{len(converted)} converted, {len(skipped)} skipped"
+    )
+    for done in converted:
+        notes = f"  ({'; '.join(w.code for w in done.warnings)})" if done.warnings else ""
+        out(f"  converted  {done.slug}{notes}")
+    for refused in skipped:
+        reasons = "; ".join(f"{i.code}: {i.message}" for i in refused.issues)
+        out(f"  skipped    {refused.name}  -- {reasons}")
+    if not converted:
+        err("nothing could be converted")
+        raise typer.Exit(exit_codes.HARNESS_ERROR)
+    err(f"wrote {len(converted)} task(s) to {out_dir}; build their images before running")
+
+
 @snapshot_app.command("build")
 def snapshot_build(
     path: Path = typer.Argument(..., help="Path to the environment directory."),
