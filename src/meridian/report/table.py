@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from meridian.models.run import RunResult, TaskResult
 from meridian.stats.bootstrap import bootstrap_ci
+from meridian.stats.intervals import t_interval
 from meridian.stats.passk import pass_at_k, pass_hat_k
 
 BAR = "─"
@@ -55,6 +56,14 @@ def render(run: RunResult) -> str:
             # correlated and a trial-level interval would be far too narrow.
             lo, hi = bootstrap_ci([(t.n, t.c, run.k) for t in scored], pass_hat_k, iterations=4000)
             lines.append(f"{'95% CI (over tasks)':<24} {f'[{_fmt(lo)}, {_fmt(hi)}]':>28}")
+            # With few tasks the bootstrap undercovers; a t interval on tasks - 1
+            # degrees of freedom is wider and more honest at small m.
+            per_task = [pass_hat_k(t.n, t.c, min(run.k, t.n)) for t in scored]
+            t_lo, t_hi = t_interval(per_task)
+            lines.append(
+                f"{'95% CI (t, df=tasks-1)':<24} "
+                f"{f'[{_fmt(max(t_lo, 0.0))}, {_fmt(min(t_hi, 1.0))}]':>28}"
+            )
     if run.excluded_task_slugs:
         lines.append(f"excluded from the aggregate: {', '.join(run.excluded_task_slugs)}")
     lines.append(f"harness error rate: {run.harness_error_summary}")
