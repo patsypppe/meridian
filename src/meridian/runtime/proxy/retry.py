@@ -38,14 +38,21 @@ RETRYABLE_EXCEPTIONS: tuple[type[BaseException], ...] = (httpx.TransportError,)
 
 @dataclass
 class RetryStats:
-    """What retrying cost one upstream call: how often, and how long it waited."""
+    """What retrying cost one upstream call: how often, and how long it waited.
+
+    `on_wait` is told about each wait *as it is scheduled*, before the sleep, so a
+    caller that is killed mid-backoff has still been told about the time it lost.
+    """
 
     retries: int = 0
     waited_ms: int = 0
+    on_wait: Callable[[float], None] | None = None
 
     def record_wait(self, seconds: float) -> None:
         self.retries += 1
         self.waited_ms += int(seconds * 1000)
+        if self.on_wait is not None:
+            self.on_wait(seconds)
 
 
 def is_retryable_status(status: int) -> bool:

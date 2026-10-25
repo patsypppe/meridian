@@ -175,3 +175,26 @@ def test_the_ledger_reports_upstream_wait_per_trial() -> None:
     ledger.record_upstream_wait("happy-path", 0, retries=1, waited_ms=1000)
     entry = ledger.snapshot()["trials"]["happy-path:0"]  # type: ignore[index]
     assert entry["upstream_retries"] == 3 and entry["upstream_wait_ms"] == 5000
+
+
+async def test_waits_are_reported_before_the_sleep_so_a_killed_call_still_counts(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A trial killed mid-backoff must still have been told about the time it lost."""
+    reported: list[float] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(429, headers={"retry-after": "30"})
+
+    class Killed(Exception):
+        pass
+
+    async def killed_while_sleeping(_: float) -> None:
+        raise Killed
+
+    monkeypatch.setattr(server_module.asyncio, "sleep", killed_while_sleeping)
+    stats = retry.RetryStats(on_wait=reported.append)
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+        with pytest.raises(Killed):
+            await server_module._post_with_retries(client, "http://x/", {}, {}, stats)
+    assert len(reported) == 1 and reported[0] >= 30.0
