@@ -123,3 +123,14 @@ def test_text_the_agent_prints_cannot_forge_a_reward(
         "/logs/verifier/reward.txt",
     )
     assert (out.reward_text or "").strip() == "0"
+
+
+def test_a_verifier_that_does_not_create_the_reward_directory_still_works(
+    docker_client: Any, image: str, tmp_path: Path
+) -> None:
+    """Harbor guarantees /logs/verifier exists; real verifiers rely on it."""
+    verifier = b"#!/bin/bash\necho 1 > /logs/verifier/reward.txt\n"
+    out = runner(docker_client, image, {"/tests/test.sh": verifier})(
+        state(tmp_path), "/tests/test.sh", "/logs/verifier/reward.txt"
+    )
+    assert (out.reward_text or "").strip() == "1"

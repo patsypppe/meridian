@@ -210,8 +210,10 @@ class ContainerScriptRunner:
 
     def __call__(self, state_dir: Path, script_path: str, reward_path: str) -> ScriptOutcome:
         marker = secrets.token_hex(16)
+        # Harbor guarantees the reward directory exists; verifiers write to it
+        # without creating it, so the sandbox must.
         command = (
-            f'tar -xf - -C / && cd "{self._workdir}" '
+            f'tar -xf - -C / && mkdir -p "$(dirname "{reward_path}")" && cd "{self._workdir}" '
             f'&& {{ if command -v bash >/dev/null 2>&1; then bash "{script_path}"; '
             f'else sh "{script_path}"; fi; }}; code=$?; '
             f'printf "\\n{marker}:%s:{marker}\\n" "$(cat "{reward_path}" 2>/dev/null)"; exit $code'

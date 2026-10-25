@@ -367,7 +367,13 @@ class TrialRunner:
             outcome, detail = self._classify(assertions, adapter_result)
         except HarnessFault as exc:
             return self._harness_error(
-                spec, started, attempt, str(exc), exc.cause, removed=phase.container_removed
+                spec,
+                started,
+                attempt,
+                str(exc),
+                exc.cause,
+                removed=phase.container_removed,
+                efficiency=self._efficiency(adapter_result, started),
             )
         except Exception as exc:
             # A grader that raises means *the assertion* is broken, not the
@@ -380,6 +386,7 @@ class TrialRunner:
                 f"grader raised {type(exc).__name__}: {exc}",
                 ErrorCause.GRADER,
                 removed=phase.container_removed,
+                efficiency=self._efficiency(adapter_result, started),
             )
 
         return TrialResult(
@@ -612,6 +619,7 @@ class TrialRunner:
         cause: ErrorCause,
         *,
         removed: bool = True,
+        efficiency: Efficiency | None = None,
     ) -> TrialResult:
         return TrialResult(
             run_id=spec.run_id,
@@ -624,6 +632,7 @@ class TrialRunner:
             container_removed=removed,
             started_unix_ms=started,
             error_cause=cause,
+            efficiency=efficiency or Efficiency(),
         )
 
 
