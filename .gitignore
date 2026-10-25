@@ -30,3 +30,7 @@ snapshot-ref.json
 
 # OS
 .DS_Store
+
+# Web dashboard
+web/node_modules/
+web/dist/

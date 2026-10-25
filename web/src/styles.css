@@ -1,0 +1,246 @@
+:root {
+  --bg: #ffffff;
+  --fg: #16181d;
+  --muted: #5b6270;
+  --line: #e1e4ea;
+  --card: #f6f7f9;
+  --accent: #2f5bea;
+  --pass: #2e9e5b;
+  --fail: #d6453d;
+  --timeout: #d9902f;
+  --harness: #8a8f99;
+  --good: #1f7a44;
+  --bad: #b3261e;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14161a;
+    --fg: #e7e9ee;
+    --muted: #9aa1ae;
+    --line: #2a2e36;
+    --card: #1c1f26;
+    --accent: #7c9bff;
+    --pass: #3fbf78;
+    --fail: #ef6a62;
+    --timeout: #e8a64a;
+    --harness: #6f7683;
+    --good: #5fd08e;
+    --bad: #ff8b84;
+  }
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+main {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+}
+h1 {
+  margin: 0 0 4px;
+  font-size: 1.6rem;
+}
+h2 {
+  margin: 28px 0 8px;
+  font-size: 1.15rem;
+}
+h3 {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+code {
+  background: var(--card);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+.muted {
+  color: var(--muted);
+}
+.good {
+  color: var(--good);
+}
+.bad {
+  color: var(--bad);
+}
+.warn {
+  color: var(--timeout);
+}
+.note {
+  padding: 8px 12px;
+  border-left: 3px solid var(--accent);
+  background: var(--card);
+}
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  align-items: center;
+  margin-top: 12px;
+}
+button {
+  font: inherit;
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--card);
+  color: var(--fg);
+  cursor: pointer;
+}
+button:hover,
+button:focus-visible {
+  border-color: var(--accent);
+  outline: none;
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+.card .big {
+  margin: 4px 0 0;
+  font-size: 1.9rem;
+  font-weight: 650;
+  line-height: 1.1;
+}
+.card .muted {
+  margin: 4px 0 0;
+  font-size: 0.85rem;
+}
+.scroll {
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th,
+td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  font-weight: normal;
+}
+thead th {
+  font-weight: 600;
+  color: var(--muted);
+}
+tbody th {
+  font-weight: 500;
+}
+.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.heat-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 3px 0;
+}
+.heat-label {
+  flex: 0 0 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.9rem;
+}
+.heat-cells {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+.cell {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  vertical-align: middle;
+}
+.cell.pass {
+  background: var(--pass);
+}
+.cell.fail {
+  background: var(--fail);
+}
+.cell.timeout {
+  background: var(--timeout);
+}
+.cell.harness_error {
+  background: var(--harness);
+}
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  padding: 0;
+  margin: 4px 0 8px;
+  list-style: none;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.chart {
+  width: 100%;
+  max-width: 560px;
+  height: auto;
+}
+.chart .grid {
+  stroke: var(--line);
+}
+.chart .axis {
+  fill: var(--muted);
+  font-size: 11px;
+}
+.chart .line {
+  stroke-width: 2;
+}
+.chart .line.hat,
+.swatch.hat {
+  stroke: var(--accent);
+  background: var(--accent);
+}
+.chart .line.at,
+.swatch.at {
+  stroke: var(--timeout);
+  background: var(--timeout);
+}
+.chart .dot.hat {
+  fill: var(--accent);
+}
+.chart .dot.at {
+  fill: var(--timeout);
+}
+.swatch {
+  display: inline-block;
+  width: 14px;
+  height: 4px;
+  border-radius: 2px;
+  vertical-align: middle;
+}
+.drop {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+@media (max-width: 560px) {
+  .heat-label {
+    flex-basis: 110px;
+  }
+}

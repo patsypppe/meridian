@@ -10,7 +10,8 @@ Source: https://github.com/UKGovernmentBEIS/inspect_ai at commit
 `7c2dcccbebc6747f310a70eeba1fa4063fe060db`.
 
 Used in: `src/meridian/stats/intervals.py` (Student-t quantile, regularized
-incomplete beta, Wilson score interval).
+incomplete beta, Wilson score interval) and its TypeScript port in
+`web/src/stats.ts`.
 
 MIT License
 
