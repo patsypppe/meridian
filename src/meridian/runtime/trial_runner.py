@@ -72,6 +72,19 @@ class UpstreamState:
 UpstreamProbe = Callable[[str, int], Awaitable[UpstreamState]]
 
 
+# Time the proxy spends backing off from a throttling provider is not the agent's
+# time. It is added to the deadline, but bounded: a provider that never recovers
+# must end the trial, not hang it.
+MAX_THROTTLE_EXTENSION_FACTOR = 2.0
+WAIT_POLL_SECONDS = 2.0
+
+
+def effective_deadline_seconds(timeout_seconds: float, throttled_seconds: float) -> float:
+    """The task's deadline plus the provider backoff it lost, capped at 2x the deadline."""
+    extension = min(max(throttled_seconds, 0.0), timeout_seconds * MAX_THROTTLE_EXTENSION_FACTOR)
+    return timeout_seconds + extension
+
+
 TRANSCRIPT_RELATIVE = ".meridian/transcript.jsonl"
 TRANSCRIPT_TAIL_CHARS = 1800
 
@@ -168,6 +181,8 @@ class ContainerPhase:
     # tell an OOM kill from any other SIGKILL — including the one Meridian sends
     # to enforce a timeout. See `_wait`.
     oom_killed: bool = False
+    # Provider backoff added to the deadline, in seconds (0 when none was needed).
+    throttle_extension_s: float = 0.0
 
 
 def _now_ms() -> int:
@@ -294,8 +309,17 @@ class TrialRunner:
             await _to_thread(container.start)
             await self._materialize(container, task, spec)
 
-            timed_out, exit_code, oom_killed = await self._wait(
-                container, task.limits.timeout_seconds
+            throttled: Callable[[], Awaitable[float]] | None = None
+            if self._upstream is not None:
+                probe = self._upstream
+                baseline = (await probe(spec.task_slug, spec.trial_index)).waited_ms
+
+                async def throttled() -> float:
+                    now = await probe(spec.task_slug, spec.trial_index)
+                    return max(now.waited_ms - baseline, 0) / 1000.0
+
+            timed_out, exit_code, oom_killed, extension_s = await self._wait(
+                container, task.limits.timeout_seconds, throttled
             )
             await self._extract(container, task, state_dir)
         except HarnessFault as fault:
@@ -317,6 +341,7 @@ class TrialRunner:
             exit_code=exit_code,
             container_removed=removed,
             oom_killed=oom_killed,
+            throttle_extension_s=extension_s,
         )
 
     def _verdict(
@@ -360,7 +385,13 @@ class TrialRunner:
                 seed=spec.seed,
                 outcome=Outcome.TIMEOUT,
                 detail=_with_transcript(
-                    f"exceeded the {task.limits.timeout_seconds}s deadline", state_dir
+                    f"exceeded the {task.limits.timeout_seconds}s deadline"
+                    + (
+                        f" (extended by {phase.throttle_extension_s:.0f}s of provider throttling)"
+                        if phase.throttle_extension_s > 0
+                        else ""
+                    ),
+                    state_dir,
                 ),
                 attempts=attempt,
                 efficiency=self._efficiency(adapter_result, started),
@@ -523,31 +554,62 @@ class TrialRunner:
         except Exception as exc:
             raise HarnessFault(f"materializing inputs failed: {type(exc).__name__}: {exc}") from exc
 
-    async def _wait(self, container: Any, timeout_seconds: int) -> tuple[bool, int | None, bool]:
+    async def _wait(
+        self,
+        container: Any,
+        timeout_seconds: int,
+        throttled_seconds: Callable[[], Awaitable[float]] | None = None,
+    ) -> tuple[bool, int | None, bool, float]:
         """Wait for the container, killing it if the deadline passes.
 
         Cancelling the Python future does not stop a container: it keeps running,
         keeps holding resources, and keeps spending tokens. The container is what
         gets killed.
 
-        Returns `(timed_out, exit_code, oom_killed)`. The OOM flag comes from the
-        daemon, never from the exit code: a cgroup kill and Meridian's own timeout
-        kill both surface as 137, so classifying on the code alone would report
-        every timeout as an out-of-memory failure.
+        The deadline moves with provider throttling: `throttled_seconds` reports how
+        long the proxy has spent backing off on this trial's behalf, and that time is
+        added to the deadline (see `effective_deadline_seconds`). Without it, a
+        rate-limited provider turns an agent that finished its work into a timeout.
+
+        Returns `(timed_out, exit_code, oom_killed, extension_seconds)`. The OOM flag
+        comes from the daemon, never from the exit code: a cgroup kill and
+        Meridian's own timeout kill both surface as 137, so classifying on the code
+        alone would report every timeout as an out-of-memory failure.
         """
+        waiter = asyncio.ensure_future(_to_thread(container.wait))
+        started = time.monotonic()
+        extension = 0.0
         try:
-            status = await asyncio.wait_for(
-                _to_thread(container.wait), timeout=float(timeout_seconds)
-            )
-        except TimeoutError:
-            await self._kill(container)
-            return True, None, False
+            while True:
+                deadline = effective_deadline_seconds(float(timeout_seconds), extension)
+                remaining = deadline - (time.monotonic() - started)
+                if remaining <= 0:
+                    await self._kill(container)
+                    return True, None, False, max(deadline - timeout_seconds, 0.0)
+                done, _ = await asyncio.wait({waiter}, timeout=min(remaining, WAIT_POLL_SECONDS))
+                if done:
+                    status = waiter.result()
+                    break
+                if throttled_seconds is not None:
+                    extension = await throttled_seconds()
+        except HarnessFault:
+            raise
         except Exception as exc:
             raise HarnessFault(
                 f"waiting on the container failed: {type(exc).__name__}: {exc}"
             ) from exc
+        finally:
+            if not waiter.done():
+                waiter.cancel()
         code = status.get("StatusCode") if isinstance(status, dict) else None
-        return False, int(code) if code is not None else None, await self._oom_killed(container)
+        return (
+            False,
+            int(code) if code is not None else None,
+            await self._oom_killed(container),
+            max(
+                effective_deadline_seconds(float(timeout_seconds), extension) - timeout_seconds, 0.0
+            ),
+        )
 
     async def _oom_killed(self, container: Any) -> bool:
         """Ask the daemon whether the cgroup killed this container.
