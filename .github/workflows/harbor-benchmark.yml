@@ -99,7 +99,7 @@ jobs:
         run: |
           {
             jq -r '[.tasks[].trials[]] | "TOTAL trials=\(length) pass=\(map(select(.outcome=="pass"))|length) harness_error=\(map(select(.outcome=="harness_error"))|length)"' out/result.json
-            jq -r '.tasks[] | "\(.task_slug) turns_mean=\(([.trials[].efficiency.turns]|add)/(.trials|length)) tool_calls_mean=\(([.trials[].efficiency.tool_calls]|add)/(.trials|length)) pass=\([.trials[]|select(.outcome=="pass")]|length)/\(.trials|length) detail=\(.trials[0].detail[0:200])"' out/result.json
+            jq -r '.tasks[] | "\(.task_slug) turns_mean=\(([.trials[].efficiency.turns]|add)/(.trials|length)) tool_calls_mean=\(([.trials[].efficiency.tool_calls]|add)/(.trials|length)) wait_s_mean=\((([.trials[].efficiency.upstream_wait_ms]|add)/(.trials|length)/1000|floor)) dur_s_mean=\((([.trials[].efficiency.duration_ms]|add)/(.trials|length)/1000|floor)) pass=\([.trials[]|select(.outcome=="pass")]|length)/\(.trials|length) detail=\(.trials[0].detail[0:200])"' out/result.json
           } > out/digest.txt 2>&1 || true
       - name: Annotate results
         if: always()

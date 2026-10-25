@@ -66,6 +66,7 @@ class UpstreamState:
     failures: int = 0
     last_failed: bool = False
     kind: str | None = None
+    waited_ms: int = 0
 
 
 UpstreamProbe = Callable[[str, int], Awaitable[UpstreamState]]
@@ -229,9 +230,17 @@ class TrialRunner:
                 )
 
             result = self._verdict(task, spec, phase, state_dir, started, attempt)
-            if self._upstream is None or result.outcome not in (Outcome.FAIL, Outcome.TIMEOUT):
+            if self._upstream is None:
                 return result
             after = await self._upstream(spec.task_slug, spec.trial_index)
+            waited = max(after.waited_ms - (before.waited_ms if before else 0), 0)
+            result = result.model_copy(
+                update={
+                    "efficiency": result.efficiency.model_copy(update={"upstream_wait_ms": waited})
+                }
+            )
+            if result.outcome not in (Outcome.FAIL, Outcome.TIMEOUT):
+                return result
             return attribute_provider_fault(result, before, after)
         finally:
             shutil.rmtree(state_dir, ignore_errors=True)

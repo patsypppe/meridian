@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import math
 from collections.abc import Callable, Mapping
+from dataclasses import dataclass
 from datetime import UTC, datetime
 from email.utils import parsedate_to_datetime
 
@@ -33,6 +34,18 @@ RETRY_AFTER_JITTER = 0.1
 
 # Connection resets, DNS failures, read/write/connect timeouts, protocol errors.
 RETRYABLE_EXCEPTIONS: tuple[type[BaseException], ...] = (httpx.TransportError,)
+
+
+@dataclass
+class RetryStats:
+    """What retrying cost one upstream call: how often, and how long it waited."""
+
+    retries: int = 0
+    waited_ms: int = 0
+
+    def record_wait(self, seconds: float) -> None:
+        self.retries += 1
+        self.waited_ms += int(seconds * 1000)
 
 
 def is_retryable_status(status: int) -> bool:

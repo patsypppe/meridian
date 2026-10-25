@@ -158,6 +158,7 @@ async def execute(client: DockerClient, request: RunRequest) -> RunOutcome:
                     failures=int(entry.get("upstream_failures", 0)),
                     last_failed=bool(entry.get("last_upstream_failed", False)),
                     kind=entry.get("last_upstream_kind"),
+                    waited_ms=int(entry.get("upstream_wait_ms", 0)),
                 )
             except Exception:
                 return UpstreamState()

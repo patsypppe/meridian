@@ -97,6 +97,9 @@ class UpstreamHealth:
     last_failed: bool = False
     # "provider" (rate limit, 5xx, transport) or "proxy" (a bug on our side).
     last_kind: str | None = None
+    # Time the proxy spent backing off before retrying the provider, in total.
+    retries: int = 0
+    waited_ms: int = 0
 
 
 @dataclass
@@ -122,6 +125,13 @@ class BudgetLedger:
         health.failures += 1
         health.last_failed = True
         health.last_kind = kind
+
+    def record_upstream_wait(
+        self, task_slug: str, trial_index: int, *, retries: int, waited_ms: int
+    ) -> None:
+        health = self.upstream.setdefault(self._key(task_slug, trial_index), UpstreamHealth())
+        health.retries += retries
+        health.waited_ms += waited_ms
 
     def record_upstream_success(self, task_slug: str, trial_index: int) -> None:
         health = self.upstream.setdefault(self._key(task_slug, trial_index), UpstreamHealth())
@@ -202,6 +212,8 @@ class BudgetLedger:
                     "upstream_failures": self.upstream.get(key, UpstreamHealth()).failures,
                     "last_upstream_failed": self.upstream.get(key, UpstreamHealth()).last_failed,
                     "last_upstream_kind": self.upstream.get(key, UpstreamHealth()).last_kind,
+                    "upstream_retries": self.upstream.get(key, UpstreamHealth()).retries,
+                    "upstream_wait_ms": self.upstream.get(key, UpstreamHealth()).waited_ms,
                 }
                 for key, entry in sorted(self.usage.items())
             },

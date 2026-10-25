@@ -86,6 +86,10 @@ class Efficiency(BaseModel):
     input_tokens: int = 0
     output_tokens: int = 0
     duration_ms: int = 0
+    # Time the proxy spent backing off from the provider (rate limits, 5xx). Part of
+    # `duration_ms`, reported separately so a slow trial can be told apart from a
+    # throttled one.
+    upstream_wait_ms: int = 0
 
 
 class TrialResult(BaseModel):

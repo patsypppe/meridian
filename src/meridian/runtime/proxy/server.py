@@ -90,6 +90,7 @@ async def _post_with_retries(
     url: str,
     payload: dict[str, Any],
     headers: dict[str, str],
+    stats: retry.RetryStats | None = None,
 ) -> httpx.Response:
     """POST, retrying transient provider failures with bounded, jittered backoff.
 
@@ -104,15 +105,19 @@ async def _post_with_retries(
         except retry.RETRYABLE_EXCEPTIONS:
             if last:
                 raise
-            await asyncio.sleep(retry.backoff_seconds(attempt, None, rng=random.random))
+            delay = retry.backoff_seconds(attempt, None, rng=random.random)
+            if stats is not None:
+                stats.record_wait(delay)
+            await asyncio.sleep(delay)
             continue
         if last or not retry.is_retryable_status(response.status_code):
             return response
-        await asyncio.sleep(
-            retry.backoff_seconds(
-                attempt, retry.retry_after_from(response.headers), rng=random.random
-            )
+        delay = retry.backoff_seconds(
+            attempt, retry.retry_after_from(response.headers), rng=random.random
         )
+        if stats is not None:
+            stats.record_wait(delay)
+        await asyncio.sleep(delay)
     raise AssertionError("unreachable")  # pragma: no cover
 
 
@@ -145,8 +150,15 @@ async def _call_upstream(
         payload = {**body, "model": state.config.upstream_model}
     else:
         payload = body
-    async with httpx.AsyncClient(timeout=UPSTREAM_TIMEOUT_SECONDS) as client:
-        response = await _post_with_retries(client, url, payload, headers)
+    stats = retry.RetryStats()
+    try:
+        async with httpx.AsyncClient(timeout=UPSTREAM_TIMEOUT_SECONDS) as client:
+            response = await _post_with_retries(client, url, payload, headers, stats)
+    finally:
+        # Recorded even when the call ultimately fails: that is when it matters most.
+        state.ledger.record_upstream_wait(
+            task_slug, trial_index, retries=stats.retries, waited_ms=stats.waited_ms
+        )
     response.raise_for_status()
     parsed: dict[str, Any] = response.json()
     return from_openai_response(parsed) if openai else parsed

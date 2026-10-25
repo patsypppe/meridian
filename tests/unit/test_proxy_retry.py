@@ -136,3 +136,42 @@ async def test_client_errors_are_returned_without_retrying(
     async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
         response = await server_module._post_with_retries(client, "http://x/", {}, {})
     assert response.status_code == 404 and calls["n"] == 1
+
+
+# -- accounting for time spent backing off ----------------------------------------------
+
+
+def test_retry_stats_accumulate_waits() -> None:
+    stats = retry.RetryStats()
+    stats.record_wait(1.5)
+    stats.record_wait(0.25)
+    assert (stats.retries, stats.waited_ms) == (2, 1750)
+
+
+async def test_waiting_is_recorded_per_call(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls = {"n": 0}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        calls["n"] += 1
+        if calls["n"] < 3:
+            return httpx.Response(429, headers={"retry-after": "2"})
+        return httpx.Response(200, json={})
+
+    monkeypatch.setattr(server_module.asyncio, "sleep", _no_sleep)
+    stats = retry.RetryStats()
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+        await server_module._post_with_retries(client, "http://x/", {}, {}, stats)
+    assert stats.retries == 2
+    # Retry-After of 2s, plus up to 10% jitter, twice
+    assert 4000 <= stats.waited_ms <= 4400
+
+
+def test_the_ledger_reports_upstream_wait_per_trial() -> None:
+    from meridian.runtime.proxy.budget import BudgetLedger
+
+    ledger = BudgetLedger()
+    ledger.usage_for("happy-path", 0)
+    ledger.record_upstream_wait("happy-path", 0, retries=2, waited_ms=4000)
+    ledger.record_upstream_wait("happy-path", 0, retries=1, waited_ms=1000)
+    entry = ledger.snapshot()["trials"]["happy-path:0"]  # type: ignore[index]
+    assert entry["upstream_retries"] == 3 and entry["upstream_wait_ms"] == 5000
