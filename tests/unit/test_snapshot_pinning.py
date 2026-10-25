@@ -63,3 +63,18 @@ def test_repinning_refuses_a_tag(tmp_path: Path) -> None:
     shutil.copytree(CHECKOUT_SUITE, suite)
     with pytest.raises(UnpinnedReferenceError):
         rewrite_suite_snapshots(suite, "checkout:latest")
+
+
+def test_pinning_handles_quoted_and_bare_digests(tmp_path: Path) -> None:
+    """Hand-written tasks quote the digest; importer-generated YAML does not."""
+    from meridian.snapshots.build import rewrite_task_snapshot
+
+    old = "sha256:" + "0" * 64
+    new = "sha256:" + "ab" * 32
+    quoted = tmp_path / "quoted.yaml"
+    quoted.write_text(f'environment:\n  snapshot: "{old}"\n  workdir: /work\n')
+    bare = tmp_path / "bare.yaml"
+    bare.write_text(f"environment:\n  snapshot: {old}\n  workdir: /work\n")
+    assert rewrite_task_snapshot(quoted, new) and rewrite_task_snapshot(bare, new)
+    assert f'snapshot: "{new}"' in quoted.read_text()
+    assert f"snapshot: {new}\n" in bare.read_text()

@@ -19,6 +19,15 @@ DIGEST_RE = re.compile(r"^sha256:[0-9a-f]{64}$")
 
 SNAPSHOT_REF_FILE = "snapshot-ref.json"
 
+# Written into tasks whose image has not been built yet (for example after
+# `meridian import-harbor`). It satisfies the digest pattern so the suite loads, but
+# no image can have it, so running such a task must be refused with a clear message.
+UNBUILT_DIGEST = "sha256:" + "0" * 64
+
+
+def is_unbuilt(reference: str) -> bool:
+    return reference == UNBUILT_DIGEST
+
 
 class UnpinnedReferenceError(ValueError):
     """Raised when a mutable tag reaches a context that requires a digest."""

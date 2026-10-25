@@ -34,8 +34,7 @@ from typing import Any
 
 import yaml
 
-UNBUILT_DIGEST = "sha256:" + "0" * 64
-"""Placeholder written into converted tasks until their image is built and pinned."""
+from meridian.snapshots.registry import UNBUILT_DIGEST
 
 TRIAL_UID = 10001
 DEFAULT_WORKDIR = "/app"
@@ -550,7 +549,3 @@ def write_suite(
                 ),
             )
     return converted, skipped
-
-
-def is_unbuilt(snapshot: str) -> bool:
-    return snapshot == UNBUILT_DIGEST

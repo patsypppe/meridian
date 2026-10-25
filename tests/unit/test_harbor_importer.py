@@ -10,6 +10,7 @@ from typer.testing import CliRunner
 
 from meridian.cli import app
 from meridian.importers import harbor
+from meridian.snapshots.registry import UNBUILT_DIGEST
 from meridian.suites.loader import load_suite
 
 pytestmark = pytest.mark.unit
@@ -234,7 +235,7 @@ def test_converted_suite_loads_and_has_the_expected_shape(tmp_path: Path) -> Non
     suite = load_suite(suite_dir)  # validates containment, existence and schema
     imported = suite.task("word-count")
     assert imported.environment.workdir == "/app"
-    assert imported.environment.snapshot == harbor.UNBUILT_DIGEST
+    assert imported.environment.snapshot == UNBUILT_DIGEST
     assert imported.limits.timeout_seconds == 240
     assert imported.outcome_assertions[0].kind == "verifier_script"
     assert [(f.src, f.dest) for f in imported.grader_files] == [
@@ -415,3 +416,52 @@ def test_a_script_that_needs_no_rewrite_is_left_alone(tmp_path: Path) -> None:
 def test_rewrite_handles_other_pytest_pins_and_python_flags() -> None:
     script = "uvx -p 3.13 -w pytest==8.4.3 pytest /tests/test_outputs.py -rA\n"
     assert harbor.rewrite_uv_boilerplate(script) == "python3 -m pytest /tests/test_outputs.py -rA\n"
+
+
+# -- pinning per-task images -----------------------------------------------------------
+
+
+def test_rewrite_task_snapshot_pins_only_that_file(tmp_path: Path) -> None:
+    from meridian.snapshots.build import rewrite_task_snapshot
+
+    source = tmp_path / "src"
+    source.mkdir()
+    tasks = [harbor.load_harbor_task(make_task(source, n)) for n in ("one", "two")]
+    suite_dir = tmp_path / "suite"
+    converted, _ = harbor.write_suite(tasks, suite_dir, suite_slug="demo")
+    first, second = (c.slug for c in converted)
+    digest = "sha256:" + "ab" * 32
+
+    assert rewrite_task_snapshot(suite_dir / "tasks" / f"{first}.yaml", digest) is True
+    assert rewrite_task_snapshot(suite_dir / "tasks" / f"{first}.yaml", digest) is False
+    suite = load_suite(suite_dir)
+    assert suite.task(first).environment.snapshot == digest
+    assert suite.task(second).environment.snapshot == UNBUILT_DIGEST
+
+
+def test_running_a_suite_with_unbuilt_images_is_refused_with_the_fix(tmp_path: Path) -> None:
+    source = tmp_path / "src"
+    source.mkdir()
+    suite_dir = tmp_path / "suite"
+    harbor.write_suite([harbor.load_harbor_task(make_task(source))], suite_dir, suite_slug="demo")
+    result = CliRunner().invoke(app, ["run", "--suite", str(suite_dir)])
+    assert result.exit_code == 2
+    assert "no built image" in result.output and "build-images" in result.output
+
+
+def test_build_images_without_dockerfiles_says_so(tmp_path: Path) -> None:
+    from tests.conftest import CHECKOUT_SUITE
+
+    result = CliRunner().invoke(app, ["suite", "build-images", str(CHECKOUT_SUITE)])
+    assert result.exit_code == 2 and "images/<slug>/Dockerfile" in result.output
+
+
+def test_only_selects_tasks_by_directory_name(tmp_path: Path) -> None:
+    dataset = tmp_path / "dataset"
+    dataset.mkdir()
+    for name in ("alpha", "beta", "gamma"):
+        make_task(dataset, name)
+    result = CliRunner().invoke(
+        app, ["import-harbor", str(dataset), "--out", str(tmp_path / "s"), "--only", "beta"]
+    )
+    assert result.exit_code == 0 and "read 1 task(s)" in result.output

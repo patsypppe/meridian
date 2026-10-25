@@ -19,7 +19,7 @@ from meridian.snapshots.build import (
     current_platform,
     rewrite_suite_snapshots,
 )
-from meridian.snapshots.registry import read_snapshot_ref
+from meridian.snapshots.registry import is_unbuilt, read_snapshot_ref
 from meridian.suites.loader import load_suite
 from meridian.suites.validate import SuiteValidationError
 from meridian.version import __version__
@@ -66,6 +66,56 @@ def version() -> None:
     out(__version__)
 
 
+@suite_app.command("build-images")
+def suite_build_images(
+    path: Path = typer.Argument(..., help="Path to the suite directory."),
+    only: list[str] = typer.Option([], "--only", help="Build just these task slugs."),
+) -> None:
+    """Build each task's image (images/<slug>/) and pin its digest into the task.
+
+    For suites with one image per task, such as those from `import-harbor`. A task is
+    built when it has an `images/<slug>/Dockerfile`; tasks sharing one image are
+    pinned with `snapshot build --update-suite` instead.
+    """
+    from meridian.snapshots.build import rewrite_task_snapshot
+
+    try:
+        suite = load_suite(path)
+    except SuiteValidationError as exc:
+        _report_validation_failure(exc)
+        raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
+
+    root = Path(path)
+    todo = [t for t in suite.tasks if (root / "images" / t.slug / "Dockerfile").is_file()]
+    if only:
+        todo = [t for t in todo if t.slug in set(only)]
+    if not todo:
+        err("no task has an images/<slug>/Dockerfile to build")
+        raise typer.Exit(exit_codes.HARNESS_ERROR)
+
+    try:
+        client = get_client()
+    except DockerUnavailableError as exc:
+        err(f"cannot reach Docker: {exc}")
+        raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
+
+    failures = 0
+    for task in todo:
+        try:
+            digest = build_snapshot(
+                client, root / "images" / task.slug, tag=f"meridian-{suite.slug}-{task.slug}:dev"
+            )
+        except SnapshotBuildError as exc:
+            failures += 1
+            err(f"  FAILED  {task.slug}: {exc}")
+            continue
+        rewrite_task_snapshot(root / "tasks" / f"{task.slug}.yaml", digest)
+        out(f"{task.slug} {digest}")
+    err(f"built {len(todo) - failures} of {len(todo)} image(s)")
+    if failures:
+        raise typer.Exit(exit_codes.HARNESS_ERROR)
+
+
 @suite_app.command("publish")
 def suite_publish(
     path: Path = typer.Argument(..., help="Path to the suite directory."),
@@ -107,6 +157,9 @@ def import_harbor(
     out_dir: Path = typer.Option(..., "--out", help="Suite directory to write into."),
     suite_slug: str = typer.Option("harbor-import", "--suite-slug", help="Slug for a new suite."),
     limit: int | None = typer.Option(None, "--limit", help="Convert at most this many tasks."),
+    only: list[str] = typer.Option(
+        [], "--only", help="Only tasks whose directory name is one of these (repeatable)."
+    ),
     rewrite_boilerplate: bool = typer.Option(
         False,
         "--rewrite-uv-boilerplate",
@@ -125,6 +178,8 @@ def import_harbor(
 
     try:
         task_dirs = harbor.find_task_dirs(path)
+        if only:
+            task_dirs = [d for d in task_dirs if d.name in set(only)]
         if limit is not None:
             task_dirs = task_dirs[:limit]
         tasks, unreadable = harbor.load_all(task_dirs, rewrite_boilerplate=rewrite_boilerplate)
@@ -389,6 +444,15 @@ def run(
     except SuiteValidationError as exc:
         _report_validation_failure(exc)
         raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
+
+    unbuilt = [t.slug for t in loaded.tasks if is_unbuilt(t.environment.snapshot)]
+    if unbuilt:
+        err(
+            f"{len(unbuilt)} task(s) have no built image yet ({', '.join(unbuilt[:5])}"
+            f"{', ...' if len(unbuilt) > 5 else ''}). Run `meridian suite build-images "
+            f"{suite}` first."
+        )
+        raise typer.Exit(exit_codes.HARNESS_ERROR)
 
     config = load_config(
         "meridian.yaml",

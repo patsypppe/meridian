@@ -18,7 +18,8 @@ if TYPE_CHECKING:  # pragma: no cover - typing only
 
 # `environment.snapshot: "sha256:..."` inside a task YAML. Rewritten in place by
 # `snapshot sync` so the pinned digest matches the architecture actually running.
-SNAPSHOT_LINE = re.compile(r'^(?P<indent>\s*snapshot:\s*")sha256:[0-9a-f]{64}(?P<tail>".*)$')
+# The value may be quoted (hand-written tasks) or bare (YAML dumped by importers).
+SNAPSHOT_LINE = re.compile(r'^(?P<indent>\s*snapshot:\s*"?)sha256:[0-9a-f]{64}(?P<tail>"?.*)$')
 
 
 class SnapshotBuildError(RuntimeError):
@@ -72,12 +73,50 @@ def build_snapshot(
     except (
         Exception
     ) as exc:  # docker.errors.BuildError and transport errors alike are harness errors
-        raise SnapshotBuildError(f"building {env_path}: {exc}") from exc
+        raise SnapshotBuildError(f"building {env_path}: {exc}{_build_log_tail(exc)}") from exc
 
     digest = require_digest(str(image.id))
     if write_ref:
         write_snapshot_ref(env_path, digest=digest, tag=tag, platform=current_platform())
     return digest
+
+
+def _build_log_tail(exc: Exception, lines: int = 15) -> str:
+    """The end of the build log, where a failed Dockerfile step says why."""
+    log = getattr(exc, "build_log", None)
+    if not log:
+        return ""
+    messages = [
+        str(entry.get("stream") or entry.get("error") or "").rstrip()
+        for entry in log
+        if isinstance(entry, dict)
+    ]
+    tail = [m for m in messages if m][-lines:]
+    return "\n--- build log (tail) ---\n" + "\n".join(tail) if tail else ""
+
+
+def rewrite_task_snapshot(task_file: str | Path, digest: str) -> bool:
+    """Pin `digest` in one task file, in place. Returns whether the file changed.
+
+    Same line-level rewrite as `rewrite_suite_snapshots`, for suites where every
+    task has its own image.
+    """
+    require_digest(digest)
+    path = Path(task_file)
+    original = path.read_text(encoding="utf-8")
+    lines = []
+    for line in original.splitlines(keepends=True):
+        match = SNAPSHOT_LINE.match(line.rstrip("\n"))
+        if match:
+            newline = "\n" if line.endswith("\n") else ""
+            lines.append(f"{match.group('indent')}{digest}{match.group('tail')}{newline}")
+        else:
+            lines.append(line)
+    rewritten = "".join(lines)
+    if rewritten == original:
+        return False
+    path.write_text(rewritten, encoding="utf-8")
+    return True
 
 
 def rewrite_suite_snapshots(suite_path: str | Path, digest: str) -> list[Path]:
