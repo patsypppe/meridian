@@ -72,6 +72,33 @@ class UpstreamState:
 UpstreamProbe = Callable[[str, int], Awaitable[UpstreamState]]
 
 
+TRANSCRIPT_RELATIVE = ".meridian/transcript.jsonl"
+TRANSCRIPT_TAIL_CHARS = 1800
+
+
+def transcript_tail(state_dir: Path, limit: int = TRANSCRIPT_TAIL_CHARS) -> str:
+    """The end of the agent's own transcript, if it kept one, else an empty string.
+
+    A timeout verdict that says only "exceeded the deadline" cannot be debugged. If
+    the agent recorded what it was doing, the last of it explains where the time
+    went. Lines are cut on a boundary so the tail stays readable.
+    """
+    path = state_dir / TRANSCRIPT_RELATIVE
+    try:
+        text = path.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return ""
+    if len(text) > limit:
+        text = text[-limit:]
+        text = text[text.find("\n") + 1 :] if "\n" in text else text
+    return text.strip()
+
+
+def _with_transcript(detail: str, state_dir: Path) -> str:
+    tail = transcript_tail(state_dir)
+    return f"{detail}; last agent activity:\n{tail}" if tail else detail
+
+
 def attribute_provider_fault(
     result: TrialResult, before: UpstreamState | None, after: UpstreamState
 ) -> TrialResult:
@@ -332,7 +359,9 @@ class TrialRunner:
                 trial_index=spec.trial_index,
                 seed=spec.seed,
                 outcome=Outcome.TIMEOUT,
-                detail=f"exceeded the {task.limits.timeout_seconds}s deadline",
+                detail=_with_transcript(
+                    f"exceeded the {task.limits.timeout_seconds}s deadline", state_dir
+                ),
                 attempts=attempt,
                 efficiency=self._efficiency(adapter_result, started),
                 container_removed=phase.container_removed,

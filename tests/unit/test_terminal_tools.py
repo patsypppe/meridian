@@ -76,3 +76,23 @@ def test_format_result_for_no_output() -> None:
 def test_schema_names_the_one_tool() -> None:
     assert [t["name"] for t in tools.TOOL_SCHEMAS] == ["bash"]
     assert tools.TOOL_SCHEMAS[0]["input_schema"]["required"] == ["command"]
+
+
+# -- the transcript --------------------------------------------------------------------
+
+from terminal_agent import transcript  # noqa: E402
+
+
+def test_transcript_lines_survive_and_are_clipped(tmp_path: Path) -> None:
+    transcript.record(str(tmp_path), "command", command="ls", output="x" * 1000, exit_code=0)
+    lines = (tmp_path / transcript.TRANSCRIPT_RELATIVE).read_text().splitlines()
+    import json
+
+    entry = json.loads(lines[0])
+    assert entry["event"] == "command" and entry["exit_code"] == 0
+    assert entry["output"].startswith("x" * 400) and "more]" in entry["output"]
+
+
+def test_a_transcript_can_never_fail_a_trial() -> None:
+    # an unwritable location is swallowed, not raised
+    transcript.record("/proc/definitely/not/writable", "command", command="ls")

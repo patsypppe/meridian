@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import json
 import os
+import time
 from pathlib import Path
 from typing import Annotated, Any, TypedDict
 
@@ -22,6 +23,7 @@ import httpx
 from langgraph.graph import END, StateGraph
 
 from terminal_agent.tools import TOOL_SCHEMAS, format_result, run_bash
+from terminal_agent.transcript import record
 
 # The proxy substitutes the model the operator chose, so this name is only a label.
 MODEL = os.environ.get("MERIDIAN_FIXTURE_MODEL", "meridian-model")
@@ -81,11 +83,16 @@ def act(state: AgentState) -> AgentState:
         "content-type": "application/json",
     }
     url = f"{context['model_base_url']}/v1/messages"
+    workdir = str(context.get("workdir", "."))
+    asked = time.monotonic()
+    record(workdir, "model_request", turn=state.get("turns", 0) + 1)
     try:
         response = httpx.post(url, json=body, headers=headers, timeout=REQUEST_TIMEOUT_SECONDS)
     except httpx.HTTPError as exc:
+        record(workdir, "model_error", error=f"{type(exc).__name__}: {exc}")
         return {"error": f"model call failed: {exc}", "completed": False}
     if response.status_code != 200:
+        record(workdir, "model_error", status=response.status_code, body=response.text)
         return {
             "error": f"model returned {response.status_code}: {response.text[:400]}",
             "completed": False,
@@ -93,6 +100,21 @@ def act(state: AgentState) -> AgentState:
 
     payload = response.json()
     usage = payload.get("usage") or {}
+    reply = payload.get("content") or []
+    record(
+        workdir,
+        "model_reply",
+        seconds=round(time.monotonic() - asked, 1),
+        stop=payload.get("stop_reason"),
+        text=" ".join(
+            b.get("text", "") for b in reply if isinstance(b, dict) and b.get("type") == "text"
+        ),
+        commands=[
+            (b.get("input") or {}).get("command")
+            for b in reply
+            if isinstance(b, dict) and b.get("type") == "tool_use"
+        ],
+    )
     return {
         "messages": [{"role": "assistant", "content": payload.get("content") or []}],
         "turns": state.get("turns", 0) + 1,
@@ -114,12 +136,22 @@ def tools(state: AgentState) -> AgentState:
         if block.get("name") != "bash" or not isinstance(arguments.get("command"), str):
             text, ok = f"[unknown tool or bad arguments: {json.dumps(arguments)[:200]}]", False
         else:
+            began = time.monotonic()
             result = run_bash(
                 arguments["command"],
                 workdir=workdir,
                 timeout_seconds=arguments.get("timeout_seconds"),
             )
             text, ok = format_result(result), result["error"] is None
+            record(
+                workdir,
+                "command",
+                command=arguments["command"],
+                exit_code=result["exit_code"],
+                error=result["error"],
+                seconds=round(time.monotonic() - began, 1),
+                output=result["output"],
+            )
         recorded.append({"name": str(block.get("name")), "ok": ok})
         results.append(
             {
