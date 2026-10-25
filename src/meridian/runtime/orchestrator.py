@@ -77,6 +77,28 @@ class RunRequest:
         return list(self.suite.scored_tasks)
 
 
+def summarize_throttling(usage: dict[str, Any]) -> str:
+    """One line on how much provider throttling a run absorbed, or "" if none.
+
+    Quotes the provider's own wording for the most recent retry, because a bare
+    "429" does not say which limit was hit or when to come back.
+    """
+    trials = usage.get("trials", {}) or {}
+    retries = sum(int(t.get("upstream_retries", 0)) for t in trials.values())
+    if retries == 0:
+        return ""
+    waited_s = sum(int(t.get("upstream_wait_ms", 0)) for t in trials.values()) / 1000
+    throttled = sum(1 for t in trials.values() if int(t.get("upstream_retries", 0)) > 0)
+    reasons = [
+        str(t.get("last_retry_reason", "")) for t in trials.values() if t.get("last_retry_reason")
+    ]
+    reason = f"; provider said: {reasons[-1]}" if reasons else ""
+    return (
+        f"provider throttling: {retries} retries across {throttled} of {len(trials)} trial(s), "
+        f"{waited_s:.0f}s spent backing off{reason}"
+    )
+
+
 def _grader_files(suite_root: Path, task: TaskDefinition) -> dict[str, bytes]:
     """Grading-time files keyed by absolute destination (see `TaskDefinition`)."""
     return {item.dest: (suite_root / item.src).read_bytes() for item in task.grader_files}
@@ -200,6 +222,9 @@ async def execute(client: DockerClient, request: RunRequest) -> RunOutcome:
         )
 
         usage = handle.usage() if handle else {}
+        throttling = summarize_throttling(usage)
+        if throttling:
+            progress(throttling)
         cost_cents = int(usage.get("run_cents", 0))
         model_ids = [str(m) for m in usage.get("models", [])]
         if len(results) < len(tasks):

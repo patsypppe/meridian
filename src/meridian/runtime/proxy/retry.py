@@ -46,13 +46,24 @@ class RetryStats:
 
     retries: int = 0
     waited_ms: int = 0
-    on_wait: Callable[[float], None] | None = None
+    on_wait: Callable[[float, str], None] | None = None
 
-    def record_wait(self, seconds: float) -> None:
+    def record_wait(self, seconds: float, reason: str = "") -> None:
         self.retries += 1
         self.waited_ms += int(seconds * 1000)
         if self.on_wait is not None:
-            self.on_wait(seconds)
+            self.on_wait(seconds, reason)
+
+
+def describe_retry(status: int | None, body: str = "", limit: int = 240) -> str:
+    """Why a call is being retried, in the provider's own words (clipped).
+
+    A provider's 429 says which limit was hit and when to come back; keeping that
+    turns "the run was throttled" into something that can be acted on.
+    """
+    text = " ".join(body.split())
+    prefix = f"{status}" if status is not None else "transport error"
+    return f"{prefix}: {text[:limit]}" if text else prefix
 
 
 def is_retryable_status(status: int) -> bool:

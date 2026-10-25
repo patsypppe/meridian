@@ -192,3 +192,22 @@ def test_summary_breaks_harness_errors_down_by_cause() -> None:
 
 def test_summary_without_errors_is_just_the_rate() -> None:
     assert _run(trial(Outcome.PASS)).harness_error_summary == "0.0%"
+
+
+def test_throttling_summary_quotes_the_provider() -> None:
+    from meridian.runtime.orchestrator import summarize_throttling
+
+    usage = {
+        "trials": {
+            "a:0": {
+                "upstream_retries": 3,
+                "upstream_wait_ms": 61000,
+                "last_retry_reason": "429: TPM",
+            },
+            "a:1": {"upstream_retries": 0, "upstream_wait_ms": 0},
+        }
+    }
+    line = summarize_throttling(usage)
+    assert "3 retries across 1 of 2 trial(s)" in line and "61s" in line and "429: TPM" in line
+    assert summarize_throttling({"trials": {"a:0": {"upstream_retries": 0}}}) == ""
+    assert summarize_throttling({}) == ""

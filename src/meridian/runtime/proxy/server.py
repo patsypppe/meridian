@@ -98,16 +98,18 @@ async def _post_with_retries(
     attempt's outcome is returned or raised unchanged, so a persistent failure
     still surfaces as an upstream error rather than being hidden.
     """
+    last_error = ""
     for attempt in range(retry.MAX_ATTEMPTS):
         last = attempt == retry.MAX_ATTEMPTS - 1
         try:
             response = await client.post(url, json=payload, headers=headers)
-        except retry.RETRYABLE_EXCEPTIONS:
+        except retry.RETRYABLE_EXCEPTIONS as exc:
+            last_error = f"{type(exc).__name__}: {exc}"
             if last:
                 raise
             delay = retry.backoff_seconds(attempt, None, rng=random.random)
             if stats is not None:
-                stats.record_wait(delay)
+                stats.record_wait(delay, retry.describe_retry(None, str(last_error)))
             await asyncio.sleep(delay)
             continue
         if last or not retry.is_retryable_status(response.status_code):
@@ -116,7 +118,7 @@ async def _post_with_retries(
             attempt, retry.retry_after_from(response.headers), rng=random.random
         )
         if stats is not None:
-            stats.record_wait(delay)
+            stats.record_wait(delay, retry.describe_retry(response.status_code, response.text))
         await asyncio.sleep(delay)
     raise AssertionError("unreachable")  # pragma: no cover
 
@@ -154,8 +156,8 @@ async def _call_upstream(
         # Recorded as each wait is scheduled, not when the call finishes: a trial
         # killed at its deadline mid-backoff would otherwise report no waiting at
         # all, which is exactly the case this exists to expose.
-        on_wait=lambda seconds: state.ledger.record_upstream_wait(
-            task_slug, trial_index, retries=1, waited_ms=int(seconds * 1000)
+        on_wait=lambda seconds, reason: state.ledger.record_upstream_wait(
+            task_slug, trial_index, retries=1, waited_ms=int(seconds * 1000), reason=reason
         )
     )
     async with httpx.AsyncClient(timeout=UPSTREAM_TIMEOUT_SECONDS) as client:

@@ -193,8 +193,40 @@ async def test_waits_are_reported_before_the_sleep_so_a_killed_call_still_counts
         raise Killed
 
     monkeypatch.setattr(server_module.asyncio, "sleep", killed_while_sleeping)
-    stats = retry.RetryStats(on_wait=reported.append)
+    stats = retry.RetryStats(on_wait=lambda seconds, reason="": reported.append(seconds))
     async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
         with pytest.raises(Killed):
             await server_module._post_with_retries(client, "http://x/", {}, {}, stats)
     assert len(reported) == 1 and reported[0] >= 30.0
+
+
+def test_a_retry_keeps_the_providers_own_explanation() -> None:
+    body = '{"error": {"message": "Rate limit reached for model X: tokens per minute (TPM)"}}'
+    text = retry.describe_retry(429, body)
+    assert text.startswith("429: ") and "tokens per minute" in text
+    assert len(retry.describe_retry(429, "x" * 5000)) <= 250
+    assert retry.describe_retry(None, "ReadTimeout: slow").startswith("transport error")
+    assert retry.describe_retry(503) == "503"
+
+
+async def test_the_reason_reaches_the_ledger(monkeypatch: pytest.MonkeyPatch) -> None:
+    from meridian.runtime.proxy.budget import BudgetLedger
+
+    ledger = BudgetLedger()
+    ledger.usage_for("happy-path", 0)
+    seen: list[str] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(429, headers={"retry-after": "0"}, text="Rate limit reached: TPM")
+
+    def on_wait(seconds: float, reason: str) -> None:
+        seen.append(reason)
+        ledger.record_upstream_wait("happy-path", 0, retries=1, waited_ms=0, reason=reason)
+
+    monkeypatch.setattr(server_module.asyncio, "sleep", _no_sleep)
+    stats = retry.RetryStats(on_wait=on_wait)
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+        await server_module._post_with_retries(client, "http://x/", {}, {}, stats)
+    assert seen and all("Rate limit reached: TPM" in r for r in seen)
+    entry = ledger.snapshot()["trials"]["happy-path:0"]  # type: ignore[index]
+    assert "TPM" in entry["last_retry_reason"]
