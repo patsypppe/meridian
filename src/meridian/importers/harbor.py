@@ -189,15 +189,23 @@ def _last_workdir(dockerfile: str) -> str | None:
     return matches[-1] if matches else None
 
 
-def _clamp_timeout(value: Any) -> int:
+def _clamp_timeout(value: Any, cap: int | None = None) -> int:
+    """The task's agent timeout, within what Meridian accepts and an optional cap.
+
+    A cap shortens the benchmark's own time limit, which changes what is being
+    measured; callers that use it must say so when they report results.
+    """
     try:
         seconds = int(float(value))
     except (TypeError, ValueError):
-        return DEFAULT_AGENT_TIMEOUT_SECONDS
-    return max(MIN_TIMEOUT_SECONDS, min(seconds, MAX_TIMEOUT_SECONDS))
+        seconds = DEFAULT_AGENT_TIMEOUT_SECONDS
+    ceiling = MAX_TIMEOUT_SECONDS if cap is None else min(cap, MAX_TIMEOUT_SECONDS)
+    return max(MIN_TIMEOUT_SECONDS, min(seconds, ceiling))
 
 
-def load_harbor_task(task_dir: Path, *, rewrite_boilerplate: bool = False) -> HarborTask:
+def load_harbor_task(
+    task_dir: Path, *, rewrite_boilerplate: bool = False, max_timeout_seconds: int | None = None
+) -> HarborTask:
     """Read one task and record everything Meridian cannot honour.
 
     Raises `HarborImportError` only when the directory is not a task at all;
@@ -336,7 +344,7 @@ def load_harbor_task(task_dir: Path, *, rewrite_boilerplate: bool = False) -> Ha
         root=root,
         name=name,
         instruction=instruction,
-        agent_timeout_seconds=_clamp_timeout(agent.get("timeout_sec")),
+        agent_timeout_seconds=_clamp_timeout(agent.get("timeout_sec"), max_timeout_seconds),
         cpus=str(cpus),
         memory_mb=int(environment.get("memory_mb") or 2048),
         workdir=str(workdir).rstrip("/") or "/",
@@ -350,14 +358,23 @@ def load_harbor_task(task_dir: Path, *, rewrite_boilerplate: bool = False) -> Ha
 
 
 def load_all(
-    task_dirs: list[Path], *, rewrite_boilerplate: bool = False
+    task_dirs: list[Path],
+    *,
+    rewrite_boilerplate: bool = False,
+    max_timeout_seconds: int | None = None,
 ) -> tuple[list[HarborTask], list[Skipped]]:
     """Load every directory; one unreadable task is reported, never fatal to the batch."""
     tasks: list[HarborTask] = []
     unreadable: list[Skipped] = []
     for directory in task_dirs:
         try:
-            tasks.append(load_harbor_task(directory, rewrite_boilerplate=rewrite_boilerplate))
+            tasks.append(
+                load_harbor_task(
+                    directory,
+                    rewrite_boilerplate=rewrite_boilerplate,
+                    max_timeout_seconds=max_timeout_seconds,
+                )
+            )
         except HarborImportError as exc:
             unreadable.append(Skipped(directory, directory.name, (Issue("unreadable", str(exc)),)))
     return tasks, unreadable

@@ -17,12 +17,18 @@ on:
       model:
         description: Model id at the provider
         default: openai/gpt-oss-120b
+      dataset_repo:
+        description: Git URL of a repository of Harbor-format tasks
+        default: "https://github.com/laude-institute/harbor"
       harbor_ref:
-        description: Harbor commit to take tasks from
+        description: Commit of that repository to take tasks from (pins the tasks)
         default: "6099b8cf2bfbbb3e7ff1eb2163bfc4524dbd9ba5"
       tasks_path:
-        description: Directory of Harbor tasks, relative to the Harbor checkout
+        description: Directory of tasks, relative to the checkout
         default: examples/tasks
+      max_timeout:
+        description: Cap on each task's agent timeout in seconds (empty = the task's own)
+        default: ""
       only:
         description: Comma-separated task directory names (empty = all that convert)
         default: "hello-world,hello-workdir,hello-skills,hello-user,hello-harborignore"
@@ -45,7 +51,7 @@ permissions:
 jobs:
   benchmark:
     runs-on: ubuntu-latest
-    timeout-minutes: 150
+    timeout-minutes: 330
     env:
       GROQ_API_KEY: ${{ inputs.provider == 'groq' && secrets.GROQ_API_KEY || '' }}
       ANTHROPIC_API_KEY: ${{ inputs.provider == 'anthropic' && secrets.ANTHROPIC_API_KEY || '' }}
@@ -65,7 +71,7 @@ jobs:
 
       - name: Fetch Harbor at the pinned commit
         run: |
-          git clone --quiet https://github.com/laude-institute/harbor "$RUNNER_TEMP/harbor"
+          git clone --quiet "${{ inputs.dataset_repo }}" "$RUNNER_TEMP/harbor"
           git -C "$RUNNER_TEMP/harbor" checkout --quiet "${{ inputs.harbor_ref }}"
           git -C "$RUNNER_TEMP/harbor" log -1 --format='harbor %H %cd'
 
@@ -76,12 +82,14 @@ jobs:
           for n in "${names[@]}"; do [ -n "$n" ] && only_args="$only_args --only $n"; done
           uv run meridian import-harbor "$RUNNER_TEMP/harbor/${{ inputs.tasks_path }}" \
             --out suites/harbor-slice --suite-slug harbor-slice \
-            --rewrite-uv-boilerplate $only_args 2>&1 | tee out-import.txt
+            --rewrite-uv-boilerplate $only_args \
+            ${{ inputs.max_timeout != '' && format('--max-timeout {0}', inputs.max_timeout) || '' }} \
+            2>&1 | tee out-import.txt
 
       - name: Build the proxy image
         run: uv run meridian snapshot build ./envs/proxy --tag meridian-proxy:dev --context .
       - name: Build the task images and pin their digests
-        run: uv run meridian suite build-images suites/harbor-slice 2>&1 | tee out-build.txt
+        run: uv run meridian suite build-images suites/harbor-slice --drop-failed 2>&1 | tee out-build.txt
 
       - name: Record and score against the real model
         run: |

@@ -70,6 +70,12 @@ def version() -> None:
 def suite_build_images(
     path: Path = typer.Argument(..., help="Path to the suite directory."),
     only: list[str] = typer.Option([], "--only", help="Build just these task slugs."),
+    drop_failed: bool = typer.Option(
+        False,
+        "--drop-failed",
+        help="Move tasks whose image fails to build out of the suite (into dropped/) and "
+        "carry on with the rest, instead of failing the whole command.",
+    ),
 ) -> None:
     """Build each task's image (images/<slug>/) and pin its digest into the task.
 
@@ -100,6 +106,7 @@ def suite_build_images(
         raise typer.Exit(exit_codes.HARNESS_ERROR) from exc
 
     failures = 0
+    failed_slugs: list[str] = []
     for task in todo:
         try:
             digest = build_snapshot(
@@ -107,11 +114,22 @@ def suite_build_images(
             )
         except SnapshotBuildError as exc:
             failures += 1
+            failed_slugs.append(task.slug)
             err(f"  FAILED  {task.slug}: {exc}")
             continue
         rewrite_task_snapshot(root / "tasks" / f"{task.slug}.yaml", digest)
         out(f"{task.slug} {digest}")
     err(f"built {len(todo) - failures} of {len(todo)} image(s)")
+    if drop_failed and failed_slugs:
+        dropped = root / "dropped"
+        dropped.mkdir(exist_ok=True)
+        for slug in failed_slugs:
+            (root / "tasks" / f"{slug}.yaml").rename(dropped / f"{slug}.yaml")
+        names = ", ".join(failed_slugs)
+        out(f"dropped {len(failed_slugs)} task(s) whose image did not build: {names}")
+        if failures == len(todo):
+            raise typer.Exit(exit_codes.HARNESS_ERROR)
+        return
     if failures:
         raise typer.Exit(exit_codes.HARNESS_ERROR)
 
@@ -160,6 +178,12 @@ def import_harbor(
     only: list[str] = typer.Option(
         [], "--only", help="Only tasks whose directory name is one of these (repeatable)."
     ),
+    max_timeout: int | None = typer.Option(
+        None,
+        "--max-timeout",
+        help="Cap each task's agent timeout, in seconds. Shortens the benchmark's own "
+        "limit, so say so when reporting results.",
+    ),
     rewrite_boilerplate: bool = typer.Option(
         False,
         "--rewrite-uv-boilerplate",
@@ -182,7 +206,9 @@ def import_harbor(
             task_dirs = [d for d in task_dirs if d.name in set(only)]
         if limit is not None:
             task_dirs = task_dirs[:limit]
-        tasks, unreadable = harbor.load_all(task_dirs, rewrite_boilerplate=rewrite_boilerplate)
+        tasks, unreadable = harbor.load_all(
+            task_dirs, rewrite_boilerplate=rewrite_boilerplate, max_timeout_seconds=max_timeout
+        )
     except harbor.HarborImportError as exc:
         err(f"import failed: {exc}")
         raise typer.Exit(exit_codes.HARNESS_ERROR) from exc

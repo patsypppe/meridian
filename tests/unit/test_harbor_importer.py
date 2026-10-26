@@ -465,3 +465,22 @@ def test_only_selects_tasks_by_directory_name(tmp_path: Path) -> None:
         app, ["import-harbor", str(dataset), "--out", str(tmp_path / "s"), "--only", "beta"]
     )
     assert result.exit_code == 0 and "read 1 task(s)" in result.output
+
+
+def test_a_timeout_cap_shortens_but_never_lengthens(tmp_path: Path) -> None:
+    root = make_task(tmp_path)  # declares 240s
+    assert harbor.load_harbor_task(root, max_timeout_seconds=100).agent_timeout_seconds == 100
+    assert harbor.load_harbor_task(root, max_timeout_seconds=600).agent_timeout_seconds == 240
+    assert harbor.load_harbor_task(root).agent_timeout_seconds == 240
+
+
+def test_the_cli_applies_the_timeout_cap(tmp_path: Path) -> None:
+    dataset = tmp_path / "dataset"
+    dataset.mkdir()
+    make_task(dataset, "one")
+    out_dir = tmp_path / "s"
+    result = CliRunner().invoke(
+        app, ["import-harbor", str(dataset), "--out", str(out_dir), "--max-timeout", "60"]
+    )
+    assert result.exit_code == 0, result.output
+    assert load_suite(out_dir).task("word-count").limits.timeout_seconds == 60
