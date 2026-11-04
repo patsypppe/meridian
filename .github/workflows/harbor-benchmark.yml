@@ -59,8 +59,8 @@ jobs:
       MERIDIAN_UPSTREAM_BASE_URL: ${{ inputs.provider == 'groq' && 'https://api.groq.com/openai/v1' || 'https://api.anthropic.com' }}
       MERIDIAN_UPSTREAM_MODEL: ${{ inputs.model }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v5
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
       - run: uv sync --frozen
@@ -117,7 +117,7 @@ jobs:
             body=$(head -c 30000 "$f" | sed -e ':a' -e 'N' -e '$!ba' -e 's/%/%25/g' -e 's/\r/%0D/g' -e 's/\n/%0A/g')
             echo "::notice title=$f::$body"
           done
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: harbor-benchmark

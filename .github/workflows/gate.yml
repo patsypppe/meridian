@@ -16,13 +16,13 @@ jobs:
   gate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           # Not optional. Merge-base resolution silently returns nothing on a
           # shallow clone, and the gate then quietly has no baseline forever.
           fetch-depth: 0
 
-      - uses: astral-sh/setup-uv@v5
+      - uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
 
@@ -59,7 +59,7 @@ jobs:
         # `always()`: a failing gate must still explain itself, or the developer
         # sees a red X with no reason and disables the check.
         if: always()
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const fs = require('fs');
@@ -96,7 +96,7 @@ jobs:
 
       - name: Archive the run
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: meridian-runs
           path: runs/
