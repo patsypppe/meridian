@@ -11,21 +11,30 @@ value that reaches a hashed structure must not be a float at all.
 
 from __future__ import annotations
 
+import json
+import logging
 from dataclasses import dataclass, field
+from pathlib import Path
 
 MICROCENTS_PER_CENT = 1_000_000
+
+logger = logging.getLogger(__name__)
 
 # Micro-cents per million tokens, input and output. Approximate and explicitly
 # not a billing system: the number exists so a runaway agent stops, and so a run
 # can report roughly what it cost.
-PRICE_TABLE_MICROCENTS_PER_MTOK: dict[str, tuple[int, int]] = {
-    "claude-sonnet-5": (300_000_000, 1_500_000_000),
-    "claude-opus-5": (1_500_000_000, 7_500_000_000),
-    "claude-haiku-4-5-20251001": (100_000_000, 500_000_000),
-    # Approximate Groq list prices, $/Mtok converted to micro-cents.
-    "openai/gpt-oss-120b": (15_000_000, 60_000_000),
-    "openai/gpt-oss-20b": (7_500_000, 30_000_000),
-}
+_PRICES_PATH = Path(__file__).parent / "model_prices.json"
+
+def _load_price_table() -> dict[str, tuple[int, int]]:
+    try:
+        with _PRICES_PATH.open() as f:
+            data = json.load(f)
+        return {k: tuple(v) for k, v in data.items()}
+    except (OSError, json.JSONDecodeError, ValueError) as e:
+        logger.warning("Failed to load model prices from %s: %s; using empty table", _PRICES_PATH, e)
+        return {}
+
+PRICE_TABLE_MICROCENTS_PER_MTOK: dict[str, tuple[int, int]] = _load_price_table()
 DEFAULT_PRICE_MICROCENTS_PER_MTOK = (300_000_000, 1_500_000_000)
 
 
@@ -115,6 +124,8 @@ class BudgetLedger:
     # Which models were actually called. Recorded because the manifest must pin
     # the model, and the harness never chooses it -- the agent does.
     models: set[str] = field(default_factory=set)
+    # Models for which we have already logged a missing-price warning this run.
+    _warned_unknown: set[str] = field(default_factory=set)
 
     def _key(self, task_slug: str, trial_index: int) -> str:
         return f"{task_slug}:{trial_index}"
@@ -203,6 +214,13 @@ class BudgetLedger:
     ) -> TrialUsage:
         usage = self.usage_for(task_slug, trial_index)
         self.models.add(model)
+        if model not in PRICE_TABLE_MICROCENTS_PER_MTOK and model not in self._warned_unknown:
+            logger.warning(
+                "No price listed for model %r; using default Sonnet rates. "
+                "Add it to model_prices.json to get accurate costs.",
+                model,
+            )
+            self._warned_unknown.add(model)
         usage.input_tokens += input_tokens
         usage.output_tokens += output_tokens
         usage.microcents += cost_microcents(model, input_tokens, output_tokens)
