@@ -55,10 +55,27 @@ jobs:
             --proxy-mode record \
             --comment-file gate-comment.md
 
+      - name: Job summary
+        # Every PR gets the verdict here, forks included. A fork's token is
+        # read-only, so the comment below cannot be posted for it, and the
+        # verdict must not exist only in a place the PR author cannot reach.
+        if: always()
+        run: |
+          if [ -f gate-comment.md ]; then
+            cat gate-comment.md >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "## Meridian gate" >> "$GITHUB_STEP_SUMMARY"
+            echo "The gate did not produce a report. This is a harness failure, not a verdict about the agent." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
       - name: Comment
         # `always()`: a failing gate must still explain itself, or the developer
         # sees a red X with no reason and disables the check.
-        if: always()
+        #
+        # Skipped for pull requests from forks: GitHub gives them a read-only
+        # token, so the comment fails with "Resource not accessible by
+        # integration" and turns a passing gate red. The summary above covers them.
+        if: always() && github.event.pull_request.head.repo.full_name == github.repository
         uses: actions/github-script@v9
         with:
           script: |
